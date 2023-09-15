@@ -1,0 +1,5 @@
+name: ohana_lcpipe
+channels:
+ - imperial-college-research-computing
+dependencies:
+ - ohana
