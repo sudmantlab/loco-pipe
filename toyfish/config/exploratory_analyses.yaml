@@ -1,0 +1,273 @@
+# =================================================================================================
+#     Descide what analyses you want to include
+# =================================================================================================
+
+# Here you could manually select which analyses you would like to include in
+# the pipeline. The default setting is "true" for all tests. 
+# Here, ...
+to_include:
+
+  # To conduct admixture analysis using Ohana to characterize population structure for all samples.
+  run_ohana_global: true
+  
+  # To conduct admixture analysis using Ohana to characterize population structure for each population separately.
+  run_ohana_local: true
+  
+  # To get different estimate of theta (e.g. nucleotide diversity π, Watterson's theta)
+  # as well as neutrality test statistics (e.g. Tajima's D) for each population 
+  # (in fixed length windows and as chromosome averages).
+  get_theta: true
+  
+  # To estimate Fst in pairs of populations (per-SNP Fst and chromosome-average Fst).
+  get_Fst: true
+  
+  # To generate window-based Fst in pairs of populations (fixed-SNP window and fixed-length window).
+  # It also outputs Manhaton plots for three types of Fst (per-SNP, fixed-SNP window and fixed-length window).
+  plot_Fst: true
+  
+  # To perform a PCA analysis using PCAngsd for all samples. 
+  run_pcangsd_global: true
+  
+  # To perform a PCA analysis using PCAngsd for each population separately. 
+  run_pcangsd_local: true
+  
+  # To estimate minor allele frequency in each population separately.
+  get_maf: true
+  
+  # To estimate the heterozygosity for each sample separately.
+  get_heterozygosity: true
+  
+  
+# ==============================================================================
+#     Mandatory pipeline settings
+# ==============================================================================
+
+
+# Under "global", data that will be needed inside the exploratory_analyses.smk
+# is stored. They provide enough information to tell snakemake what input files are needed by rule "all".
+# Aiming to find the input files, the snakemake initiates the pipeline.
+global:
+
+  # Required. Full path to your folder in which all the output files are stored. 
+  # This folder should include son folders such as "config" and "docs".
+  basedir: "/global/scratch/users/zzhou32/loco-pipe/toyfish"
+  
+  # Required. Full path to the reference genome.
+  # The reference genome should be in .fasta format. Under the current version, we recommend 
+  # reference genome to be approximately at chromosome level. In other words, we advice against a highly fragmented 
+  # reference genome (e.g. L80 > 100). Due to the fact that many downstream analyses are performed at
+  # chromosome/scaffold/contig level, having a highly-fragmented reference genome will create too many parallel jobs and might 
+  # put cluster in high stress.
+  reference: "/global/scratch/users/zzhou32/Rockfish/toyfish/toy_refgen.fa"
+  
+    
+  # Optional. A csv file that includes names for chromosomes.
+  # This chr_table should have two columns: this first column is the original chromosome/scaffold/contig names 
+  # and the second column is the new names that would be shown in the Fst plot. Shorter, simpler names are recommended
+  # for clarity of the plot.
+  chr_table: "/global/scratch/users/zzhou32/loco-pipe/toyfish/docs/chr_table.tsv"
+  
+  # Optional. The metedata tsv file.
+  # This file should include at least the name of the samples and the full pathway to the bamfiles
+  # If you want to include analyses such as heterozygosity, then a column of traits that could be used to
+  # separate the original sample is needed.
+  meta_data: "/global/scratch/users/zzhou32/loco-pipe/toyfish/docs/metadata.tsv"
+  
+  # Required. Full path to the folder in which R scripts required for the pipeline are saved.
+  # That folder includes fst_functions.R, get_depth_filter.R and plot_fst.R.
+  scriptdir: "/global/scratch/users/zzhou32/loco-pipe/workflow/scripts"
+ 
+  # Required. Name of the text file that has the full path of all the bam files that will be included in the analyses.
+  # No full path is needed here because this text file will be stored inside the "docs" folder in "basedir".
+  bamlist: "bamlist_min1x.txt" 
+  
+  # Required. The name of a column inside the metadata table which you want to use to subset the population.
+  # The input should be a string. In the first generation of the
+  # loco-pipe, we only implement one level of hierachy. 
+  pop_level: "common_name"
+  
+# The following parameters are needed by get_depth_global.smk. This snakemake rule 
+# returns depth distribution of every site summed over all samples. Each chromosome will be processed individually.
+# With the output from get_depth_global.smk,
+# we could filter out the sites that are poorly mapped or are repetitive.
+get_depth_global:
+  
+  # Required. The minimum base quality score.
+  # Sequencing data below this threshold will be filtered out and not included in the depth counting.
+  minq: "20"
+  
+  # Required. The minimum mapping quality score.
+  # A sequencing read that is below this threshold will be filtered out and not included in the depth counting.
+  minmapq: "20"
+  
+  # Required. The number of threads in the cluster needed for this job.
+  # A thread could be seen as a computing unit. Generally, the more threads you assign,
+  # the faster the job could be done. For this step, the maximum number of threads that
+  # ANGSD can take advantage of is about 8.
+  threads: 8
+  
+  # Optional. Optional arguments to be passed to ANGSD -doDepth.
+  # These arguments could be extra filtering parameters, extra analyses, etc.
+  extra: " "
+  
+
+# The following parameters are needed by snp_calling_global.smk. This rule will find a set of single
+# nucleotide polymorphisms (SNP) across all samples. Each chromosome will be processed individually.
+snp_calling_global:
+  
+  # Required. Threshold for a site to be considered in SNP calling based on sample size.
+  # The site that has a smaller sample size than "minind" will be filtered out. 
+  # Note that there is no standarized number for "minind". The choice depends on the
+  # sample size and sequencing depth. With typical low-coverage
+  # data, we often use half of the total sample size.
+  minind: "15"
+  
+  # Required. Threshold for a site to be considered in SNP calling based on allele frequency.
+  # The site that has a smaller minor allele frequency that "minmaf" will be filtered out.
+  minmaf: "0.05"
+  
+  # Required. Threshold for a site to be considered as a SNP based on its p-value.
+  # The site that has a p-value larger than "pval" will be filtered out.
+  pval: "1e-6"
+  
+  # Optional. Optional arguments to be passed to the SNP calling step in ANGSD.
+  # These arguments could add extra input files to analyses (e.g. ancestral genome and individual inbreed coefficients). 
+  # They can also be used to specify additional filters or additional analyses.
+  extra: " "
+  
+# The following parameters are needed by get_heterozygosity.smk, which generates individual-level genome-wide average
+# heterozygosity estimates for each sample. This rule is a two-step process using ANGSD: it first 
+# applies -doSaf to output a saf.idx file for each sample and then runs the realSFS submodule in ANGSD to return the 
+# genome-wide site frequency spectrum (in the .SFS file). Genome-wide average heterozygosity can then be calculated from the SFS. 
+# Each sample will be processed individually.
+# More detailed description on heteozygosity could be found on this webpage: http://www.popgen.dk/angsd/index.php/Heterozygosity.
+get_heterozygosity:
+
+  # Required. The number of threads in the cluster needed for this job.
+  # A thread could be seen as a computing unit. Generally, the more threads you assign,
+  # the faster the job could be done. For this step, the maximum number of threads that
+  # ANGSD can take advantage of is about 8, but the realSFS module is capable of using more threads.
+  threads: 8
+  
+  # Required. The minimum base quality score.
+  # Sequencing data below this threshold will be filtered out and not included in the heterozygosity estimation.
+  minq: "20"
+  
+  # Required. The minimum mapping quality score.
+  # A sequencing read that is below this threshold will be filtered out and not included in the heterozygosity estimation.
+  minmapq: "20"
+  
+  # Optional. Optional arguments to be passed to ANGSD -doSaf.
+  # These arguments allow the analyses to better fit your need (e.g. if your reference genome does not represent the
+  # ancestral state, you could use -fold 1 flag here to estimate the folded SFS).
+  dosaf_extra: " "
+  
+  # Optional. Optional arguments to be passed to ANGSD function realSFS.
+  # The two parameters, -tole and -maxIter, are used to determine when the optimization algorithm stops. 
+  # The -tole is an shortened for "tolerance for breaking Expectation Maximization", and the -maxIter 
+  # is shortened for "maximum iteration".
+  # Decreasing "-tole" and increasing "-maxIter" will result in longer computational time but will potentially output more
+  # accurate result.
+  realsfs_extra: "-tole 1e-08 -maxIter 500"
+  
+# This rule will generate a subset of SNPs for each chromomsome from the SNP list generated from all samples
+# by the snp_calling_global.smk. This is an attempt to limit the effect of linkage for 
+# centain analyses (e.g. admixture analysis).
+subset_snp_list_global:
+
+  # Required. The SNPs subsetting is done by choosing 1 SNP out of every n number of SNPs.
+  # If n = 100, we are picking the first SNP out of every 100 SNPs along the genome. 
+  # The higher "n" is, the fewer SNPs are retained in the subsetted list.
+  n: 100
+
+# Similar to the rule above, this one also outputs subsetted SNPs. The difference between the two
+# is that this rule operates on one specific population instead of all samples.
+subset_snp_list_local: 
+ 
+  # Required. The SNPs subsetting is done by choosing 1 SNP out of every n number of SNPs.
+  # If n = 100, we are picking the first SNP out of the 100 continuous SNPs.
+  # The higher "n" is, the fewer SNPs are retained in the subsetted list.
+  n: 100
+  
+# This rule will conduct admixture analysis on all samples to characterize population structure using the ohana software.
+# More information about ohana could be found on this webpage: https://github.com/jade-cheng/ohana.
+run_ohana_global:
+
+  # Required. The minimum number of K (i.e. the number of ancstral population components assumed in the sample).
+  min_k: 2
+  
+  # Required. The maximum number of K (i.e. the number of ancstral population components assumed in the sample).
+  max_k: 7
+
+# This rule will conduct admixture analysis on samples belonging to the same population to characterize population structure using the ohana software.
+# More information about ohana could be found on this webpage: https://github.com/jade-cheng/ohana.
+run_ohana_local:
+
+  # Required. The minimum number of K (i.e. the number of ancstral population components assumed in the sample).
+  min_k: 2
+  
+  # Required. The maximum number of K (i.e. the number of ancstral population components assumed in the sample).
+  max_k: 7
+  
+# ==============================================================================
+#     Selective pipeline settings
+# ==============================================================================
+# The following sections could be required for the analyses based on the corresponding "switches" at the top of this config file.
+# If the "switch" matching the name of a section below is "true", read that section and edit its content if necessary.
+
+# To get different estimate of theta (e.g. nucleotide diversity π, Watterson's theta)
+# as well as neutrality test statistics (e.g. Tajima's D) for each population 
+# (in fixed length windows and as chromosome averages).
+get_theta:
+
+  # Required. The number of threads in the cluster needed for this job.
+  # A thread could be seen as a computing unit. Generally, the more threads you assign,
+  # the faster the job could be done. For this step, the maximum number of threads that
+  # ANGSD can take advantage of is about 8, but the realSFS module is capable of using more threads.
+  threads: 8
+  
+  # Required. The minimum base quality score.
+  # Sequencing data below this threshold will be filtered out and not included in the theta estimation.
+  minq: 20
+  
+  # Required. The minimum mapping quality score.
+  # A sequencing read that is below this threshold will be filtered out and not included in the theta estimation.
+  minmapq: 20
+  
+  # Required. Window size in base pairs for theta estimation in sliding window.
+  window_size: 10000
+  
+  # Required. Step size in base pairs for theta estimation in sliding window.
+  # When step size equals window size, the windows are non-overlapping, and there is no gap between them. 
+  step_size: 10000
+  
+  # Optional. Optional arguments to be passed to ANGSD -doSaf.
+  # These arguments allow the analyses to better fit your need (e.g. if your reference genome does not represent the
+  # ancestral state, you could use -fold 1 flag here to estimate the folded SFS).
+  dosaf_extra: ""
+  
+  # Optional. Optional arguments to be passed to ANGSD function realSFS.
+  realsfs_extra: ""
+  
+# To estimate Fst in pairs of populations (per-SNP Fst and chromosome-average Fst).
+get_fst:
+
+  # Required. The number of threads in the cluster needed for this job.
+  # For this step, the maximum number of threads that ANGSD can take advantage of is about 8, 
+  # but the realSFS module is capable of using more threads.
+  threads: 8
+  
+  # Optional. Optional arguments to be passed to the realSFS in ANGSD.
+  extra: ""
+ 
+# To generate window-based Fst in pairs of populations (fixed-SNP window and fixed-length window).
+# It also outputs Manhaton plots for three types of Fst (per-SNP, fixed-SNP window and fixed-length window).
+plot_fst:
+  
+  # Required. The number of SNPs to be included into one fixed-SNP window.
+  snp_window_size: 100
+  
+  # Required. The number of bases to be included into one fixed-length window.
+  bp_window_size: 10000
+  
+  
