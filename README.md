@@ -56,6 +56,8 @@ sequencing (lcWGS) data.
 
 ## Before you start
 
+#### Reference genome
+
 This pipeline requires a moderately contiguous reference genome for your
 study system. Currently, it does not support highly fragmented reference
 genomes, since most analyses are parallelized by scaffolds. Having too
@@ -66,11 +68,15 @@ of the genome should be consisted of no more than 100 scaffolds
 the analysis (we will ask you to provide a list of scaffolds that you
 would like to include).
 
+#### Sequence alignment files
+
 In addition, we assume that properly mapped and filtered bam files are
 ready to be used as input files for loco-pipe. You can choose your
 favorite software and/or pipeline to go from fastq to bam, but one
 pipeline that we particularly recommend is
 [grenepipe](https://github.com/moiexpositoalonsolab/grenepipe).
+
+#### grenepipe
 
 grenepipe is a Snakemake pipeline for variant calling from raw sequence
 data. Although it is developed for high-coverage data, you can skip the
@@ -86,17 +92,29 @@ documented](https://github.com/moiexpositoalonsolab/grenepipe/wiki), and
 it is the main inspiration for loco-pipe. Familiarizing yourself with
 grenepipe will also make loco-pipe much easier to learn.
 
+If you choose to use grenepipe to generate your bam files. Here are our
+recommendations on making the transition from grenepipe to loco-pipe as
+seamless as possible.
+
+> - `all_qc` flag and `bcftools-stats: false`
+> - `clip-read-overlaps: true` and `VALIDATION_STRINGENCY=SILENT` for
+>   `picard MarkDuplicates`
+
 ## Setting up the pipeline
 
-1.  Download `loco-pipe` from GitHub (e.g. using `git clone`).
-
-2.  Install
+1.  Install
     [mamba](https://mamba.readthedocs.io/en/latest/mamba-installation.html#mamba-install)
     if you have not yet done so. A fresh install with Mambaforge is
     highly recommended.
 
+2.  Download `loco-pipe` from GitHub (e.g. using `git clone`). We
+    recommend you to download it to a folder where you store your
+    software programs. We will refer to the full path of the resulting
+    `loco-pipe` folder as `PIPEDIR`.
+
 3.  Create the `loco-pipe` conda environment using mamba by running
-    `mamba env create -f loco-pipe/loco-pipe.yaml`.
+    `mamba env create -f $PIPEDIR/workflow/envs/loco-pipe.yaml` (replace
+    \$PIPEDIR with a real path).
 
 4.  (Optional) If you would like to run PCA with the software
     [PCAngsd](https://github.com/Rosemeis/pcangsd) using loco-pipe, you
@@ -126,22 +144,47 @@ grenepipe will also make loco-pipe much easier to learn.
     - First, create a base directory for your project. This folder
       should be separate from the loco-pipe folder. You can name it
       however you want (just avoid special characters other than dashes
-      and underscores), but we will refer to the path to this folder as
-      `BASEDIR`.
+      and underscores), but we will refer to the full path of this
+      folder as `BASEDIR`.
     - Within `BASEDIR`, create a new folder called `docs`. You can also
       have your sequencing data (e.g. fastq and bam files) in separate
       folders in `BASEDIR`, but this is not required.
 
 6.  Prepare a **sample table** and a **chromosome table**. Both of them
     should be tab separated. Store them in the `docs` folder in
-    `BASEDIR`.
+    `BASEDIR`. You can name them however you want.
 
-    - Sample table: This table should contain a minimum of three
-      columns. A column named exactly as `sample_name`; a column named
-      exactly as `bam` which stores the full paths of all your bam
-      files, and a column that stores the population-level traits you
-      wish to segregate the specimens with. You will enter the name of
-      the third column into the config file.
+    - Sample table: This table should contain a minimum of three columns
+      in no particularly order. One column should be named exactly as
+      `sample_name` and it should contain sample IDs of all the samples
+      to be included in the analysis. Another column should be named
+      exactly as `bam` and it should store the full paths of the bam
+      file for each sample. A third column should specify the grouping
+      information you wish to segregate the samples by These could be
+      sampling sites, populations, ecotypes, sex, subspecies, species,
+      etc. You will enter the name of the third column into the pipeline
+      configuration file (see below).
+
+      > A few tips about the sample table:
+      > - Sample names have to be unique, and each sample should
+      >   correspond to a single bam file (i.e. we assume that if you
+      >   have multiple bam files for a single sample, they have already
+      >   been merged). In cases where you would like to keep different
+      >   bam files from the same sample separate, e.g. for batch effect
+      >   control, you will need to distinguish them by assigning them
+      >   different sample names, e.g. by adding a suffix to their
+      >   original names. If you do this, please also note that
+      >   including multiple copies of the same sample can severely bias
+      >   certain analyses, such as PCA, so we recommend you to only do
+      >   this in the first iteration of the pipeline, and once the risk
+      >   of batch effect is eliminated, you should merge or remove the
+      >   duplicated samples.
+      > - You can have multiple grouping variables
+      > - You can run part of the pipeline first and then assign the
+      >   grouping variable
+      > - In general, you can have several iterations of the sample
+      >   table
+
     - Chromosome table: This table should contain one or two columns.
       The first column is required, and it records the names of all
       chromosomes/scaffolds/contigs that you would like to include in
@@ -150,7 +193,7 @@ grenepipe will also make loco-pipe much easier to learn.
       names in the reference genome. The second column is optional, and
       it records shortened or alternative names of the
       chromosomes/scaffolds/contigs which you would like to show on the
-      plots. If the second column is empty, the orignal names will be
+      plots. If the second column is empty, the original names will be
       shown.
 
 7.  Edit the configuration files
@@ -181,14 +224,15 @@ grenepipe will also make loco-pipe much easier to learn.
 
     ``` bash
     snakemake \
+    --use-conda \
     --conda-frontend mamba \
     --directory $BASEDIR \
     --scheduler greedy \
     --rerun-triggers mtime \
-    --snakefile loco-pipe.smk 
+    --snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk 
     ```
 
-    When running it on a computer cluser, make sure to use the
+    When running it on a computer cluster, make sure to use the
     `--profile` flag to specify your cluster profile. Other flags that
     may be useful are `--conda-prefix`, `--default-resources`, `-p`,
     etc.
