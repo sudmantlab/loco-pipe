@@ -33,7 +33,7 @@ rule get_fst:
 rule plot_fst:
     input: 
         fst = expand("{{basedir}}/angsd/get_fst/{{population1}}.{{population2}}.{chr}.done", chr = CHRS),
-        chr_table = config["global"]["chr_table"],
+        chr_table = CHR_TABLE,
     output: 
         png = "{basedir}/figures/fst/{population1}.{population2}.png",
         done = touch("{basedir}/figures/fst/{population1}.{population2}.done"),

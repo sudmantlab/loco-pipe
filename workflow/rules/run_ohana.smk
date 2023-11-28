@@ -4,8 +4,8 @@
 # This rule converts the subsetted beagle formatted genotype likelihood file to an .lgm format file 
 # which is needed for Ohana.
 rule get_ohana_input_global:
-    input: rules.combine_subsetted_beagle_global.output.subsetted_beagle
-    output: "{basedir}/ohana/global/combined.subsetted.lgm"
+    input: "{basedir}/angsd/snp_calling_global/{file}.beagle"
+    output: "{basedir}/ohana/global/{file}.lgm"
     params: outdir = "{basedir}/ohana/global"
     conda: "../envs/ohana.yaml"
     threads: 1
@@ -22,13 +22,13 @@ rule get_ohana_input_global:
 # frequencies in each ancestral population.
 # A well-explained example could be found here: https://github.com/jade-cheng/ohana/blob/master/README.md.
 rule run_ohana_global:
-     input: "{basedir}/ohana/global/combined.subsetted.lgm"
+     input: "{basedir}/ohana/global/{file}.lgm"
      output: 
-         q_mat = "{basedir}/ohana/global/combined.subsetted.k{k}.q.matrix",
-         f_mat = "{basedir}/ohana/global/combined.subsetted.k{k}.f.matrix",
-         done = touch("{basedir}/ohana/global/combined.subsetted.k{k}.done"),
+         q_mat = "{basedir}/ohana/global/{file}.k{k}.q.matrix",
+         f_mat = "{basedir}/ohana/global/{file}.k{k}.f.matrix",
+         done = touch("{basedir}/ohana/global/{file}.k{k}.done"),
      threads: 4
-     log: "{basedir}/ohana/global/combined.subsetted.k{k}.log"
+     log: "{basedir}/ohana/global/{file}.k{k}.log"
      conda: "../envs/ohana.yaml"
      shell:
          '''
@@ -41,8 +41,8 @@ rule run_ohana_global:
 # The next two rules inherit the same logic from get_ohana_input_global and run_ohana_global rules,
 # but these rules uses data specific to one population.
 rule get_ohana_input_local:
-    input: rules.combine_subsetted_beagle_local.output.subsetted_beagle
-    output: "{basedir}/ohana/local/{population}.combined.subsetted.lgm"
+    input: "{basedir}/angsd/get_maf/{population}.{file}.beagle"
+    output: "{basedir}/ohana/local/{population}.{file}.lgm"
     params: outdir = "{basedir}/ohana/local"
     conda: "../envs/ohana.yaml"
     threads: 1
@@ -53,13 +53,13 @@ rule get_ohana_input_local:
         '''
 
 rule run_ohana_local:
-     input: "{basedir}/ohana/local/{population}.combined.subsetted.lgm"
+     input: "{basedir}/ohana/local/{population}.{file}.lgm"
      output: 
-         q_mat = "{basedir}/ohana/local/{population}.combined.subsetted.k{k}.q.matrix",
-         f_mat = "{basedir}/ohana/local/{population}.combined.subsetted.k{k}.f.matrix",
-         done = touch("{basedir}/ohana/local/{population}.combined.subsetted.k{k}.done"),
+         q_mat = "{basedir}/ohana/local/{population}.{file}.k{k}.q.matrix",
+         f_mat = "{basedir}/ohana/local/{population}.{file}.k{k}.f.matrix",
+         done = touch("{basedir}/ohana/local/{population}.{file}.k{k}.done"),
      threads: 4
-     log: "{basedir}/ohana/local/{population}.combined.subsetted.k{k}.log"
+     log: "{basedir}/ohana/local/{population}.{file}.k{k}.log"
      conda: "../envs/ohana.yaml"
      shell:
          '''
@@ -69,3 +69,52 @@ rule run_ohana_local:
          -fo {output.f_mat} \
          -mi 50 &> {log}
          '''
+
+rule plot_ohana_admixture_global:
+    input:
+        done = expand("{{basedir}}/ohana/global/{{file}}.k{k}.done", k=list(range(config["run_ohana_global"]["min_k"], config["run_ohana_global"]["max_k"] + 1))),
+    output:
+        plot = "{basedir}/figures/ohana/global/{file}.png",
+        done = touch("{basedir}/ohana/global/{file}.plot.done"),
+    params:
+        indir = "{basedir}/ohana/global",
+        outdir = "{basedir}/figures/ohana/global",
+        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        group_by = config["run_ohana_global"]["group_by"],
+        min_k = config["run_ohana_global"]["min_k"],
+        max_k = config["run_ohana_global"]["max_k"],
+        rscript = config["global"]["scriptdir"] + "/plot_ohana_admixture.R",
+    threads: 1
+    log: "{basedir}/ohana/global/{file}.plot.log"
+    conda:
+        "../envs/r.yaml" 
+    shell:
+        '''
+        mkdir -p {params.outdir}
+        Rscript --vanilla {params.rscript} {params.indir} {wildcards.file} {output.plot} {params.sample_table_path} {params.group_by} {params.min_k} {params.max_k} &> {log}
+        '''
+
+rule plot_ohana_admixture_local:
+    input:
+        done = expand("{{basedir}}/ohana/local/{{population}}.{{file}}.k{k}.done", k=list(range(config["run_ohana_local"]["min_k"], config["run_ohana_local"]["max_k"] + 1))),
+    output:
+        plot = "{basedir}/figures/ohana/local/{population}.{file}.png",
+        done = touch("{basedir}/ohana/local/{population}.{file}.plot.done"),
+    params:
+        indir = "{basedir}/ohana/local",
+        outdir = "{basedir}/figures/ohana/local",
+        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        group_by = config["run_ohana_local"]["group_by"],
+        min_k = config["run_ohana_local"]["min_k"],
+        max_k = config["run_ohana_local"]["max_k"],
+        pop_col = config["global"]["pop_level"],
+        rscript = config["global"]["scriptdir"] + "/plot_ohana_admixture.R",
+    threads: 1
+    log: "{basedir}/ohana/local/{population}.{file}.plot.log"
+    conda:
+        "../envs/r.yaml" 
+    shell:
+        '''
+        mkdir -p {params.outdir}
+        Rscript --vanilla {params.rscript} {params.indir} {wildcards.file} {output.plot} {params.sample_table_path} {params.group_by} {params.min_k} {params.max_k} {params.pop_col} {wildcards.population} &> {log}
+        '''

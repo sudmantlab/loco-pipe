@@ -71,3 +71,25 @@ rule get_theta:
         -outnames {params.outbase}.{params.window_size}window_{params.step_size}step.thetas 2>> {log}
         '''
 
+rule plot_theta_by_window:
+    input:
+        chr_table = CHR_TABLE,
+        done = expand("{{basedir}}/angsd/get_theta/{{population}}.{chr}.done", chr = CHRS),
+    output:
+        plot = "{basedir}/figures/get_theta/{population}.theta_by_window.png",
+        done = touch("{basedir}/angsd/get_theta/{population}.plot_theta_by_window.done"),
+    params:
+        indir = "{basedir}/angsd/get_theta",
+        outdir = "{basedir}/figures/get_theta",
+        window_size=config["get_theta"]["window_size"],
+        step_size=config["get_theta"]["step_size"],
+        rscript = config["global"]["scriptdir"] + "/plot_theta_by_window.R",
+    threads: 4
+    log: "{basedir}/angsd/get_theta/{population}.plot_theta_by_window.log"
+    conda:
+        "../envs/r.yaml" 
+    shell:
+        '''
+        mkdir -p {params.outdir}
+        Rscript --vanilla {params.rscript} {params.indir} {output.plot} {input.chr_table} {params.window_size} {params.step_size} {wildcards.population} &> {log}
+        '''

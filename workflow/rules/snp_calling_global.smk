@@ -36,8 +36,11 @@ rule snp_calling_global:
     conda: "../envs/angsd.yaml"
     shell:
         '''
-        MINDP=`cat {input.depth_filter} | tail -n 1 | cut -f 3`
-        MAXDP=`cat {input.depth_filter} | tail -n 1 | cut -f 4`
+        MINDP=`cat {input.depth_filter} | tail -n 1 | cut -f 1`
+        MAXDP=`cat {input.depth_filter} | tail -n 1 | cut -f 2`
+        NIND=`cat {input.bamlist} | wc -l`
+        MININD_PROPORTION={params.minind}
+        MININD=`awk -v x="$NIND" -v y="$MININD_PROPORTION" 'BEGIN {{ z = int(x * y); print z }}'`
         mkdir -p {params.outdir}
         angsd \
             -bam {input.bamlist} -ref {input.ref} \
@@ -46,7 +49,7 @@ rule snp_calling_global:
             -GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 1 \
             -doDepth 1 -doCounts 1 -maxDepth 100000 -dumpCounts 1 \
             -doIBS 1 -makematrix 1 -doCov 1 \
-            -setMinDepth $MINDP -setMaxDepth $MAXDP -minInd {params.minind} \
+            -setMinDepth $MINDP -setMaxDepth $MAXDP -minInd $MININD \
             -SNP_pval {params.pval} -minMaf {params.minmaf} \
             -minQ {params.minq} -minMapQ {params.minmapq} \
             -remove_bads 1 -only_proper_pairs 1 \

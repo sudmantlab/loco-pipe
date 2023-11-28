@@ -7,10 +7,10 @@ rule get_heterozygosity:
     input:
         ref = REFERENCE,
         fai = REFERENCE + ".fai",
-        bam = lambda wildcards: BAMERORY[wildcards.id],
+        bam = lambda wildcards: BAM_DICT[wildcards.id],
         site_list = "{basedir}/angsd/get_depth_global/combined.site_list",
         site_list_idx = "{basedir}/angsd/get_depth_global/combined.site_list.idx",
-        chr_list = CHR_LIST_PATHWAY,
+        chr_list = BASEDIR + "/docs/chr_list.txt",
     output:
         dosaf = expand("{{basedir}}/angsd/heterozygosity/{{id}}.{ext}", ext = ["saf.pos.gz", "saf.idx", "saf.gz", "arg"]),
         realsfs = "{basedir}/angsd/heterozygosity/{id}.sfs",
@@ -36,7 +36,7 @@ rule get_heterozygosity:
         -out {params.outdir}/{wildcards.id} \
         -doSaf 1 -GL 1 \
         -P {threads} \
-        -minQ {params.minq} -minmapq {params.minmapq} -sites {input.site_list} -rf {input.chr_list} \
+        -minQ {params.minq} -minmapq {params.minmapq} -sites {input.site_list}  -rf {input.chr_list} \
         -remove_bads 1 -only_proper_pairs 1 \
         {params.dosaf_extra} &> {log.dosaf}
         ## Get SFS from saf
@@ -44,4 +44,26 @@ rule get_heterozygosity:
         {params.outdir}/{wildcards.id}.saf.idx \
         -cores {threads} \
         {params.realsfs_extra} > {output.realsfs} 2> {log.realsfs}
+        '''
+
+rule plot_heterozygosity:
+    input:
+        done=expand("{{basedir}}/angsd/heterozygosity/{id}.done", id=ALL_SAMPLES),
+    output:
+        plot="{basedir}/figures/heterozygosity/heterozygosity.png",
+        done=touch("{basedir}/angsd/heterozygosity/plot_heterozygosity.done"),
+    params:
+        indir="{basedir}/angsd/heterozygosity",
+        outdir="{basedir}/figures/heterozygosity",
+        sample_table_path="{basedir}/docs/" + config["global"]["metadata"],
+        color_by=config["get_heterozygosity"]["color_by"],
+        rscript=config["global"]["scriptdir"] + "/plot_heterozygosity.R",
+    threads: 1
+    log: "{basedir}/angsd/heterozygosity/plot_heterozygosity.log"
+    conda:
+        "../envs/r.yaml" 
+    shell:
+        '''
+        mkdir -p {params.outdir}
+        Rscript --vanilla {params.rscript} {params.indir} {params.outdir} {params.sample_table_path} {params.color_by} &> {log}
         '''

@@ -13,8 +13,8 @@ rule get_site_list_global:
     threads: 1
     shell:
         '''
-        MINDP=`cat {input.depth_filter} | tail -n 1 | cut -f 3`
-        MAXDP=`cat {input.depth_filter} | tail -n 1 | cut -f 4`
+        MINDP=`cat {input.depth_filter} | tail -n 1 | cut -f 1`
+        MAXDP=`cat {input.depth_filter} | tail -n 1 | cut -f 2`
         zcat {input.pos} | awk -v min="$MINDP" -v max="$MAXDP" -F'\t' '$3>min && $3<max {{print $1"\t"$2}}' > {output.site_list}
         # Generate an index file for the site list.
         angsd sites index {output.site_list} 

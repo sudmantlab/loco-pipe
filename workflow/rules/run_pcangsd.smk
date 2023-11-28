@@ -1,10 +1,12 @@
-rule run_pcangsd_global:
+rule run_pcangsd_pca_global:
     input: "{basedir}/angsd/snp_calling_global/{file}.beagle.gz",
     output: 
+        cov = "{basedir}/pcangsd/global/{file}.cov",
         done = touch("{basedir}/pcangsd/global/{file}.done"),
     params:
         outdir = "{basedir}/pcangsd/global",
-    threads: 8
+        minmaf=config["run_pcangsd"]["minmaf"],
+    threads: config["run_pcangsd"]["threads"]
     log: "{basedir}/pcangsd/global/{file}.log"
     conda:
         "pcangsd"
@@ -18,20 +20,22 @@ rule run_pcangsd_global:
         --beagle {input} \
         --snp_weights \
         --sites_save \
-        --minMaf 0.05 \
+        --minMaf {params.minmaf} \
         --threads {threads} \
         --out {params.outdir}/{wildcards.file} \
         &>> {log}
         '''
         
-rule run_pcangsd_local:
-    input: "{basedir}/angsd/get_maf/{file}.beagle.gz",
+rule run_pcangsd_pca_local:
+    input: "{basedir}/angsd/get_maf/{population}.{file}.beagle.gz",
     output: 
-        done = touch("{basedir}/pcangsd/local/{file}.done"),
+        cov = "{basedir}/pcangsd/local/{population}.{file}.cov",
+        done = touch("{basedir}/pcangsd/local/{population}.{file}.done"),
     params:
         outdir = "{basedir}/pcangsd/local",
-    threads: 8
-    log: "{basedir}/pcangsd/local/{file}.log"
+        minmaf=config["run_pcangsd"]["minmaf"],
+    threads: config["run_pcangsd"]["threads"]
+    log: "{basedir}/pcangsd/local/{population}.{file}.log"
     conda:
         "pcangsd"
     shell:
@@ -42,8 +46,53 @@ rule run_pcangsd_local:
         --beagle {input} \
         --snp_weights \
         --sites_save \
-        --minMaf 0.05 \
+        --minMaf {params.minmaf} \
         --threads {threads} \
-        --out {params.outdir}/{wildcards.file} \
+        --out {params.outdir}/{wildcards.population}.{wildcards.file} \
         &> {log}
+        '''
+
+rule plot_pcangsd_pca_global:
+    input:
+        cov = "{basedir}/pcangsd/global/{file}.cov",
+        done = "{basedir}/pcangsd/global/{file}.done",
+    output:
+        plot = "{basedir}/figures/pcangsd/global/{file}.png",
+        done = touch("{basedir}/pcangsd/global/{file}.plot.done"),
+    params:
+        outdir = "{basedir}/figures/pcangsd/global",
+        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        color_by = config["run_pcangsd"]["color_by"],
+        rscript = config["global"]["scriptdir"] + "/plot_pcangsd_pca.R",
+    threads: 1
+    log: "{basedir}/pcangsd/global/{file}.plot.log"
+    conda:
+        "../envs/r.yaml" 
+    shell:
+        '''
+        mkdir -p {params.outdir}
+        Rscript --vanilla {params.rscript} {input.cov} {output.plot} {params.sample_table_path} {params.color_by} &> {log}
+        '''
+
+rule plot_pcangsd_pca_local:
+    input:
+        cov = "{basedir}/pcangsd/local/{population}.{file}.cov",
+        done = "{basedir}/pcangsd/local/{population}.{file}.done",
+    output:
+        plot = "{basedir}/figures/pcangsd/local/{population}.{file}.png",
+        done = touch("{basedir}/pcangsd/local/{population}.{file}.plot.done"),
+    params:
+        outdir = "{basedir}/figures/pcangsd/local",
+        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        color_by = config["run_pcangsd"]["color_by"],
+        pop_col = config["global"]["pop_level"],
+        rscript = config["global"]["scriptdir"] + "/plot_pcangsd_pca.R",
+    threads: 1
+    log: "{basedir}/pcangsd/local/{population}.{file}.plot.log"
+    conda:
+        "../envs/r.yaml" 
+    shell:
+        '''
+        mkdir -p {params.outdir}
+        Rscript --vanilla {params.rscript} {input.cov} {output.plot} {params.sample_table_path} {params.color_by} {params.pop_col} {wildcards.population} &> {log}
         '''

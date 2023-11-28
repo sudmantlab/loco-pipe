@@ -7,17 +7,20 @@ rule get_depth_filter_global:
     input: expand("{{basedir}}/angsd/get_depth_global/{chr}.depthGlobal", chr = CHRS)
     output: 
         "{basedir}/angsd/get_depth_global/depth_filter.tsv",
-        "{basedir}/angsd/get_depth_global/depth_filter.png"
+        "{basedir}/figures/depth/depth_filter.png"
     threads: 4
     params:
         indir = "{basedir}/angsd/get_depth_global/",
-        chr_list = CHR_LIST_PATHWAY,
+        plot_dir = "{basedir}/figures/depth/",
+        chr_list = CHR_TABLE,
+        n_sd = config["get_depth_filter_global"]["n_sd"],
         rscript = config["global"]["scriptdir"] + "/get_depth_filter.R"
     log: "{basedir}/angsd/get_depth_global/get_depth_filter.log"
     conda: "../envs/r.yaml"
     shell:
         '''
-        Rscript {params.rscript} {params.indir} {params.chr_list} &> {log}
+        mkdir -p {params.plot_dir}
+        Rscript {params.rscript} {params.indir} {params.plot_dir} {params.chr_list} {params.n_sd} &> {log}
         '''
 
 
