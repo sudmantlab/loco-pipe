@@ -1,14 +1,17 @@
 #!/usr/bin/env Rscript
 args = commandArgs(trailingOnly=TRUE)
 indir <- args[1]
-chr_list <- args[2]
+plot_dir <- args[2]
+chr_table <- args[3]
+n_sd <- as.double(args[4])
+
 library(tidyverse)
 library(cowplot)
 library(fitdistrplus)
 library(extraDistr)
 #indir <- "/global/scratch/users/nicolas931010/rockfish_popgen/korean/angsd/get_depth_global/"
 #chr_list <- "/global/scratch/users/nicolas931010/rockfish_popgen/korean/docs/chr_list.txt"
-chrs <- read_lines(chr_list)
+chrs <- read_tsv(chr_table, col_names = FALSE) %>% pull(1)
 for (i in seq_along(chrs)){
   depth_count_tmp <- read_lines(str_c(indir, "/", chrs[i], ".depthGlobal")) %>%
     str_split(pattern = "\t") %>%
@@ -52,8 +55,8 @@ fitted_dist <- depth_dist_subset %>%
   fitdist("tnorm", start = list(mean=depth_mode, sd=depth_mode/5), fix.arg = list(a = depth_lower_bound, b= depth_upper_bound), discrete = TRUE)
 fitted_mean <- fitted_dist$estimate[1]
 fitted_sd <- fitted_dist$estimate[2]
-min_filter <- round(fitted_mean-fitted_sd*2)
-max_filter <- round(fitted_mean+fitted_sd*2)
+min_filter <- round(fitted_mean-fitted_sd*n_sd)
+max_filter <- round(fitted_mean+fitted_sd*n_sd)
 fitted_hist <- tibble(depth=(depth_lower_bound+1):(depth_upper_bound-1)) %>%
   mutate(count=dtnorm(depth, mean=fitted_mean, sd = fitted_sd, a = depth_lower_bound, b= depth_upper_bound)) %>%
   #dnbinom(x = 1:10000, size=fit$estimate[1], mu = fit$estimate[2]) %>% 
@@ -69,6 +72,6 @@ depth_plot <- depth_hist %>%
   annotate("text", Inf, -Inf, label=str_c("fitted_sd=", round(fitted_sd,1)), hjust = 1.1, vjust= -18, color="blue") +
   xlim(c(NA, fitted_mean*2)) +
   cowplot::theme_minimal_grid()
-tibble(fitted_mean, fitted_sd, min_filter, max_filter) %>%
+tibble(min_filter, max_filter, fitted_mean, fitted_sd) %>%
   write_tsv(str_c(indir, "/depth_filter.tsv"))
-ggsave(str_c(indir, "/depth_filter.png"), depth_plot)
+ggsave(str_c(plot_dir, "/depth_filter.png"), depth_plot)
