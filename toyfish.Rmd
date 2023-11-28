@@ -1,35 +1,68 @@
 ---
-title: "Toyfish - a trimmed dataset from real rockfish data"
+title: "Toyfish - a quick tutorial with an example dataset"
 output: github_document
 ---
 
-In the Toyfish dataset, we have a total of 30 rockfish from two populations: sunset and vermilion; each population has 15 specimens. Within vermilion population, there are three sub-populations that are named creatively as: vermilion_1, vermilion_2 and vermilion_3; each sub-population has 5 specimens.
 
-Fun fact: rockfishes have 25 chromosomes; however, with the aim of having a time-saving test dataset, I selected 3 million base pairs from chr15 and chr16 (from 17Mbp to 20Mbp) and furthur subset 40% of them. These bam files are stored inside a folder called "bams". The reference file is zipped and stored inside the "toyfish" folder; remember to unzip it before running the pipeline!
+## Dataset overview
 
-Here are the codes you need to run loco-pipe and 
+![](https://media.fisheries.noaa.gov/dam-migration/cryptic-pairs-the-vermilion-and-sunset-rockfishes-noaa-nwfsc.png)
 
-#### To run the pipeline
+To help users quickly learn and test loco-pipe on their own, we provide a heavily subsetted lcWGS dataset with which the pipeline can be run in a few minutes. This dataset that we call "toyfish" is composed of 30 rockfish individuals from a pair of sister taxa: sunset rockfish (Sebastes crocotulus) and vermilion rockfish (Sebastes miniatus). Each species has 15 specimens. Within vermilion, there are three populations that are named creatively as: vermilion_1, vermilion_2 and vermilion_3; each population has 5 specimens. 
+
+As shown in the picture above, these two species are very similar in their phenotypes and even experts cannot accurately to tell them apart. It is even harder to distinguish one vermilion population from another based only on visual cues. So hopefully, in addition to teaching users about loco-pipe, this tutorial will be a good demonstration of the power of lcWGS in characterizing population structure in natural populations.
+
+Rockfishes have 24 chromosomes; however, with the aim of having a small test dataset, we selected a 3Mbp region from chromosomes 15 and 16 (from 17Mbp to 20Mbp), and further subset their read depth to 40% of the original data. These bam files are stored in `toyfish/bams`. The subsetted reference genome sequence and its index file are stored in `toyfish/reference`
+
+
+## To run the pipeline
+
+1. 
+
+2. 
+
+3. 
+
 ```{bash, eval = FALSE}
 ## First, move to the folder that includes the exploratory_analyses.smk.
-cd /global/scratch/users/zzhou32/rockfish_popgen/workflow/pipelines
+PIPEDIR=/global/scratch/users/nicolas931010/loco-pipe
+BASEDIR=/global/scratch/users/nicolas931010/loco-pipe/toyfish
+CONDA=/global/scratch/users/nicolas931010/conda-envs
 
 ## Then, activate the Loco-pipe environment
-conda activate locopipe
+conda activate loco-pipe
+
+snakemake \
+  --use-conda \
+  --conda-frontend mamba \
+  --conda-prefix $CONDA \
+  --directory $BASEDIR \
+  --scheduler greedy \
+  --cores 1 \
+  --rerun-triggers mtime \
+  --snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk -p -n
 
 ## Finally, adjust the flags below as needed and run the pipeline! 
 ## The ending -n flag means it is a dry run. If the dry run goes through, remove "-n" and rerun the pipe-line.
 snakemake \
   --conda-frontend mamba \
-  --conda-prefix /global/scratch/users/zzhou32/mambaforge/envs \
-  --directory /global/scratch/users/zzhou32/loco-pipe/toyfish \
-  --profile /global/scratch/users/nicolas931010/rockfish_popgen/workflow/profiles/slurm_savio3_htc \
+  --conda-prefix $CONDA \
+  --directory $BASEDIR \
+  --profile $PIPEDIR/workflow/profiles/slurm_savio4_htc \
   --scheduler greedy \
   --default-resources mem_mb=None disk_mb=None \
   --rerun-triggers mtime \
-  --snakefile exploratory_analyses.smk -n
-  
+  --snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk -p -n
+
+## flowchart
+mkdir -p $BASEDIR/figures/flowchart
+snakemake -n --forceall --rulegraph \
+--directory $BASEDIR \
+--snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk  | \
+dot -Tpdf > $BASEDIR/figures/flowchart/toyfish.pdf
 ```
+
+
 #### To visualize your results.
 We provide template codes to make three different visualizations: theta plots, population admixture, and pca plots of all specimens. As automatic and convenient as the template could be, you still need to change some elements manually (e.g. meta_data table pathway, base direction, etc.)
 1. Theta plots
@@ -42,10 +75,10 @@ library(MetBrewer)
 # global pathway to the metadata tsv inside your "docs" folder
 
 
-metadata_pathway<- "/global/scratch/users/zzhou32/loco-pipe/toyfish/docs/metadata.tsv"
+metadata_pathway<- "toyfish/docs/metadata.tsv"
 species_table <- read_tsv(metadata_pathway)%>%mutate(population=pca_cluster) # the "population" is the grouping factor you put down for the config file
-basedir<- "/global/scratch/users/zzhou32/loco-pipe/toyfish"
-chrs <- read_lines("/global/scratch/users/zzhou32/loco-pipe/toyfish/docs/chr_list.txt")
+basedir<- "toyfish"
+chrs <- read_tsv("toyfish/docs/chr_table.tsv", col_names = FALSE) %>% pull(X1)
 
 
 # Thanks to the way Loco-pipe names files, we could access to the .pestPG file for each sub-group. Change the count() based on your grouping factor.
