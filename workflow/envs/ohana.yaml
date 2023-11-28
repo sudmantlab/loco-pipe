@@ -2,4 +2,4 @@ name: ohana_lcpipe
 channels:
  - imperial-college-research-computing
 dependencies:
- - ohana
+ - ohana==0.1

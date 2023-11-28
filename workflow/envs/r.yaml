@@ -2,11 +2,11 @@ name: r_lcpipe
 channels:
  - conda-forge
 dependencies:
- - r-essentials
- - r-tidyverse
- - r-cowplot
- - r-matrix
- - r-fitdistrplus
- - r-extraDistr
- - r-survival
-
+ - r-essentials==4.2
+ - r-tidyverse==2.0.0
+ - r-cowplot==1.1.1
+ - r-matrix==1.5_3
+ - r-fitdistrplus==1.1_8
+ - r-extraDistr==1.9.1
+ - r-survival==3.5_3
+ - mkl==2023.2.0
