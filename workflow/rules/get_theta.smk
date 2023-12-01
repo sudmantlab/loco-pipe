@@ -76,13 +76,15 @@ rule plot_theta_by_window:
         chr_table = CHR_TABLE,
         done = expand("{{basedir}}/angsd/get_theta/{{population}}.{chr}.done", chr = CHRS),
     output:
-        plot = "{basedir}/figures/get_theta/{population}.theta_by_window.png",
-        done = touch("{basedir}/angsd/get_theta/{population}.plot_theta_by_window.done"),
+        plot = "{basedir}/figures/theta/{population}.theta_by_window.png",
+        done = touch("{basedir}/figures/theta/{population}.theta_by_window.done"),
     params:
         indir = "{basedir}/angsd/get_theta",
         outdir = "{basedir}/figures/get_theta",
         window_size=config["get_theta"]["window_size"],
         step_size=config["get_theta"]["step_size"],
+        fig_height = config["get_theta"]["fig_height"],
+        fig_width = config["get_theta"]["fig_width"],
         rscript = config["global"]["scriptdir"] + "/plot_theta_by_window.R",
     threads: 4
     log: "{basedir}/angsd/get_theta/{population}.plot_theta_by_window.log"
@@ -91,5 +93,5 @@ rule plot_theta_by_window:
     shell:
         '''
         mkdir -p {params.outdir}
-        Rscript --vanilla {params.rscript} {params.indir} {output.plot} {input.chr_table} {params.window_size} {params.step_size} {wildcards.population} &> {log}
+        Rscript --vanilla {params.rscript} {params.indir} {output.plot} {input.chr_table} {params.window_size} {params.step_size} {wildcards.population} {params.fig_height} {params.fig_width} &> {log}
         '''

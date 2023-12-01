@@ -10,6 +10,8 @@ chr_table <- args[3]
 window_size <- args[4] %>% as.integer()
 step_size <- args[5] %>% as.integer()
 population <- args[6]
+fig_height <- args[7] %>% as.integer()
+fig_width <- args[8] %>% as.integer()
 
 #indir <- "/global/scratch/users/nicolas931010/loco-pipe/toyfish/angsd/get_theta"
 #plot <-  "/global/scratch/users/nicolas931010/loco-pipe/toyfish/figures/get_theta/vermilion.theta_by_window.png"
@@ -49,4 +51,4 @@ theta_plot <- theta_table_long %>%
         axis.line = element_blank())
 
 ggsave(filename = plot, 
-       plot = theta_plot, width = 50, height = 30, units = 'cm', pointsize = 20)
+       plot = theta_plot, width = fig_width, height = fig_height, units = 'in', pointsize = 20)

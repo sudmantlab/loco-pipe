@@ -40,12 +40,14 @@ rule plot_fst:
     threads: 4
     params:
         rscript = config["global"]["scriptdir"] + "/plot_fst.R",
-        snp_window_size = config["plot_fst"]["snp_window_size"],
-        bp_window_size = config["plot_fst"]["bp_window_size"],
+        snp_window_size = config["get_fst"]["snp_window_size"],
+        bp_window_size = config["get_fst"]["bp_window_size"],
+        fig_height = config["get_fst"]["fig_height"],
+        fig_width = config["get_fst"]["fig_width"],
     log: "{basedir}/figures/fst/{population1}.{population2}.log"
     conda: "../envs/r.yaml"
     shell:
         '''
         # module load r  
-        Rscript {params.rscript} {input.chr_table} {wildcards.basedir} {wildcards.population1} {wildcards.population2} {params.snp_window_size} {params.bp_window_size} &> {log}
+        Rscript {params.rscript} {input.chr_table} {wildcards.basedir} {wildcards.population1} {wildcards.population2} {params.snp_window_size} {params.bp_window_size} {params.fig_height} {params.fig_width} &> {log}
         '''

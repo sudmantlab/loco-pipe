@@ -51,7 +51,7 @@ rule plot_heterozygosity:
         done=expand("{{basedir}}/angsd/heterozygosity/{id}.done", id=ALL_SAMPLES),
     output:
         plot="{basedir}/figures/heterozygosity/heterozygosity.png",
-        done=touch("{basedir}/angsd/heterozygosity/plot_heterozygosity.done"),
+        done=touch("{basedir}/figures/heterozygosity/heterozygosity.done"),
     params:
         indir="{basedir}/angsd/heterozygosity",
         outdir="{basedir}/figures/heterozygosity",

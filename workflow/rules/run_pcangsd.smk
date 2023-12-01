@@ -58,7 +58,7 @@ rule plot_pcangsd_pca_global:
         done = "{basedir}/pcangsd/global/{file}.done",
     output:
         plot = "{basedir}/figures/pcangsd/global/{file}.png",
-        done = touch("{basedir}/pcangsd/global/{file}.plot.done"),
+        done = touch("{basedir}/figures/pcangsd/global/{file}.done"),
     params:
         outdir = "{basedir}/figures/pcangsd/global",
         sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
@@ -80,7 +80,7 @@ rule plot_pcangsd_pca_local:
         done = "{basedir}/pcangsd/local/{population}.{file}.done",
     output:
         plot = "{basedir}/figures/pcangsd/local/{population}.{file}.png",
-        done = touch("{basedir}/pcangsd/local/{population}.{file}.plot.done"),
+        done = touch("{basedir}/figures/pcangsd/local/{population}.{file}.done"),
     params:
         outdir = "{basedir}/figures/pcangsd/local",
         sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],

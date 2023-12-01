@@ -119,7 +119,7 @@ rule plot_lostruct_mds_global:
     output:
         combined_plot="{basedir}/figures/lostruct/global/combined.mds.png",
         separated_plot="{basedir}/figures/lostruct/global/separated.mds.png",
-        done=touch("{basedir}/lostruct/global/plot_lostruct_mds/plot_lostruct_mds.done"),
+        done=touch("{basedir}/figures/lostruct/global/plot_lostruct_mds.done"),
     params:
         rscript=config["global"]["scriptdir"] + "/plot_lostruct_mds.R",
         chr_table_path=config["global"]["basedir"] + "/docs/" + config["global"]["chr_table"],
@@ -193,7 +193,7 @@ rule plot_lostruct_outlier_pca_global:
     output:
         combined_plot="{basedir}/figures/lostruct/global/combined.pca.png",
         separated_plot="{basedir}/figures/lostruct/global/separated.pca.pdf",
-        done=touch("{basedir}/lostruct/global/plot_lostruct_outlier_pca/plot_lostruct_outlier_pca.done"),
+        done=touch("{basedir}/figures/lostruct/global/plot_lostruct_outlier_pca.done"),
     params:
         outdir="{basedir}/lostruct/global/plot_lostruct_outlier_pca",
         rscript=config["global"]["scriptdir"] + "/plot_lostruct_outlier_pca.R",

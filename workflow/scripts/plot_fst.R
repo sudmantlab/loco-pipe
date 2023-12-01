@@ -10,6 +10,8 @@ population1 <- args[3]
 population2 <- args[4]
 snp_window_size <- args[5] %>% as.integer()
 bp_window_size <- args[6] %>% as.integer()
+fig_height <- args[7] %>% as.integer()
+fig_width <- args[8] %>% as.integer()
 
 ## List of chromosomes
 chr_table <- read_tsv(chr_table, col_names = FALSE, col_types = cols(.default = col_character()))
@@ -77,19 +79,19 @@ fst <- read_tsv(paste0(basedir, '/angsd/get_fst/', population1, '.', population2
 
 ## Plot Fst in fixed SNP windows
 fst_snp_window <- fixed_snp_window_fst(fst, snp_window_size)
-write_tsv(fst_snp_window, paste0( basedir, '/angsd/get_fst/', population1, '.', population2, '.', snp_window_size, 'snp_window.tsv'))
+write_tsv(fst_snp_window, paste0(basedir, '/angsd/get_fst/', population1, '.', population2, '.', snp_window_size, 'snp_window.tsv'))
 fst_snp_window_plot <- plot_fst(fst_snp_window)
 ggsave(filename  = paste0(basedir, '/figures/fst/', population1, '.', population2, '.', snp_window_size, 'snp_window.png'), 
-       plot = fst_snp_window_plot, width = 50, height = 10, units = 'cm', pointsize = 20)
+       plot = fst_snp_window_plot, width = fig_width, height = fig_height, units = 'in', pointsize = 20)
 
 ## Plot Fst in fixed bp windows
 fst_bp_window <- fixed_bp_window_fst(fst, bp_window_size)
-write_tsv(fst_bp_window, paste0( basedir, '/angsd/get_fst/', population1, '.', population2, '.', bp_window_size, 'bp_window.tsv'))
+write_tsv(fst_bp_window, paste0(basedir, '/angsd/get_fst/', population1, '.', population2, '.', bp_window_size, 'bp_window.tsv'))
 fst_bp_window_plot <- plot_fst(fst_bp_window)
 ggsave(filename  = paste0(basedir, '/figures/fst/', population1, '.', population2, '.', bp_window_size, 'bp_window.png'), 
-       plot= fst_bp_window_plot, width = 50, height = 10, units = 'cm', pointsize = 20)
+       plot= fst_bp_window_plot, width = fig_width, height = fig_height, units = 'in', pointsize = 20)
 
 ## Plot original Fst with no windows
 fst_plot <- plot_fst(fst)
 ggsave(filename  = paste0(basedir, '/figures/fst/', population1, '.', population2, '.png'), 
-       plot = fst_plot, width = 50, height = 10, units = 'cm', pointsize = 20)
+       plot = fst_plot, width = fig_width, height = fig_height, units = 'in', pointsize = 20)

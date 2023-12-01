@@ -4,7 +4,6 @@
 
 # Here you could manually select which analyses you would like to include in
 # the pipeline. The default setting is "true" for all tests. 
-# Here, ...
 to_include:
 
   # To conduct admixture analysis using Ohana to characterize population structure for all samples.
@@ -281,7 +280,13 @@ get_theta:
   # Optional. Optional arguments to be passed to ANGSD function realSFS.
   realsfs_extra: ""
   
-# To estimate Fst in pairs of populations (per-SNP Fst and chromosome-average Fst).
+  # Required. Height of the theta plot, in inches.
+  fig_height: 6
+  
+  # Required. Width of the theta plot, in inches.
+  fig_width: 3
+
+# To estimate and plot Fst in pairs of populations (per-SNP, windowed, and chromosome-average Fst).
 get_fst:
 
   # Required. The number of threads in the cluster needed for this job.
@@ -289,18 +294,20 @@ get_fst:
   # but the realSFS module is capable of using more threads.
   threads: 8
   
-  # Optional. Optional arguments to be passed to the realSFS in ANGSD.
+  # Optional. Optional arguments to be passed to the realSFS module in ANGSD.
   extra: ""
  
-# To generate window-based Fst in pairs of populations (fixed-SNP window and fixed-length window).
-# It also outputs Manhaton plots for three types of Fst (per-SNP, fixed-SNP window and fixed-length window).
-plot_fst:
-  
   # Required. The number of SNPs to be included into one fixed-SNP window.
   snp_window_size: 100
   
   # Required. The number of bases to be included into one fixed-length window.
   bp_window_size: 10000
+  
+  # Required. Height of the Manhattan plot, in inches.
+  fig_height: 3
+  
+  # Required. Width of the Manhattan plot, in inches.
+  fig_width: 3
   
 lostruct:
   snp_window_size: 100

@@ -75,7 +75,7 @@ rule plot_ohana_admixture_global:
         done = expand("{{basedir}}/ohana/global/{{file}}.k{k}.done", k=list(range(config["run_ohana_global"]["min_k"], config["run_ohana_global"]["max_k"] + 1))),
     output:
         plot = "{basedir}/figures/ohana/global/{file}.png",
-        done = touch("{basedir}/ohana/global/{file}.plot.done"),
+        done = touch("{basedir}/figures/ohana/global/{file}.done"),
     params:
         indir = "{basedir}/ohana/global",
         outdir = "{basedir}/figures/ohana/global",
@@ -99,7 +99,7 @@ rule plot_ohana_admixture_local:
         done = expand("{{basedir}}/ohana/local/{{population}}.{{file}}.k{k}.done", k=list(range(config["run_ohana_local"]["min_k"], config["run_ohana_local"]["max_k"] + 1))),
     output:
         plot = "{basedir}/figures/ohana/local/{population}.{file}.png",
-        done = touch("{basedir}/ohana/local/{population}.{file}.plot.done"),
+        done = touch("{basedir}/figures/ohana/local/{population}.{file}.done"),
     params:
         indir = "{basedir}/ohana/local",
         outdir = "{basedir}/figures/ohana/local",
