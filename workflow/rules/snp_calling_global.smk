@@ -1,9 +1,6 @@
 # This function returns all the index files for the input bam files.
 # It is used in the "input" of the following rule.
 def get_input_bai(lists):
-    #path = wildcards.basedir + "/docs/" + BAMLIST
-    #all_bam = pd.read_csv(path, header = None)[0].unique()
-    #bai = expand("{bam}.bai", bam = all_bam)
     bai = expand("{list}.bai", list = lists)
     return bai
 

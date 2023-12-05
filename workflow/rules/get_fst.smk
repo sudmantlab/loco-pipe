@@ -1,5 +1,5 @@
 ## Note that this assumes the saf is polarized with an ancestral genome. If this is not the case, use extra argument in the config file to output an folded SFS.
-
+# This rule first estimates Fst between two populations, by using the site allele frequency likelihoods files of both populations to construct a chromosome-wide two-dimensional site frequency spectrum (SFS). RealSFS then takes this 2D SFS as a prior for the calculation of posterior estimates of Fst per SNP. 
 rule get_fst:
     input:
         ref = REFERENCE,
@@ -29,6 +29,7 @@ rule get_fst:
         # Estimating average Fst in angsd
         realSFS fst stats {params.outbase}.alpha_beta.fst.idx > {params.outbase}.average_fst.txt 2>> {log}
         '''
+# This rule outputs three types of Manhattan plots for each pair of populations: 1) per-SNP Fst, 2) Fst in windows with a fixed length, and 3) Fst in windows with a fixed number of SNPs.
 
 rule plot_fst:
     input: 

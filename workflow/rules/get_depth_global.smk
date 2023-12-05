@@ -1,15 +1,11 @@
 # This function returns all the index files for the input bam files.
 # It is used in the "input" of the following rule.
 def get_input_bai(lists):
-    #path = wildcards.basedir + "/docs/" + BAMLIST
-    #all_bam = pd.read_csv(path, header = None)[0].unique()
-    #bai = expand("{bam}.bai", bam = all_bam)
     bai = expand("{list}.bai", list = lists)
     return bai
     
-# This rule runs ANGSD in a conda environment, counts the read 
-# depth of every site summed over all samples, and outputs the 
-# result into a pos.gz file. It also outputs depthGlobal and depthSample,
+# This rule runs ANGSD in a conda environment, counts the read depth of every site summed over all samples, 
+# and outputs the result into a pos.gz file. It also outputs depthGlobal and depthSample,
 # whose detailed description could be found on the ANGSD website:
 # http://www.popgen.dk/angsd/index.php/Depth. 
 rule get_depth_global:
