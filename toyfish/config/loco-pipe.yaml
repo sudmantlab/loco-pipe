@@ -240,6 +240,7 @@ run_ohana_local:
   
   # The name of a column inside the metadata table which you want to facet the admixture plot by
   group_by: "pca_cluster"
+
 # ==============================================================================
 #     Selective pipeline settings
 # ==============================================================================
@@ -308,14 +309,33 @@ get_fst:
   
   # Required. Width of the Manhattan plot, in inches.
   fig_width: 3
-  
+
+# To run local PCA with the lostruct package in R
 lostruct:
+
+  # Number of SNPs in each window
   snp_window_size: 100
+  
+  # Minimum minor allele frequency filter when running the PCA
   minmaf: 0.05
+  
+  # Number of top PCs to retain for each window
   pc: 2
+  
+  # Number of top MDS axes to retain
   k: 10
+  
+  # Number of threads that PCAngsd uses
   threads: 24
+  
+  # z-value cutoff for a window to be considered an outlier
   z_cutoff: 3
+  
+  # Width of the mds figure
   fig_width: 12
+  
+  # Height of the mds figure
   fig_height: 8
+  
+  # Variable to color the points by in concensus PCA plots
   color_by: "pca_cluster"

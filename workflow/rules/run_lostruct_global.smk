@@ -1,3 +1,4 @@
+# This rule splits chromosome-level beagle formatted genotype likelihoods into windows with fixed number of SNPs
 rule split_beagle_global:
     input:
         beagle="{basedir}/angsd/snp_calling_global/{chr}.beagle.gz",
@@ -21,7 +22,8 @@ rule split_beagle_global:
         rm -f {params.outdir}/{wildcards.chr}.beagle
         rm -f {params.outdir}/{wildcards.chr}.beagle.header
         '''
-        
+
+# This rule runs PCAngsd at each window
 rule run_pcangsd_in_windows_global:
     input:
         done="{basedir}/lostruct/global/split_beagle/{chr}.done",
@@ -58,6 +60,7 @@ rule run_pcangsd_in_windows_global:
         done
         '''
 
+# This rule summarizes PCA results at each window as required by the lostruct package
 rule summarize_pcangsd_for_lostruct_global:
     input:
         done="{basedir}/lostruct/global/run_pcangsd_in_windows/{chr}.done",
@@ -85,6 +88,7 @@ rule summarize_pcangsd_for_lostruct_global:
         done
         '''
 
+# This rule runs the lostruct package using PCA summaries as input and outputs a distance matrix, which describes the dissimilarity between windows
 rule run_lostruct_global:
     input:
         done=expand("{{basedir}}/lostruct/global/summarize_pcangsd_for_lostruct/{chr}.done", chr=CHRS),
@@ -112,7 +116,8 @@ rule run_lostruct_global:
         rm -f {params.outdir}/*
         Rscript --vanilla {params.rscript} {params.chr_table_path} {params.pc} {params.k} {params.indir} {params.outdir} {threads} &> {log}
         '''
-        
+
+# This rule plots the top MDS axes and saves the outlier windows in text files
 rule plot_lostruct_mds_global:
     input:
         done="{basedir}/lostruct/global/run_lostruct/run_lostruct.done",
@@ -142,6 +147,7 @@ rule plot_lostruct_mds_global:
         Rscript --vanilla {params.rscript} {params.chr_table_path} {params.indir} {params.outdir} {params.plot_dir} {params.k} {params.z_cutoff} {params.fig_width} {params.fig_height} &> {log}
         '''
 
+# This rule combines outlier windows along the same MDS axis and performs a concensus PCA with PCAngsd
 rule run_pcangsd_with_lostruct_outliers_global:
     input:
         done="{basedir}/lostruct/global/plot_lostruct_mds/plot_lostruct_mds.done",
@@ -186,7 +192,8 @@ rule run_pcangsd_with_lostruct_outliers_global:
         &>> {log}
         done
         '''
-        
+
+# This rule plots the result of the outlier windows' concensus PCA
 rule plot_lostruct_outlier_pca_global:
     input:
         done="{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers/run_pcangsd_with_lostruct_outliers.done",

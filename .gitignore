@@ -47,3 +47,12 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Project specific files
+angsd/
+pcangsd/
+ohana/
+lostruct/
+slurm-log/
+.snakemake/
+*done

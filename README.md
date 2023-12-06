@@ -11,8 +11,13 @@ loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
   start</a>
 - <a href="#setting-up-the-pipeline"
   id="toc-setting-up-the-pipeline">Setting up the pipeline</a>
-- <a href="#launch-the-pipeline" id="toc-launch-the-pipeline">Launch the
-  pipeline</a>
+- <a href="#preparing-the-project-directory-and-required-input-files"
+  id="toc-preparing-the-project-directory-and-required-input-files">Preparing
+  the project directory and required input files</a>
+- <a href="#launching-the-pipeline"
+  id="toc-launching-the-pipeline">Launching the pipeline</a>
+- <a href="#future-directions" id="toc-future-directions">Future
+  directions</a>
 
 **loco-pipe** is an automated Snakemake pipeline that streamlines a set
 of essential population genomic analyses for low-coverage whole genome
@@ -127,7 +132,9 @@ seamless as possible.
     cd $SOFTWARE_DIR # replace $SOFTWARE_DIR with a real path
     # download PCAngsd from Github
     git clone https://github.com/Rosemeis/pcangsd.git
-    cd pcangsd  
+    cd pcangsd
+    # check out the version the loco-pipe is based on
+    git checkout 2880c6aafe5c8b075f7730779cc6f94fee2c9bbb
     # create an environment for PCAngsd 
     mamba env create -f environment.yml  
     # activate the conda environment
@@ -139,8 +146,23 @@ seamless as possible.
     conda deactivate  
     ```
 
-5.  Set up the file structure.
+5.  (Optional) If you would like to run local PCA with the
+    [lostruct](https://github.com/petrelharp/local_pca) package in R
+    using loco-pipe, you **must** install lostruct (in addition to
+    PCAngsd, see above) manually as it is not yet available on conda.
+    Please install it to a conda environment named `lostruct` using the
+    script below.
 
+    ``` bash
+    mamba create -n lostruct -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
+    conda activate -n lostruct
+    ## this is an awkward solution, but I had to do it because lostruct would be installed to my system library location rather than the conda environment specific one instead
+    devtools::install_github("petrelharp/local_pca/lostruct")
+    ```
+
+## Preparing the project directory and required input files
+
+1.  Set up the file structure.
     - First, create a base directory for your project. This folder
       should be separate from the loco-pipe folder. You can name it
       however you want (just avoid special characters other than dashes
@@ -149,11 +171,9 @@ seamless as possible.
     - Within `BASEDIR`, create a new folder called `docs`. You can also
       have your sequencing data (e.g. fastq and bam files) in separate
       folders in `BASEDIR`, but this is not required.
-
-6.  Prepare a **sample table** and a **chromosome table**. Both of them
+2.  Prepare a **sample table** and a **chromosome table**. Both of them
     should be tab separated. Store them in the `docs` folder in
     `BASEDIR`. You can name them however you want.
-
     - Sample table: This table should contain a minimum of three columns
       in no particularly order. One column should be named exactly as
       `sample_name` and it should contain sample IDs of all the samples
@@ -195,31 +215,28 @@ seamless as possible.
       chromosomes/scaffolds/contigs which you would like to show on the
       plots. If the second column is empty, the original names will be
       shown.
-
-7.  Edit the configuration files
-
+3.  Edit the configuration files
     - The pipeline config file `loco-pipe.yaml`: This config file stores
       information that could be read by the loco-pipe. You should change
       the elements under the “global” tab based on your own research
       data and modify the hyper-parameters below other tabs depending on
-      your computing power. This file is also designed to allow you
-      control what features you want to include in your own runs. For
-      example, if you wish not to have calculate Fst, you can edit the
-      ‘get_Fst: true’ to ‘get_Fst: true’, and the “get_Fst” switch will
-      be turned off. The config file is thouroughly annotated, so please
-      read it through and make edits when needed.
-    - The cluster config file `cluster_config.yaml` (Optional): This
+      your preference. This file is also designed to allow you control
+      what features you want to include in your own runs. For example,
+      if you wish not to have calculate Fst, you can edit the ‘get_Fst:
+      true’ to ‘get_Fst: true’, and the “get_Fst” switch will be turned
+      off. The config file is thoroughly annotated, so please read it
+      through and make edits when needed.
+    - The cluster config file
+      `workflow/profiles/slurm/cluster_config.yaml` (Optional): This
       config files specifies the resources each step of the pipeline can
       use on a computer cluster.
 
-## Launch the pipeline
+## Launching the pipeline
 
 1.  Activate the `loco-pipe` environment with
     `conda activate loco-pipe`.
 
-2.  Set your working directory as `loco-pipe`.
-
-3.  You are now ready to launch the pipeline. We recommend to always
+2.  You are now ready to launch the pipeline. We recommend to always
     start with a dry run using the `-n` flag before actually running it.
 
     ``` bash
@@ -236,3 +253,11 @@ seamless as possible.
     `--profile` flag to specify your cluster profile. Other flags that
     may be useful are `--conda-prefix`, `--default-resources`, `-p`,
     etc.
+
+## Future directions
+
+We plan to improve the functionality of loco-pipe, by incorporating more
+analyses (e.g. GWAS, dxy) into this pipeline and also enabling more
+functionalities for the existing softwares (e.g. ANGSD, Ohana). In terms
+of variety, we will also provide more software options for users to pick
+for certain analysis (e.g. winSFS, ngsAdmix).
