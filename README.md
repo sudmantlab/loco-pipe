@@ -59,7 +59,7 @@ sequencing (lcWGS) data.
 
 ## Pipeline flowchart
 
-![](overall_pipeline.png)
+![](updated_locopipe.jpeg)
 
 ## Before you start
 
