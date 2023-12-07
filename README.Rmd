@@ -43,7 +43,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Pipeline flowchart
 
-![](overall_pipeline.png)
+![](updated_locopipe.jpeg)
 
 ## Before you start
 
