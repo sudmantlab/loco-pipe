@@ -19,11 +19,11 @@ Raw sequencing data were generated from an Illumina Novaseq sequencer, and we pe
 
 ## Setting up the pipeline
 
-1. Install [mamba](https://mamba.readthedocs.io/en/latest/mamba-installation.html#mamba-install) if you have not yet done so. A fresh install with Mambaforge is highly recommended.
+1. Install [mamba](https://mamba.readthedocs.io/en/latest/mamba-installation.html#mamba-install) if you have not already done so. A fresh install with Mambaforge is highly recommended.
 
-2. Download `loco-pipe` from GitHub (e.g. using `git clone`). We recommend you to download it to a folder where you store your software programs. We will refer to the full path of the resulting `loco-pipe` folder as `PIPEDIR`.
+2. Download `loco-pipe` from GitHub (e.g. using `git clone`). We recommend you to download it to a folder where you store your software programs. We will refer to the full path of the directory that contains the `loco-pipe` folder as `SOFTWARE_DIR`.
 
-3. Create the `loco-pipe` conda environment using mamba by running `mamba env create -f $PIPEDIR/workflow/envs/loco-pipe.yaml` (replace $PIPEDIR with a real path).
+3. Create the `loco-pipe` conda environment using mamba by running `mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/loco-pipe.yaml` (replace $SOFTWARE_DIR with a real path).
 
 4. (Optional) If you would like to run PCA with the software [PCAngsd](https://github.com/Rosemeis/pcangsd) using loco-pipe, you **must** install PCAngsd manually as it is not yet available on conda. Please install it to a conda environment named `pcangsd` using the script below.
 
@@ -49,19 +49,27 @@ Raw sequencing data were generated from an Illumina Novaseq sequencer, and we pe
 5. (Optional) If you would like to run local PCA with the [lostruct](https://github.com/petrelharp/local_pca) package in R using loco-pipe, you **must** install lostruct (in addition to PCAngsd, see above) manually as it is not yet available on conda. Please install it to a conda environment named `lostruct` using the script below.
 
     ```{bash eval=FALSE}
+    # create a conda environment named lostruct and install R and some key R packages
     mamba create -n lostruct -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
+    # activate the lostruct conda environment
     conda activate -n lostruct
-    ## this is an awkward solution, but I had to do it because lostruct would be installed to my system library location rather than the conda environment specific one instead
+    # launch R
+    R
+    # install lostruct
     devtools::install_github("petrelharp/local_pca/lostruct")
+    # quit R
+    q()
+    # deactivate the conda environment
+    conda deactivate  
     ```
 
 ## Preparing the project directory and required input files
 
-The file structure, metadata table, chromosome table, and pipeline configuration file for toyfish are already set up for you in the `toyfish` directory. However, you do need to change some file paths to match the ones on your computer. 
+The file structure, sample table, chromosome table, and pipeline configuration file for toyfish are already set up for you in the `toyfish` directory. However, you do need to change some file paths to match the ones on your computer. 
 
-1. In the metadata table (`toyfish/docs/metadata.tsv`), replace all occurrences of `/global/scratch/users/nicolas931010/` with the path at which `loco-pipe` is located on your computer.
+1. In the sample table (`toyfish/docs/sample_table.tsv`), replace all occurrences of `/global/scratch/users/nicolas931010/` with the path at which `loco-pipe` is located on your computer.
 
-2. In the loco-pipe configuration file (`toyfish/config/loco-pipe.yaml`), replace all occurrences of `/global/scratch/users/nicolas931010/` with the path at which `loco-pipe` is located on your computer.
+2. In the loco-pipe configuration file (`toyfish/config/config.yaml`), replace all occurrences of `/global/scratch/users/nicolas931010/` with the path at which `loco-pipe` is located on your computer.
 
 3. If you want to run `toyfish` on a computer cluster, also edit the `cluster_config.yaml` file under `workflow/profiles` to make sure that your cluster settings are specified correctly.
 
@@ -72,7 +80,7 @@ The file structure, metadata table, chromosome table, and pipeline configuration
 2. Define some environmental variables. Replace all occurrences of `/global/scratch/users/nicolas931010/` with appropriate paths on your computer.
 
 ```{bash, eval = FALSE}
-PIPEDIR=/global/scratch/users/nicolas931010/loco-pipe
+SOFTWARE_DIR=/global/scratch/users/nicolas931010
 BASEDIR=/global/scratch/users/nicolas931010/loco-pipe/toyfish
 CONDA=/global/scratch/users/nicolas931010/conda-envs
 ```
@@ -83,7 +91,7 @@ CONDA=/global/scratch/users/nicolas931010/conda-envs
 mkdir -p $BASEDIR/figures/flowchart
 snakemake -n --forceall --rulegraph \
 --directory $BASEDIR \
---snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk  | \
+--snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk  | \
 dot -Tpdf > $BASEDIR/figures/flowchart/toyfish.pdf
 ```
 
@@ -100,7 +108,7 @@ snakemake \
   --scheduler greedy \
   --cores 1 \
   --rerun-triggers mtime \
-  --snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk -p -n
+  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk -p -n
 ```
 
 On a computer cluster:
@@ -110,16 +118,18 @@ snakemake \
   --conda-frontend mamba \
   --conda-prefix $CONDA \
   --directory $BASEDIR \
-  --profile $PIPEDIR/workflow/profiles/slurm \
+  --profile $SOFTWARE_DIR/loco-pipe/workflow/profiles/slurm \
   --scheduler greedy \
   --default-resources mem_mb=None disk_mb=None \
   --rerun-triggers mtime \
-  --snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk -p -n
+  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk -p -n
 ```
 
-Note that the ending `-n` flag means it is a dry run. If the dry run goes through, remove "-n" and rerun the pipe-line.
+Note that the ending `-n` flag means it is a dry run. If the dry run goes through, remove `-n` to actually run the pipeline. 
 
 ## Example output
+
+Below are some figures that are automatically plotted by loco-pipe. After running it with the toyfish dataset, you should see these figures recreated in the `toyfish/figures` folder. 
 
 #### Pipeline flowchart
 
@@ -177,6 +187,14 @@ Note that the ending `-n` flag means it is a dry run. If the dry run goes throug
 #### Heterozygosity estimates
 
 ![](toyfish/figures/heterozygosity/heterozygosity.png)
+
+#### Local PCA MDS plot when combining all chromosomes
+
+![](toyfish/figures/lostruct/global/combined.mds.png)
+
+#### Local PCA outlier window concensus PCA plot when combining all chromosomes
+
+![](toyfish/figures/lostruct/global/combined.pca.png)
 
 ```{r eval=FALSE, echo=FALSE}
 # One of the most important quality control steps in the analysis of lcWGS data is the establishment of proper depth filters. Highly repetitive regions in the reference genome tend to have much lower mapping rate than the rest of the genome as reads cannot map uniquely to them. On the other hand, when such repetitive/duplicated regions are collapsed to a single sequence on the reference genome, too many reads may map incorrectly to it. These regions thus violate many basic assumptions used in downstream analyses and will bias their results if not filtered out. However, there has not been a consensus method to determine the depth filters, and common practices so far have included arbitrarily picking a value or taking a certain standard deviation away from the mean/median of the empirical distribution. But since the distribution of sequencing depth tends to have an irregular shape and a long tail, taking its standard deviation is often uninformative and is not a generalizable solution. With loco-pipe, we fit a normal distribution to the bulk of the empirical distribution, excluding both tails, and use the fitted normal distribution as a guideline for depth filter determination. This method thus has the advantage of reproducibility across datasets, and is more sound statistically than existing approaches. 

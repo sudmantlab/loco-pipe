@@ -65,7 +65,7 @@ global:
   # That folder includes fst_functions.R, get_depth_filter.R and plot_fst.R.
   scriptdir: "/global/scratch/users/nicolas931010/loco-pipe/workflow/scripts"
   
-  # Required. The name of a column inside the metadata table which you want to use to subset the population.
+  # Required. The name of a column inside the sample table which you want to use to subset the population.
   # The input should be a string. In the first generation of the
   # loco-pipe, we only implement one level of hierachy. 
   pop_level: "common_name"
@@ -74,7 +74,7 @@ global:
   # This file should include at least the name of the samples and the full pathway to the bamfiles
   # If you want to include analyses such as heterozygosity, then a column of traits that could be used to
   # separate the original sample is needed.
-  metadata: "metadata.tsv"
+  sample_table: "sample_table.tsv"
 
   # Required. The name of a tsv file that includes names for chromosomes.
   # This chr_table should have one or two columns: this first column is the original chromosome/scaffold/contig names. 
@@ -176,7 +176,7 @@ get_heterozygosity:
   # accurate result.
   realsfs_extra: "-tole 1e-08 -maxIter 500"
 
-  # The name of a column inside the metadata table which you want to color the heterozygosity plot by
+  # The name of a column inside the sample table which you want to color the heterozygosity plot by
   color_by: "pca_cluster"
 
 # This rule will generate a subset of SNPs for each chromomsome from the SNP list generated from all samples
@@ -212,7 +212,7 @@ run_pcangsd:
   # Required. Number of threads PCAngsd uses.
   threads: 8
 
-  # The name of a column inside the metadata table which you want to color the PCA plot by
+  # The name of a column inside the sample table which you want to color the PCA plot by
   color_by: "pca_cluster"
 
 # This rule will conduct admixture analysis on all samples to characterize population structure using the ohana software.
@@ -225,7 +225,7 @@ run_ohana_global:
   # Required. The maximum number of K (i.e. the number of ancstral population components assumed in the sample).
   max_k: 7
   
-  # The name of a column inside the metadata table which you want to facet the admixture plot by
+  # The name of a column inside the sample table which you want to facet the admixture plot by
   group_by: "pca_cluster"
 
 # This rule will conduct admixture analysis on samples belonging to the same population to characterize population structure using the ohana software.
@@ -238,7 +238,7 @@ run_ohana_local:
   # Required. The maximum number of K (i.e. the number of ancstral population components assumed in the sample).
   max_k: 7
   
-  # The name of a column inside the metadata table which you want to facet the admixture plot by
+  # The name of a column inside the sample table which you want to facet the admixture plot by
   group_by: "pca_cluster"
 
 # ==============================================================================

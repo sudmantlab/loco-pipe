@@ -26,6 +26,13 @@ Toyfish - a quick tutorial with an example dataset
     id="toc-theta-and-neutrality-stats">Theta and neutrality stats</a>
   - <a href="#heterozygosity-estimates"
     id="toc-heterozygosity-estimates">Heterozygosity estimates</a>
+  - <a href="#local-pca-mds-plot-when-combining-all-chromosomes"
+    id="toc-local-pca-mds-plot-when-combining-all-chromosomes">Local PCA MDS
+    plot when combining all chromosomes</a>
+  - <a
+    href="#local-pca-outlier-window-concensus-pca-plot-when-combining-all-chromosomes"
+    id="toc-local-pca-outlier-window-concensus-pca-plot-when-combining-all-chromosomes">Local
+    PCA outlier window concensus PCA plot when combining all chromosomes</a>
 
 ## Dataset overview
 
@@ -66,17 +73,17 @@ subsetted reference genome sequence and its index file are stored in
 
 1.  Install
     [mamba](https://mamba.readthedocs.io/en/latest/mamba-installation.html#mamba-install)
-    if you have not yet done so. A fresh install with Mambaforge is
+    if you have not already done so. A fresh install with Mambaforge is
     highly recommended.
 
 2.  Download `loco-pipe` from GitHub (e.g. using `git clone`). We
     recommend you to download it to a folder where you store your
-    software programs. We will refer to the full path of the resulting
-    `loco-pipe` folder as `PIPEDIR`.
+    software programs. We will refer to the full path of the directory
+    that contains the `loco-pipe` folder as `SOFTWARE_DIR`.
 
 3.  Create the `loco-pipe` conda environment using mamba by running
-    `mamba env create -f $PIPEDIR/workflow/envs/loco-pipe.yaml` (replace
-    \$PIPEDIR with a real path).
+    `mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/loco-pipe.yaml`
+    (replace \$SOFTWARE_DIR with a real path).
 
 4.  (Optional) If you would like to run PCA with the software
     [PCAngsd](https://github.com/Rosemeis/pcangsd) using loco-pipe, you
@@ -111,27 +118,34 @@ subsetted reference genome sequence and its index file are stored in
     script below.
 
     ``` bash
+    # create a conda environment named lostruct and install R and some key R packages
     mamba create -n lostruct -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
+    # activate the lostruct conda environment
     conda activate -n lostruct
-    ## this is an awkward solution, but I had to do it because lostruct would be installed to my system library location rather than the conda environment specific one instead
+    # launch R
+    R
+    # install lostruct
     devtools::install_github("petrelharp/local_pca/lostruct")
+    # quit R
+    q()
+    # deactivate the conda environment
+    conda deactivate  
     ```
 
 ## Preparing the project directory and required input files
 
-The file structure, metadata table, chromosome table, and pipeline
+The file structure, sample table, chromosome table, and pipeline
 configuration file for toyfish are already set up for you in the
 `toyfish` directory. However, you do need to change some file paths to
 match the ones on your computer.
 
-1.  In the metadata table (`toyfish/docs/metadata.tsv`), replace all
+1.  In the sample table (`toyfish/docs/sample_table.tsv`), replace all
     occurrences of `/global/scratch/users/nicolas931010/` with the path
     at which `loco-pipe` is located on your computer.
 
-2.  In the loco-pipe configuration file
-    (`toyfish/config/loco-pipe.yaml`), replace all occurrences of
-    `/global/scratch/users/nicolas931010/` with the path at which
-    `loco-pipe` is located on your computer.
+2.  In the loco-pipe configuration file (`toyfish/config/config.yaml`),
+    replace all occurrences of `/global/scratch/users/nicolas931010/`
+    with the path at which `loco-pipe` is located on your computer.
 
 3.  If you want to run `toyfish` on a computer cluster, also edit the
     `cluster_config.yaml` file under `workflow/profiles` to make sure
@@ -147,7 +161,7 @@ match the ones on your computer.
     your computer.
 
 ``` bash
-PIPEDIR=/global/scratch/users/nicolas931010/loco-pipe
+SOFTWARE_DIR=/global/scratch/users/nicolas931010
 BASEDIR=/global/scratch/users/nicolas931010/loco-pipe/toyfish
 CONDA=/global/scratch/users/nicolas931010/conda-envs
 ```
@@ -158,7 +172,7 @@ CONDA=/global/scratch/users/nicolas931010/conda-envs
 mkdir -p $BASEDIR/figures/flowchart
 snakemake -n --forceall --rulegraph \
 --directory $BASEDIR \
---snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk  | \
+--snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk  | \
 dot -Tpdf > $BASEDIR/figures/flowchart/toyfish.pdf
 ```
 
@@ -175,7 +189,7 @@ snakemake \
   --scheduler greedy \
   --cores 1 \
   --rerun-triggers mtime \
-  --snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk -p -n
+  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk -p -n
 ```
 
 On a computer cluster:
@@ -185,17 +199,21 @@ snakemake \
   --conda-frontend mamba \
   --conda-prefix $CONDA \
   --directory $BASEDIR \
-  --profile $PIPEDIR/workflow/profiles/slurm \
+  --profile $SOFTWARE_DIR/loco-pipe/workflow/profiles/slurm \
   --scheduler greedy \
   --default-resources mem_mb=None disk_mb=None \
   --rerun-triggers mtime \
-  --snakefile $PIPEDIR/workflow/pipelines/loco-pipe.smk -p -n
+  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk -p -n
 ```
 
 Note that the ending `-n` flag means it is a dry run. If the dry run
-goes through, remove “-n” and rerun the pipe-line.
+goes through, remove `-n` to actually run the pipeline.
 
 ## Example output
+
+Below are some figures that are automatically plotted by loco-pipe.
+After running it with the toyfish dataset, you should see these figures
+recreated in the `toyfish/figures` folder.
 
 #### Pipeline flowchart
 
@@ -252,3 +270,11 @@ goes through, remove “-n” and rerun the pipe-line.
 #### Heterozygosity estimates
 
 ![](toyfish/figures/heterozygosity/heterozygosity.png)
+
+#### Local PCA MDS plot when combining all chromosomes
+
+![](toyfish/figures/lostruct/global/combined.mds.png)
+
+#### Local PCA outlier window concensus PCA plot when combining all chromosomes
+
+![](toyfish/figures/lostruct/global/combined.pca.png)

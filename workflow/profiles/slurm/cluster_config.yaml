@@ -1,0 +1,8 @@
+__default__:
+  time: 4320
+  nodes: 1
+  cpus-per-task: 4
+  account: co_genomicdata
+  partition: savio4_htc
+  qos: savio_lowprio
+  exclude: n0100.savio4
