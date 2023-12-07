@@ -1,3 +1,5 @@
+# This rule uses PCAngsd software to conduct PCA analysis on a global level. 
+# More details about PCAngsd could be found here: http://www.popgen.dk/software/index.php/PCAngsd.
 rule run_pcangsd_pca_global:
     input: "{basedir}/angsd/snp_calling_global/{file}.beagle.gz",
     output: 
@@ -25,7 +27,9 @@ rule run_pcangsd_pca_global:
         --out {params.outdir}/{wildcards.file} \
         &>> {log}
         '''
-        
+
+# This rule uses PCAngsd software to conduct PCA analysis on a local level. 
+# More details about PCAngsd could be found here: http://www.popgen.dk/software/index.php/PCAngsd.      
 rule run_pcangsd_pca_local:
     input: "{basedir}/angsd/get_maf/{population}.{file}.beagle.gz",
     output: 
@@ -51,7 +55,7 @@ rule run_pcangsd_pca_local:
         --out {params.outdir}/{wildcards.population}.{wildcards.file} \
         &> {log}
         '''
-
+# This rule plots the PCA analysis conducted in the rule,run_pcangsd_pca_global, above. 
 rule plot_pcangsd_pca_global:
     input:
         cov = "{basedir}/pcangsd/global/{file}.cov",
@@ -74,6 +78,7 @@ rule plot_pcangsd_pca_global:
         Rscript --vanilla {params.rscript} {input.cov} {output.plot} {params.sample_table_path} {params.color_by} &> {log}
         '''
 
+# This rule plots the PCA analysis conducted in the rule,run_pcangsd_pca_local, above. 
 rule plot_pcangsd_pca_local:
     input:
         cov = "{basedir}/pcangsd/local/{population}.{file}.cov",

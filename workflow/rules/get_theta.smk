@@ -1,3 +1,5 @@
+# This rule includes three steps.
+# The first step is to input a population-specific bamlist and a chromosome-specific site list into ANGSD to calculate site allele frequency likelihoods for each population at each chromosome. Then we use realSFS to estimate the one-dimensional SFS on all sites (variable and invariable). Finally, the SFS is used as a prior to calculate theta. We offer three types of theta estimation: 1) per-SNP, 2) chromosome-average, and 3) sliding-window. 
 rule get_theta:
     input:
         ref=REFERENCE,
@@ -70,7 +72,7 @@ rule get_theta:
         -win {params.window_size} -step {params.step_size} \
         -outnames {params.outbase}.{params.window_size}window_{params.step_size}step.thetas 2>> {log}
         '''
-
+# This rule generates plots for 1)estimates of pi, 2)Watterson’s theta, and 3)Tajima’s D in sliding windows for each population separately.
 rule plot_theta_by_window:
     input:
         chr_table = CHR_TABLE,
