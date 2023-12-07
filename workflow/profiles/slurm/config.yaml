@@ -1,0 +1,17 @@
+# Default settings of the cookiecutter setup
+restart-times: 0
+jobscript: "slurm-jobscript.sh"
+cluster: "slurm-submit.py"
+cluster-status: "slurm-status.py"
+cluster-cancel: "scancel"
+max-jobs-per-second: 1
+max-status-checks-per-second: 10
+local-cores: 1
+latency-wait: 60
+
+# Additional settings used for our purposes
+use-conda: True
+jobs: 300
+keep-going: True
+rerun-incomplete: True
+printshellcmds: True

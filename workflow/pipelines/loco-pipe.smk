@@ -2,15 +2,15 @@ import numpy as np
 import pandas as pd
 import os 
 
-configfile: "config/loco-pipe.yaml"
+configfile: "config/config.yaml"
 
 #################################################
 ##  Things read directly from the config file
 
 BASEDIR  = config["global"]["basedir"]
 REFERENCE = config["global"]["reference"]
-CHR_TABLE = BASEDIR + "/docs/" + config["global"]["chr_table"]
-METADATA = BASEDIR + "/docs/" + config["global"]["metadata"]
+CHR_TABLE_PATH = BASEDIR + "/docs/" + config["global"]["chr_table"]
+SAMPLE_TABLE_PATH = BASEDIR + "/docs/" + config["global"]["sample_table"]
 
 ## Note: we need to define a flag for all population-level analyses, and this flag needs to be consistently applied
 POP_L1_COLNAME = config["global"]["pop_level"] if config["to_include"]["run_pcangsd_local"]|config["to_include"]["get_maf"]| config["to_include"]["get_theta"]|config["to_include"]["get_Fst"] else []
@@ -18,15 +18,15 @@ POP_L1_COLNAME = config["global"]["pop_level"] if config["to_include"]["run_pcan
 #################################################
 ## Varibles generated from the config variables
 
-CHR_TB = pd.read_csv(CHR_TABLE, sep="\t",header=None, index_col=None)
-CHRS = CHR_TB.iloc[:,0]
+CHR_TABLE = pd.read_csv(CHR_TABLE_PATH, sep="\t",header=None, index_col=None)
+CHRS = CHR_TABLE.iloc[:,0]
 #CHR_LIST = ','.join([x for x in CHRS])
 #CHRS.to_csv(CHR_LIST, header=False,index=False,sep="\t") if os.path.exists(CHR_LIST) else []
-MD_TABLE = pd.read_csv(METADATA, sep="\t")
-ALL_BAMS = MD_TABLE["bam"].unique()
-ALL_SAMPLES = MD_TABLE["sample_name"].unique()
-BAM_DICT = MD_TABLE.set_index('sample_name')['bam'].to_dict()
-POP_L1_COL = MD_TABLE[POP_L1_COLNAME]
+SAMPLE_TABLE = pd.read_csv(SAMPLE_TABLE_PATH, sep="\t")
+ALL_BAMS = SAMPLE_TABLE["bam"].unique()
+ALL_SAMPLES = SAMPLE_TABLE["sample_name"].unique()
+BAM_DICT = SAMPLE_TABLE.set_index('sample_name')['bam'].to_dict()
+POP_L1_COL = SAMPLE_TABLE[POP_L1_COLNAME]
 POP_L1 = POP_L1_COL.unique()
 
 #################################################
