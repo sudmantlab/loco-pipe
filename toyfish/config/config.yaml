@@ -4,6 +4,9 @@
 
 # Here you could manually select which analyses you would like to include in
 # the pipeline. The default setting is "true" for all tests. 
+# If you do not have a grouping factor to to run the local analyses, please make sure the
+# following "to_inculde" functions are turned "false": run_ohana_local, get theta, get_Fst, plot_Fst, 
+# run_pcangsd_local and get_maf.
 to_include:
 
   # To conduct admixture analysis using Ohana to characterize population structure for all samples.
@@ -74,6 +77,8 @@ global:
   # This file should include at least the name of the samples and the full pathway to the bamfiles
   # If you want to include analyses such as heterozygosity, then a column of traits that could be used to
   # separate the original sample is needed.
+  # If you do not want to include any local-level analyses, please make sure to create a fake column in your 
+  # dataset with all entries the same.
   sample_table: "sample_table.tsv"
 
   # Required. The name of a tsv file that includes names for chromosomes.
@@ -176,7 +181,8 @@ get_heterozygosity:
   # accurate result.
   realsfs_extra: "-tole 1e-08 -maxIter 500"
 
-  # The name of a column inside the sample table which you want to color the heterozygosity plot by
+  # The name of a column inside the sample table which you want to color the heterozygosity plot by.
+  # If you do not have a grouping color, use the name of the fake column that you create.
   color_by: "pca_cluster"
 
 # This rule will generate a subset of SNPs for each chromomsome from the SNP list generated from all samples
@@ -213,6 +219,7 @@ run_pcangsd:
   threads: 8
 
   # The name of a column inside the sample table which you want to color the PCA plot by
+  # If you do not have a grouping color, use the name of the fake column that you create.
   color_by: "pca_cluster"
 
 # This rule will conduct admixture analysis on all samples to characterize population structure using the ohana software.
@@ -225,7 +232,9 @@ run_ohana_global:
   # Required. The maximum number of K (i.e. the number of ancstral population components assumed in the sample).
   max_k: 7
   
-  # The name of a column inside the sample table which you want to facet the admixture plot by
+  # The name of a column inside the sample table which you want to facet the admixture plot by.
+  # If you do not have a grouping color, use the name of the fake column that you create.
+
   group_by: "pca_cluster"
 
 # This rule will conduct admixture analysis on samples belonging to the same population to characterize population structure using the ohana software.
@@ -338,4 +347,5 @@ lostruct:
   fig_height: 8
   
   # Variable to color the points by in concensus PCA plots
+  # If you do not have a grouping color, use the name of the fake column that you create.
   color_by: "pca_cluster"

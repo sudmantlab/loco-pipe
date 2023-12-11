@@ -196,16 +196,16 @@ computer cluster, making it much easier to learn and troubleshoot.
       pipeline configuration file `config.yaml`. Below is an example of
       a sample table.
 
-      | sample_name | bam                                                                        | common_name | pca_cluster |
-      |:------------|:---------------------------------------------------------------------------|:------------|:------------|
-      | ABLG11920-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11920-1.bam | sunset      | sunset      |
-      | ABLG12067-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG12067-1.bam | sunset      | sunset      |
-      | ABLG11918-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11918-1.bam | vermilion   | vermilion_1 |
-      | ABLG11913-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11913-1.bam | vermilion   | vermilion_1 |
-      | ABLG9871-1  | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG9871-1.bam  | vermilion   | vermilion_2 |
-      | ABLG11795-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11795-1.bam | vermilion   | vermilion_2 |
-      | ABLG11937-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11937-1.bam | vermilion   | vermilion_3 |
-      | ABLG11940-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11940-1.bam | vermilion   | vermilion_3 |
+      | sample_name | bam                                                                        | common_name | pca_cluster | fake_col |
+      |:------------|:---------------------------------------------------------------------------|:------------|:------------|:---------|
+      | ABLG11920-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11920-1.bam | sunset      | sunset      | all      |
+      | ABLG12067-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG12067-1.bam | sunset      | sunset      | all      |
+      | ABLG11918-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11918-1.bam | vermilion   | vermilion_1 | all      |
+      | ABLG11913-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11913-1.bam | vermilion   | vermilion_1 | all      |
+      | ABLG9871-1  | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG9871-1.bam  | vermilion   | vermilion_2 | all      |
+      | ABLG11795-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11795-1.bam | vermilion   | vermilion_2 | all      |
+      | ABLG11937-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11937-1.bam | vermilion   | vermilion_3 | all      |
+      | ABLG11940-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11940-1.bam | vermilion   | vermilion_3 | all      |
 
       > A few tips about the sample table:
       > - Sample names have to be unique, and each sample should
@@ -232,7 +232,7 @@ computer cluster, making it much easier to learn and troubleshoot.
       >   launch the pipeline again with an updated sample table.
       > - In case that you don’t have any grouping information a priori,
       >   you still need to have a fake grouping column with all samples
-      >   having the same entry for plotting purpose (e.g. PCA and
+      >   having the same entry for plotting purpose, as shown in the last column (e.g. PCA and
       >   admixture). In this case, you will also need to turn off all
       >   population-level analyses in the configuration file (see
       >   below).
