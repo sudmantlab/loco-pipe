@@ -13,6 +13,7 @@ rule get_maf:
         config["get_depth_global"]["threads"]
     params:
         outdir="{basedir}/angsd/get_maf",
+        gl_model=config["global"]["gl_model"],
         minq=config["get_depth_global"]["minq"],
         minmapq=config["get_depth_global"]["minmapq"],
         extra=config["snp_calling_global"]["extra"]
@@ -26,7 +27,7 @@ rule get_maf:
             -P {threads} \
             -out {params.outdir}/{wildcards.population}.{wildcards.chr} \
             -sites {input.site_list} -r {wildcards.chr} \
-            -GL 1 -doGlf 2 -doMaf 1 -doSaf 1 -doMajorMinor 3 \
+            -GL {params.gl_model} -doGlf 2 -doMaf 1 -doSaf 1 -doMajorMinor 3 \
             -doCounts 1 -dumpCounts 1 \
             -doIBS 1 -makematrix 1 -doCov 1 \
             -minQ {params.minq} -minMapQ {params.minmapq} \

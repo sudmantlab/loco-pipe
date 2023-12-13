@@ -20,10 +20,10 @@ def extract_each_bam_column_to_txt(input_tsv_file, separator, Groupings, base_di
             for each_row in new_df:
                 txt_file.write( str(each_row) + '\n')
                 
-# This rule is to create a global bamlist from the metadata table. (By "global", we mean every sample listed in the metadata table is being included) 
+# This rule is to create a global bamlist from the sample table. (By "global", we mean every sample listed in the sample table is being included) 
 rule get_bamlist_global:
   input: 
-    tsv_file = METADATA
+    tsv_file = SAMPLE_TABLE_PATH
   output: 
     txt_file = "{basedir}/docs/"+BAMLIST
   params:
@@ -32,10 +32,10 @@ rule get_bamlist_global:
   run:
     extract_bam_column_to_txt(input.tsv_file, params.basedir, "\t", params.filename)
 
-# This rule is to create a bamlist per population from the metadata table. (By "local", we mean that we separate samples by population) 
+# This rule is to create a bamlist per population from the sample table. (By "local", we mean that we separate samples by population) 
 rule get_bamlist_local:
   input: 
-    tsv_file = METADATA,
+    tsv_file = SAMPLE_TABLE_PATH,
   params:
     basedir = BASEDIR,
     grouping = POP_L1_COLNAME,

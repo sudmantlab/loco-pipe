@@ -14,6 +14,7 @@ rule get_fst:
         config["get_fst"]["threads"]
     params:
         outdir = "{basedir}/angsd/get_fst",
+        ref_type = config["global"]["ref_type"],
         outbase = "{basedir}/angsd/get_fst/{population1}.{population2}.{chr}",
         extra = config["get_fst"]["extra"],
     log: "{basedir}/angsd/get_fst/{population1}.{population2}.{chr}.log"
@@ -22,9 +23,9 @@ rule get_fst:
         '''
         mkdir -p {params.outdir}
         # Generate the 2dSFS to be used as a prior for Fst estimation (and individual plots)
-        realSFS {input.saf1} {input.saf2} -P {threads} {params.extra} > {params.outbase}.2dSFS 2> {log}
+        realSFS {input.saf1} {input.saf2} -P {threads} -fold {params.ref_type} {params.extra} > {params.outbase}.2dSFS 2> {log}
         # Estimating Fst in angsd
-        realSFS fst index  {input.saf1} {input.saf2} -sfs {params.outbase}.2dSFS -fstout {params.outbase}.alpha_beta
+        realSFS fst index  {input.saf1} {input.saf2} -sfs {params.outbase}.2dSFS -fstout {params.outbase}.alpha_beta -fold {params.ref_type}
         realSFS fst print {params.outbase}.alpha_beta.fst.idx > {params.outbase}.alpha_beta.txt 2>> {log}
         # Estimating average Fst in angsd
         realSFS fst stats {params.outbase}.alpha_beta.fst.idx > {params.outbase}.average_fst.txt 2>> {log}
@@ -34,7 +35,7 @@ rule get_fst:
 rule plot_fst:
     input: 
         fst = expand("{{basedir}}/angsd/get_fst/{{population1}}.{{population2}}.{chr}.done", chr = CHRS),
-        chr_table = CHR_TABLE,
+        chr_table = CHR_TABLE_PATH,
     output: 
         png = "{basedir}/figures/fst/{population1}.{population2}.png",
         done = touch("{basedir}/figures/fst/{population1}.{population2}.done"),

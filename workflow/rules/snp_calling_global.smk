@@ -23,6 +23,7 @@ rule snp_calling_global:
         config["get_depth_global"]["threads"]
     params:
         outdir = "{basedir}/angsd/snp_calling_global",
+        gl_model = config["global"]["gl_model"],
         minq = config["get_depth_global"]["minq"],
         minmapq = config["get_depth_global"]["minmapq"],
         minind = config["snp_calling_global"]["minind"],
@@ -43,7 +44,7 @@ rule snp_calling_global:
             -bam {input.bamlist} -ref {input.ref} \
             -P {threads} \
             -out {params.outdir}/{wildcards.chr} -r {wildcards.chr} \
-            -GL 1 -doGlf 2 -doMaf 1 -doMajorMinor 1 \
+            -GL {params.gl_model} -doGlf 2 -doMaf 1 -doMajorMinor 1 \
             -doDepth 1 -doCounts 1 -maxDepth 100000 -dumpCounts 1 \
             -doIBS 1 -makematrix 1 -doCov 1 \
             -setMinDepth $MINDP -setMaxDepth $MAXDP -minInd $MININD \

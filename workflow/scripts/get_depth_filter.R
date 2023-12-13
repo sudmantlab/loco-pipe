@@ -39,8 +39,8 @@ count_mode <- depth_hist %>%
   filter(depth>depth_quantile) %>%
   slice_max(count) %>%
   pull(count)
-depth_lower_bound <- depth_mode*0.75
-depth_upper_bound <- depth_mode*1.25
+depth_lower_bound <- depth_mode*0.5
+depth_upper_bound <- depth_mode*1.5
 depth_hist_subset <- depth_hist %>%
   filter(depth > depth_lower_bound, depth < depth_upper_bound)
 n_sites_subset <- depth_hist_subset %>%

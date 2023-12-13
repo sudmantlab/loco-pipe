@@ -1,4 +1,4 @@
-sample_name	bam	common_name	pca_cluster
+sample_name	bam	species	population
 ABLG11920-1	/global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11920-1.bam	sunset	sunset
 ABLG12067-1	/global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG12067-1.bam	sunset	sunset
 ABLG11582-1	/global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11582-1.bam	sunset	sunset

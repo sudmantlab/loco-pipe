@@ -35,7 +35,8 @@ theta_table <- read_tsv(paste0(indir, '/', population, '.', chrs, '.', window_si
 theta_table_long <- theta_table %>%
   left_join(chr_table, by=c("Chr"="chr")) %>%
   transmute(lg=lg, pos=WinCenter, pi=tP/nSites, `Watterson's theta`=tW/nSites, `Tajima's D`=Tajima) %>%
-  pivot_longer(cols = 3:5, names_to = "name", values_to = "value")
+  pivot_longer(cols = 3:5, names_to = "name", values_to = "value") %>%
+  mutate(name=fct_relevel(name, c("pi", "Watterson's theta" , "Tajima's D")))
 
 theta_plot <- theta_table_long %>%
   ggplot(aes(x=pos, y=value)) +

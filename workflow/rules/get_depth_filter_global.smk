@@ -12,7 +12,7 @@ rule get_depth_filter_global:
     params:
         indir = "{basedir}/angsd/get_depth_global/",
         plot_dir = "{basedir}/figures/depth/",
-        chr_list = CHR_TABLE,
+        chr_list = CHR_TABLE_PATH,
         n_sd = config["get_depth_filter_global"]["n_sd"],
         rscript = config["global"]["scriptdir"] + "/get_depth_filter.R"
     log: "{basedir}/angsd/get_depth_global/get_depth_filter.log"

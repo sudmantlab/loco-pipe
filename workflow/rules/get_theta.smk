@@ -15,8 +15,10 @@ rule get_theta:
     params:
         outdir="{basedir}/angsd/get_theta",
         outbase="{basedir}/angsd/get_theta/{population}.{chr}",
+        gl_model=config["global"]["gl_model"],
         minq=config["get_theta"]["minq"],
         minmapq=config["get_theta"]["minmapq"],
+        ref_type = config["global"]["ref_type"],
         window_size=config["get_theta"]["window_size"],
         step_size=config["get_theta"]["step_size"],
         dosaf_extra=config["get_theta"]["dosaf_extra"],
@@ -34,7 +36,7 @@ rule get_theta:
         -out {params.outbase} \
         -doSaf 1 \
         -doCounts 1 \
-        -GL 1 \
+        -GL {params.gl_model} \
         -P {threads} \
         -minQ {params.minq} -minMapQ {params.minmapq} \
         -remove_bads 1 -only_proper_pairs 1\
@@ -44,6 +46,7 @@ rule get_theta:
         realSFS \
         {params.outbase}.saf.idx \
         -P {threads} \
+        -fold {params.ref_type} \
         {params.realsfs_extra} \
         > {params.outbase}.sfs 2>> {log}
         
@@ -53,7 +56,9 @@ rule get_theta:
         -outname {params.outbase} \
         -sfs {params.outbase}.sfs \
         -anc {input.ref} \
-        -P {threads} 2>> {log}
+        -P {threads} \
+        -fold {params.ref_type} \
+        2>> {log}
         
         ## Print per-SNP theta
         thetaStat print \
@@ -75,14 +80,14 @@ rule get_theta:
 # This rule generates plots for 1)estimates of pi, 2)Watterson’s theta, and 3)Tajima’s D in sliding windows for each population separately.
 rule plot_theta_by_window:
     input:
-        chr_table = CHR_TABLE,
+        chr_table = CHR_TABLE_PATH,
         done = expand("{{basedir}}/angsd/get_theta/{{population}}.{chr}.done", chr = CHRS),
     output:
         plot = "{basedir}/figures/theta/{population}.theta_by_window.png",
         done = touch("{basedir}/figures/theta/{population}.theta_by_window.done"),
     params:
         indir = "{basedir}/angsd/get_theta",
-        outdir = "{basedir}/figures/get_theta",
+        outdir = "{basedir}/figures/theta",
         window_size=config["get_theta"]["window_size"],
         step_size=config["get_theta"]["step_size"],
         fig_height = config["get_theta"]["fig_height"],

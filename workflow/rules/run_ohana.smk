@@ -79,7 +79,7 @@ rule plot_ohana_admixture_global:
     params:
         indir = "{basedir}/ohana/global",
         outdir = "{basedir}/figures/ohana/global",
-        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        sample_table_path = "{basedir}/docs/" + config["global"]["sample_table"],
         group_by = config["run_ohana_global"]["group_by"],
         min_k = config["run_ohana_global"]["min_k"],
         max_k = config["run_ohana_global"]["max_k"],
@@ -103,7 +103,7 @@ rule plot_ohana_admixture_local:
     params:
         indir = "{basedir}/ohana/local",
         outdir = "{basedir}/figures/ohana/local",
-        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        sample_table_path = "{basedir}/docs/" + config["global"]["sample_table"],
         group_by = config["run_ohana_local"]["group_by"],
         min_k = config["run_ohana_local"]["min_k"],
         max_k = config["run_ohana_local"]["max_k"],

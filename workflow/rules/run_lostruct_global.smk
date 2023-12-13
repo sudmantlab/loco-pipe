@@ -150,7 +150,7 @@ rule plot_lostruct_mds_global:
 # This rule combines outlier windows along the same MDS axis and performs a concensus PCA with PCAngsd
 rule run_pcangsd_with_lostruct_outliers_global:
     input:
-        done="{basedir}/lostruct/global/plot_lostruct_mds/plot_lostruct_mds.done",
+        done="{basedir}/figures/lostruct/global/plot_lostruct_mds.done",
     output:
         done=touch("{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers/run_pcangsd_with_lostruct_outliers.done"),
     params:
@@ -206,7 +206,7 @@ rule plot_lostruct_outlier_pca_global:
         rscript=config["global"]["scriptdir"] + "/plot_lostruct_outlier_pca.R",
         cov_dir="{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers",
         plot_dir="{basedir}/figures/lostruct/global",
-        sample_table_path="{basedir}/docs/" + config["global"]["metadata"],
+        sample_table_path="{basedir}/docs/" + config["global"]["sample_table"],
         color_by=config["lostruct"]["color_by"],
         chr_table_path=config["global"]["basedir"] + "/docs/" + config["global"]["chr_table"],
         k=config["lostruct"]["k"],

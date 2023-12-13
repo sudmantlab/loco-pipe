@@ -47,3 +47,5 @@ lostruct/
 slurm-logs/
 .snakemake/
 *done
+*bamlist*
+*chr_list*

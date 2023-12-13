@@ -71,7 +71,7 @@ global:
   # Required. The name of a column inside the sample table which you want to use to subset the population.
   # The input should be a string. In the first generation of the
   # loco-pipe, we only implement one level of hierachy. 
-  pop_level: "common_name"
+  pop_level: "species"
     
   # Required. The name of the metedata tsv file.
   # This file should include at least the name of the samples and the full pathway to the bamfiles
@@ -86,6 +86,13 @@ global:
   # The second column is optional, and it contains the new names that would be shown in the Fst plot. Shorter, simpler names are recommended
   # for clarity of the plot.
   chr_table: "chr_table.tsv"
+  
+  # Required. The genotype likelihood model to be used in ANGSD. Enter 1 for the Samtools model and 2 for the GATK model. 
+  # See https://www.popgen.dk/angsd/index.php/Genotype_Likelihoods for details.
+  gl_model: 1
+  
+  # Required. Type of reference genome. Enter 0 if the reference genome is either ancestral or from an outgroup, and 1 if not.
+  ref_type: 1
   
 # The following parameters are needed by get_depth_global.smk. This snakemake rule 
 # returns depth distribution of every site summed over all samples. Each chromosome will be processed individually.
@@ -109,7 +116,7 @@ get_depth_global:
   
   # Optional. Optional arguments to be passed to ANGSD -doDepth.
   # These arguments could be extra filtering parameters, extra analyses, etc.
-  extra: " "
+  extra: ""
   
 get_depth_filter_global:
 
@@ -144,7 +151,7 @@ snp_calling_global:
   # Optional. Optional arguments to be passed to the SNP calling step in ANGSD.
   # These arguments could add extra input files to analyses (e.g. ancestral genome and individual inbreed coefficients). 
   # They can also be used to specify additional filters or additional analyses.
-  extra: " "
+  extra: ""
   
 # The following parameters are needed by get_heterozygosity.smk, which generates individual-level genome-wide average
 # heterozygosity estimates for each sample. This rule is a two-step process using ANGSD: it first 
@@ -168,22 +175,20 @@ get_heterozygosity:
   # A sequencing read that is below this threshold will be filtered out and not included in the heterozygosity estimation.
   minmapq: "20"
   
-  # Optional. Optional arguments to be passed to ANGSD -doSaf.
-  # These arguments allow the analyses to better fit your need (e.g. if your reference genome does not represent the
-  # ancestral state, you could use -fold 1 flag here to estimate the folded SFS).
-  dosaf_extra: " "
+  # Optional arguments to be passed to ANGSD -doSaf.
+  # These arguments allow the analyses to better fit your need.
+  dosaf_extra: ""
   
-  # Optional. Optional arguments to be passed to ANGSD function realSFS.
+  # Optional arguments to be passed to ANGSD function realSFS.
   # The two parameters, -tole and -maxIter, are used to determine when the optimization algorithm stops. 
-  # The -tole is an shortened for "tolerance for breaking Expectation Maximization", and the -maxIter 
-  # is shortened for "maximum iteration".
-  # Decreasing "-tole" and increasing "-maxIter" will result in longer computational time but will potentially output more
-  # accurate result.
+  # The -tole flag is an shortened for "tolerance for breaking Expectation Maximization".
+  # The -maxIter flag is shortened for "maximum iteration".
+  # Decreasing "-tole" and increasing "-maxIter" will result in longer computational time but will potentially output more accurate result.
   realsfs_extra: "-tole 1e-08 -maxIter 500"
 
   # The name of a column inside the sample table which you want to color the heterozygosity plot by.
   # If you do not have a grouping color, use the name of the fake column that you create.
-  color_by: "pca_cluster"
+  color_by: "population"
 
 # This rule will generate a subset of SNPs for each chromomsome from the SNP list generated from all samples
 # by the snp_calling_global.smk. This is an attempt to limit the effect of linkage for 
@@ -220,7 +225,7 @@ run_pcangsd:
 
   # The name of a column inside the sample table which you want to color the PCA plot by
   # If you do not have a grouping color, use the name of the fake column that you create.
-  color_by: "pca_cluster"
+  color_by: "population"
 
 # This rule will conduct admixture analysis on all samples to characterize population structure using the ohana software.
 # More information about ohana could be found on this webpage: https://github.com/jade-cheng/ohana.
@@ -235,7 +240,7 @@ run_ohana_global:
   # The name of a column inside the sample table which you want to facet the admixture plot by.
   # If you do not have a grouping color, use the name of the fake column that you create.
 
-  group_by: "pca_cluster"
+  group_by: "population"
 
 # This rule will conduct admixture analysis on samples belonging to the same population to characterize population structure using the ohana software.
 # More information about ohana could be found on this webpage: https://github.com/jade-cheng/ohana.
@@ -248,7 +253,7 @@ run_ohana_local:
   max_k: 7
   
   # The name of a column inside the sample table which you want to facet the admixture plot by
-  group_by: "pca_cluster"
+  group_by: "population"
 
 # ==============================================================================
 #     Selective pipeline settings
@@ -283,8 +288,6 @@ get_theta:
   step_size: 10000
   
   # Optional. Optional arguments to be passed to ANGSD -doSaf.
-  # These arguments allow the analyses to better fit your need (e.g. if your reference genome does not represent the
-  # ancestral state, you could use -fold 1 flag here to estimate the folded SFS).
   dosaf_extra: ""
   
   # Optional. Optional arguments to be passed to ANGSD function realSFS.
@@ -348,4 +351,4 @@ lostruct:
   
   # Variable to color the points by in concensus PCA plots
   # If you do not have a grouping color, use the name of the fake column that you create.
-  color_by: "pca_cluster"
+  color_by: "population"

@@ -65,7 +65,7 @@ rule plot_pcangsd_pca_global:
         done = touch("{basedir}/figures/pcangsd/global/{file}.done"),
     params:
         outdir = "{basedir}/figures/pcangsd/global",
-        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        sample_table_path = "{basedir}/docs/" + config["global"]["sample_table"],
         color_by = config["run_pcangsd"]["color_by"],
         rscript = config["global"]["scriptdir"] + "/plot_pcangsd_pca.R",
     threads: 1
@@ -88,7 +88,7 @@ rule plot_pcangsd_pca_local:
         done = touch("{basedir}/figures/pcangsd/local/{population}.{file}.done"),
     params:
         outdir = "{basedir}/figures/pcangsd/local",
-        sample_table_path = "{basedir}/docs/" + config["global"]["metadata"],
+        sample_table_path = "{basedir}/docs/" + config["global"]["sample_table"],
         color_by = config["run_pcangsd"]["color_by"],
         pop_col = config["global"]["pop_level"],
         rscript = config["global"]["scriptdir"] + "/plot_pcangsd_pca.R",
