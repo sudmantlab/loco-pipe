@@ -22,6 +22,7 @@ if(length(args)>4){
 # pop_col <- "common_name"
 # pop <- "vermilion"
 
+## read in sample table and subset by population if this is a local run
 if(length(args)<=4){
   sample_table <- read_tsv(sample_table_path)
 } else {
@@ -29,6 +30,7 @@ if(length(args)<=4){
     filter(get(pop_col)==pop)
 }
 sample_size <- nrow(sample_table)
+## read in the covariance matrix and perform eigen decomposition
 c <- read_delim(cov, col_names = FALSE, delim=" ") %>%
   as.matrix()
 e <- eigen(c)
@@ -38,9 +40,7 @@ fix_names <- function(x) str_c("PC", seq_along(x))
 e_vectors <- as_tibble(e$vectors, .name_repair = fix_names) 
 pca_table <- sample_table %>%
   bind_cols(e_vectors) 
-## note: we should subset less stringently
-axis_1 <- 1
-axis_2 <- 2
+## plot PCA
 plot_pca <-function(axis_1, axis_2){
   pca_table %>%
     ggplot(aes(x=get(str_c("PC", axis_1)), 
@@ -56,6 +56,7 @@ plot_pca <-function(axis_1, axis_2){
           axis.text = element_blank())
 }
 legend <- get_legend(plot_pca(1,2) + theme(legend.position = "right"))
+## different numbers of top PC axes will be plotted depending on the sample size
 if (sample_size < 4) {
   (plot_pca(1,2) + theme(legend.position = "right")) %>% 
     ggsave(plot=., filename = plot, width = 4, height = 2, units = "in")

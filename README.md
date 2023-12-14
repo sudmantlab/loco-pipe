@@ -20,8 +20,8 @@ loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
   directions</a>
 
 **loco-pipe** is an automated Snakemake pipeline that streamlines a set
-of essential population genomic analyses for low-coverage whole genome
-sequencing (lcWGS) data.
+of essential population genomic analyses for **lo**w-**co**verage whole
+genome sequencing (lcWGS) data.
 
 ## Key features
 
@@ -29,7 +29,7 @@ sequencing (lcWGS) data.
 - Can be launched with a single line of code
 - Incorporation of key filtering steps and best practices for
   low-coverage data
-- Key results are plotted automatically for easy visual inspection
+- Key results are plotted automatically for visual inspection
 - Easy customization through a configuration file
 - Detailed tutorial with a [toy
   dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md)
@@ -196,16 +196,16 @@ computer cluster, making it much easier to learn and troubleshoot.
       pipeline configuration file `config.yaml`. Below is an example of
       a sample table.
 
-      | sample_name | bam                                                                        | common_name | pca_cluster | fake_col |
-      |:------------|:---------------------------------------------------------------------------|:------------|:------------|:---------|
-      | ABLG11920-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11920-1.bam | sunset      | sunset      | all      |
-      | ABLG12067-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG12067-1.bam | sunset      | sunset      | all      |
-      | ABLG11918-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11918-1.bam | vermilion   | vermilion_1 | all      |
-      | ABLG11913-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11913-1.bam | vermilion   | vermilion_1 | all      |
-      | ABLG9871-1  | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG9871-1.bam  | vermilion   | vermilion_2 | all      |
-      | ABLG11795-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11795-1.bam | vermilion   | vermilion_2 | all      |
-      | ABLG11937-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11937-1.bam | vermilion   | vermilion_3 | all      |
-      | ABLG11940-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11940-1.bam | vermilion   | vermilion_3 | all      |
+      | sample_name | bam                                                                        | species   | population  |
+      |:------------|:---------------------------------------------------------------------------|:----------|:------------|
+      | ABLG11920-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11920-1.bam | sunset    | sunset      |
+      | ABLG12067-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG12067-1.bam | sunset    | sunset      |
+      | ABLG11918-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11918-1.bam | vermilion | vermilion_1 |
+      | ABLG11913-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11913-1.bam | vermilion | vermilion_1 |
+      | ABLG9871-1  | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG9871-1.bam  | vermilion | vermilion_2 |
+      | ABLG11795-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11795-1.bam | vermilion | vermilion_2 |
+      | ABLG11937-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11937-1.bam | vermilion | vermilion_3 |
+      | ABLG11940-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11940-1.bam | vermilion | vermilion_3 |
 
       > A few tips about the sample table:
       > - Sample names have to be unique, and each sample should
@@ -232,7 +232,7 @@ computer cluster, making it much easier to learn and troubleshoot.
       >   launch the pipeline again with an updated sample table.
       > - In case that you don’t have any grouping information a priori,
       >   you still need to have a fake grouping column with all samples
-      >   having the same entry for plotting purpose, as shown in the last column (e.g. PCA and
+      >   having the same entry for plotting purposes (e.g. PCA and
       >   admixture). In this case, you will also need to turn off all
       >   population-level analyses in the configuration file (see
       >   below).
@@ -312,11 +312,11 @@ computer cluster, making it much easier to learn and troubleshoot.
 ## Future directions
 
 We plan to improve the functionality of loco-pipe, by incorporating
-additional analyses (e.g. GWAS, dxy) into this pipeline and also
-enabling more functionalities for the existing software programs
-(e.g. ANGSD, Ohana). In terms of variety, we also hope to provide more
-software options for users to pick for certain analysis (e.g. winSFS for
-SFS estimation, ngsAdmix for admixture analysis).
+additional analyses (e.g. GWAS, dxy, LD estimation and pruning) into
+this pipeline and also enabling more functionalities for the existing
+software programs (e.g. ANGSD, Ohana). In terms of variety, we also hope
+to provide more software options for users to pick for certain analysis
+(e.g. winSFS for SFS estimation, ngsAdmix for admixture analysis).
 
 All kinds of feedback, such as bug reports and feature requests, are
 welcome on the “Issue” page. We also encourage users to build on the

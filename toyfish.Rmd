@@ -11,6 +11,8 @@ output:
 
 ![](https://media.fisheries.noaa.gov/dam-migration/cryptic-pairs-the-vermilion-and-sunset-rockfishes-noaa-nwfsc.png)
 
+(Image credit: [NOAA](https://www.fisheries.noaa.gov/west-coast/science-data/southern-california-shelf-rockfish-hook-and-line-survey))
+
 To help users quickly learn and test loco-pipe on their own, we provide a heavily subsetted lcWGS dataset with which the pipeline can be run in a few minutes. This dataset that we call "toyfish" is part of a larger rockfish dataset that the Sudmant lab has generated together with several collaborators. It is composed of 30 rockfish individuals from a pair of sister taxa: sunset rockfish (Sebastes crocotulus) and vermilion rockfish (Sebastes miniatus). Each species has 15 specimens. Within vermilion, there are three populations that are genetically distinct: vermilion_1, vermilion_2 and vermilion_3; each population has 5 specimens. 
 
 As shown in the picture above, these two species are very similar in their phenotype and even experts cannot accurately to tell them apart. It is even harder to distinguish one vermilion population from another based only on visual cues. So hopefully, in addition to teaching users about loco-pipe, this toy dataset will be a good demonstration of the power of lcWGS in characterizing population structure in natural populations.

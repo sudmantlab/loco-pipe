@@ -28,16 +28,14 @@ if (ncol(chr_table) == 1){
 chr_table <- chr_table %>%
   rename(chr = X1, lg = X2) #rename the columns for the plot
 chrs <- chr_table$chr
-
-
+## read in the theta result
 theta_table <- read_tsv(paste0(indir, '/', population, '.', chrs, '.', window_size, 'window_', step_size, 'step.thetas.pestPG')) 
-  
 theta_table_long <- theta_table %>%
   left_join(chr_table, by=c("Chr"="chr")) %>%
   transmute(lg=lg, pos=WinCenter, pi=tP/nSites, `Watterson's theta`=tW/nSites, `Tajima's D`=Tajima) %>%
   pivot_longer(cols = 3:5, names_to = "name", values_to = "value") %>%
   mutate(name=fct_relevel(name, c("pi", "Watterson's theta" , "Tajima's D")))
-
+## plot theta in sliding windows
 theta_plot <- theta_table_long %>%
   ggplot(aes(x=pos, y=value)) +
   geom_point(size = 0.1) +
@@ -50,6 +48,5 @@ theta_plot <- theta_table_long %>%
         axis.text = element_text(size = 6), 
         panel.border = element_rect(color="black"),
         axis.line = element_blank())
-
 ggsave(filename = plot, 
        plot = theta_plot, width = fig_width, height = fig_height, units = 'in', pointsize = 20)

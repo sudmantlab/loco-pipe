@@ -38,6 +38,9 @@ Toyfish - a quick tutorial with an example dataset
 
 ![](https://media.fisheries.noaa.gov/dam-migration/cryptic-pairs-the-vermilion-and-sunset-rockfishes-noaa-nwfsc.png)
 
+(Image credit:
+[NOAA](https://www.fisheries.noaa.gov/west-coast/science-data/southern-california-shelf-rockfish-hook-and-line-survey))
+
 To help users quickly learn and test loco-pipe on their own, we provide
 a heavily subsetted lcWGS dataset with which the pipeline can be run in
 a few minutes. This dataset that we call “toyfish” is part of a larger

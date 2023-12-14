@@ -33,6 +33,7 @@ rule combine_subsetted_beagle_global:
     output:
         subsetted_beagle = "{basedir}/angsd/snp_calling_global/combined.subsetted.beagle",
         subsetted_beagle_gz = "{basedir}/angsd/snp_calling_global/combined.subsetted.beagle.gz",
+        done = touch("{basedir}/angsd/snp_calling_global/combined.subsetted.beagle.done"),
     threads: 1
     log: "{basedir}/angsd/snp_calling_global/combine_subsetted_beagle.log"
     shell:
@@ -51,6 +52,7 @@ rule combine_subsetted_beagle_local:
         subsetted_beagle = "{basedir}/angsd/get_maf/{population}.combined.subsetted.beagle",
         subsetted_beagle_site = "{basedir}/angsd/get_maf/{population}.combined.subsetted.beagle.sites",
         subsetted_beagle_gz = "{basedir}/angsd/get_maf/{population}.combined.subsetted.beagle.gz",
+        done = touch("{basedir}/angsd/get_maf/{population}.combined.subsetted.beagle.done"),
     threads: 1
     log: "{basedir}/angsd/get_maf/{population}.combine_subsetted_beagle.log"
     shell:

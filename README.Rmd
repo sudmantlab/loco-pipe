@@ -10,14 +10,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-**loco-pipe** is an automated Snakemake pipeline that streamlines a set of essential population genomic analyses for low-coverage whole genome sequencing (lcWGS) data.
+**loco-pipe** is an automated Snakemake pipeline that streamlines a set of essential population genomic analyses for **lo**w-**co**verage whole genome sequencing (lcWGS) data.
 
 ## Key features
 
 * Streamlining of several essential population genomic analyses
 * Can be launched with a single line of code
 * Incorporation of key filtering steps and best practices for low-coverage data
-* Key results are plotted automatically for easy visual inspection
+* Key results are plotted automatically for visual inspection
 * Easy customization through a configuration file
 * Detailed tutorial with a [toy dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md) and extensive in-line annotation
 * Flexible architecture that allows for the addition of new features
@@ -117,14 +117,14 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
     
         ```{r echo=FALSE, message=FALSE}
         library(tidyverse)
-        read_tsv("toyfish/docs/sample_table.tsv") %>% group_by(pca_cluster) %>% slice_head(n=2) %>% knitr::kable()
+        read_tsv("toyfish/docs/sample_table.tsv") %>% group_by(population) %>% slice_head(n=2) %>% knitr::kable()
         ```
         
         > A few tips about the sample table:
             * Sample names have to be unique, and each sample should correspond to a single bam file (i.e. we assume that if you have multiple bam files for a single sample, they have already been merged). In cases where you would like to keep different bam files from the same sample separate, e.g. for batch effect control, you will need to distinguish them by assigning them different sample names, e.g. by adding a suffix to their original names. If you do this, please also note that including multiple copies of the same sample can severely bias certain analyses, such as PCA, so we recommend you to only do this in the first iteration of the pipeline, and once the risk of batch effect is eliminated, you should merge or remove the duplicated samples.
             * You can have multiple grouping variables in the sample table, although you may need to launch the pipeline more than once in order to conduct analyses based on different grouping variables.
             * In practice, you may need to have multiple versions of the sample table. For example, you may include all samples in the first run, exclude some problematic one and/or change the grouping of others based on the result of the first run, and launch the pipeline again with an updated sample table. 
-            * In case that you don't have any grouping information a priori, you still need to have a fake grouping column with all samples having the same entry for plotting purpose (e.g. PCA and admixture). In this case, you will also need to turn off all population-level analyses in the configuration file (see below).
+            * In case that you don't have any grouping information a priori, you still need to have a fake grouping column with all samples having the same entry for plotting purposes (e.g. PCA and admixture). In this case, you will also need to turn off all population-level analyses in the configuration file (see below).
         
     * Chromosome table: This table should contain one or two **unnamed** columns. The first column is required, and it records the names of all chromosomes/scaffolds/contigs that you would like to include in the analysis. These should exactly match the names in the reference genome. The second column is optional, and it records shortened or alternative names of the chromosomes/scaffolds/contigs which you would like to show on the plots. If the second column is empty, the original names will be shown. Below is an example of a chromosome table.
     
@@ -163,6 +163,6 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
 
 ## Future directions
 
-We plan to improve the functionality of loco-pipe, by incorporating additional analyses (e.g. GWAS, dxy) into this pipeline and also enabling more functionalities for the existing software programs (e.g. ANGSD, Ohana). In terms of variety, we also hope to provide more software options for users to pick for certain analysis (e.g. winSFS for SFS estimation, ngsAdmix for admixture analysis).
+We plan to improve the functionality of loco-pipe, by incorporating additional analyses (e.g. GWAS, dxy, LD estimation and pruning) into this pipeline and also enabling more functionalities for the existing software programs (e.g. ANGSD, Ohana). In terms of variety, we also hope to provide more software options for users to pick for certain analysis (e.g. winSFS for SFS estimation, ngsAdmix for admixture analysis).
 
 All kinds of feedback, such as bug reports and feature requests, are welcome on the "Issue" page. We also encourage users to build on the existing infrastructure and add more functionalities to loco-pipe in the form of pull requests.

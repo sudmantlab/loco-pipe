@@ -35,7 +35,7 @@ rule run_pcangsd_in_windows_global:
         snp_window_size=config["lostruct"]["snp_window_size"],
         ## note that this will make the number of SNPs in each window different. if we want to keep the number of SNPs consistent, we'll need to stick with the minmaf filter used when generating the beagle file
         minmaf=config["lostruct"]["minmaf"],
-    threads: config["run_pcangsd"]["threads"]
+    threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/lostruct/global/run_pcangsd_in_windows/{chr}.log"
     conda:
         "pcangsd"
@@ -158,7 +158,7 @@ rule run_pcangsd_with_lostruct_outliers_global:
         outdir="{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers",
         beagle_dir="{basedir}/lostruct/global/split_beagle",
         minmaf=config["lostruct"]["minmaf"],
-    threads: config["run_pcangsd"]["threads"]
+    threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers/run_pcangsd_with_lostruct_outliers.log"
     conda:
         "pcangsd"

@@ -37,6 +37,7 @@ if(length(args)>7){
 # pop_col <- "common_name"
 # pop <- "vermilion"
 
+## read in sample table and subset by population if "local"
 if(length(args)<=7){
   sample_table <- read_tsv(sample_table_path) %>%
     mutate(id_tmp = row_number() %>% as.character())
@@ -47,6 +48,7 @@ if(length(args)<=7){
     mutate(id_tmp = row_number() %>% as.character())
   indir_file <- str_c(indir, "/", pop, ".", file)
 }
+## read in admixture proportions
 sample_size <- nrow(sample_table)
 for (k in min_k:max_k) {
   genome_admix_k <-  read_tsv(paste0(indir_file, ".k", k,".q.matrix"), skip=1, col_names = FALSE) %>%
@@ -61,6 +63,7 @@ for (k in min_k:max_k) {
     genome_admix <- bind_rows(genome_admix, genome_admix_k)
   }
 }
+## generate admixture plot
 sample_order <- genome_admix %>%
   filter(k==max_k) %>%
   group_by(k, get(group_by), anc) %>%

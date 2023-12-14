@@ -38,5 +38,5 @@ rule get_depth_global:
         -minMapQ {params.minmapq} \
         -remove_bads 1 -only_proper_pairs 1 \
         {params.extra} \
-        2> {log}
+        &> {log}
         '''

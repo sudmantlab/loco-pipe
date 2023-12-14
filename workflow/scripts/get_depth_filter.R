@@ -9,8 +9,8 @@ library(tidyverse)
 library(cowplot)
 library(fitdistrplus)
 library(extraDistr)
-#indir <- "/global/scratch/users/nicolas931010/rockfish_popgen/korean/angsd/get_depth_global/"
-#chr_list <- "/global/scratch/users/nicolas931010/rockfish_popgen/korean/docs/chr_list.txt"
+
+## read in empirical depth distribution
 chrs <- read_tsv(chr_table, col_names = FALSE) %>% pull(1)
 for (i in seq_along(chrs)){
   depth_count_tmp <- read_lines(str_c(indir, "/", chrs[i], ".depthGlobal")) %>%
@@ -27,6 +27,7 @@ for (i in seq_along(chrs)){
 depth_hist <- depth_count %>%
   tibble(depth=0:10000, count=.) %>%
   filter(depth > 0)
+## find the mode of the distribution
 depth_quantile <- depth_hist %>%
   uncount(count) %>%
   pull(depth) %>%
@@ -39,6 +40,7 @@ count_mode <- depth_hist %>%
   filter(depth>depth_quantile) %>%
   slice_max(count) %>%
   pull(count)
+# subset the chunk of distribution between 50% and 150% of the mode
 depth_lower_bound <- depth_mode*0.5
 depth_upper_bound <- depth_mode*1.5
 depth_hist_subset <- depth_hist %>%
@@ -46,6 +48,7 @@ depth_hist_subset <- depth_hist %>%
 n_sites_subset <- depth_hist_subset %>%
   pull(count) %>%
   sum()
+## fit a truncated normal distribution to the subsetted chunk
 set.seed(42)
 depth_dist_subset <- depth_hist_subset %>%
   uncount(count) %>%
@@ -53,14 +56,15 @@ depth_dist_subset <- depth_hist_subset %>%
   sample(100000)
 fitted_dist <- depth_dist_subset %>%
   fitdist("tnorm", start = list(mean=depth_mode, sd=depth_mode/5), fix.arg = list(a = depth_lower_bound, b= depth_upper_bound), discrete = TRUE)
+## use numbers of sd away from the mean as depth filters
 fitted_mean <- fitted_dist$estimate[1]
 fitted_sd <- fitted_dist$estimate[2]
 min_filter <- round(fitted_mean-fitted_sd*n_sd)
 max_filter <- round(fitted_mean+fitted_sd*n_sd)
 fitted_hist <- tibble(depth=(depth_lower_bound+1):(depth_upper_bound-1)) %>%
   mutate(count=dtnorm(depth, mean=fitted_mean, sd = fitted_sd, a = depth_lower_bound, b= depth_upper_bound)) %>%
-  #dnbinom(x = 1:10000, size=fit$estimate[1], mu = fit$estimate[2]) %>% 
   mutate(count=count*n_sites_subset)
+## plot depth distribution and depth filters
 depth_plot <- depth_hist %>%
   filter(count <= count_mode * 1.5) %>%
   ggplot(aes(x=depth, y=count)) +
@@ -72,6 +76,8 @@ depth_plot <- depth_hist %>%
   annotate("text", Inf, -Inf, label=str_c("fitted_sd=", round(fitted_sd,1)), hjust = 1.1, vjust= -18, color="blue") +
   xlim(c(NA, fitted_mean*2)) +
   cowplot::theme_minimal_grid()
+## output chosen depth filters as a text file
 tibble(min_filter, max_filter, fitted_mean, fitted_sd) %>%
   write_tsv(str_c(indir, "/depth_filter.tsv"))
+## output the plot
 ggsave(str_c(plot_dir, "/depth_filter.png"), depth_plot)

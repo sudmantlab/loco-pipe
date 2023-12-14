@@ -40,12 +40,13 @@ vignettes/*.pdf
 .Renviron
 
 # Project specific files
-angsd/
-pcangsd/
-ohana/
-lostruct/
-slurm-logs/
-.snakemake/
+loco-pipe.Rproj
+toyfish/angsd/*
+toyfish/pcangsd/*
+toyfish/ohana/*
+toyfish/lostruct/*
+toyfish/slurm-logs/*
+toyfish/.snakemake/*
 *done
 *bamlist*
 *chr_list*

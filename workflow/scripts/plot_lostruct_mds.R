@@ -124,15 +124,3 @@ mds_long %>%
   dplyr::select(axis_sign, prefix, chr, start, end, center) %>%
   group_by(axis_sign, chr) %>%
   group_walk(~ write_tsv(.x, str_c(out_dir, "/", .y$chr, ".", .y$axis_sign, ".tsv"), col_names = FALSE))
-
-
-# ggplot(mds_wide, aes(x=dist_3, y=dist_4, color=lg, shape=lg)) +
-# 	geom_point() +
-# 	scale_shape_manual(values = c(rep(c(15,16,17,18),7), 15, 16)) +
-# 	xlab(paste0("PCo1 (", proportion_variance[1], "%)")) +
-# 	ylab(paste0("PCo2 (", proportion_variance[2], "%)")) +
-# 	cowplot::theme_cowplot()
-# read_tsv("/global/scratch/users/nicolas931010/rockfish_popgen/korean/by_group/black-and-yellow_gopher/docs/sample_table.tsv") %>%
-# 	bind_cols(tibble(x=pca_summary %>% as.matrix() %>% .[2000, 4:76], y=pca_summary%>% as.matrix() %>% .[2000, 77:149])) %>%
-# 	ggplot(aes(x=x, y=y, color=common_name)) +
-# 	geom_point()

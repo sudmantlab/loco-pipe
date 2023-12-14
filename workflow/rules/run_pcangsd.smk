@@ -7,8 +7,8 @@ rule run_pcangsd_pca_global:
         done = touch("{basedir}/pcangsd/global/{file}.done"),
     params:
         outdir = "{basedir}/pcangsd/global",
-        minmaf=config["run_pcangsd"]["minmaf"],
-    threads: config["run_pcangsd"]["threads"]
+        minmaf=config["run_pcangsd_global"]["minmaf"],
+    threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/pcangsd/global/{file}.log"
     conda:
         "pcangsd"
@@ -37,8 +37,8 @@ rule run_pcangsd_pca_local:
         done = touch("{basedir}/pcangsd/local/{population}.{file}.done"),
     params:
         outdir = "{basedir}/pcangsd/local",
-        minmaf=config["run_pcangsd"]["minmaf"],
-    threads: config["run_pcangsd"]["threads"]
+        minmaf=config["run_pcangsd_local"]["minmaf"],
+    threads: config["run_pcangsd_local"]["threads"]
     log: "{basedir}/pcangsd/local/{population}.{file}.log"
     conda:
         "pcangsd"
@@ -66,7 +66,7 @@ rule plot_pcangsd_pca_global:
     params:
         outdir = "{basedir}/figures/pcangsd/global",
         sample_table_path = "{basedir}/docs/" + config["global"]["sample_table"],
-        color_by = config["run_pcangsd"]["color_by"],
+        color_by = config["run_pcangsd_global"]["color_by"],
         rscript = config["global"]["scriptdir"] + "/plot_pcangsd_pca.R",
     threads: 1
     log: "{basedir}/pcangsd/global/{file}.plot.log"
@@ -89,7 +89,7 @@ rule plot_pcangsd_pca_local:
     params:
         outdir = "{basedir}/figures/pcangsd/local",
         sample_table_path = "{basedir}/docs/" + config["global"]["sample_table"],
-        color_by = config["run_pcangsd"]["color_by"],
+        color_by = config["run_pcangsd_local"]["color_by"],
         pop_col = config["global"]["pop_level"],
         rscript = config["global"]["scriptdir"] + "/plot_pcangsd_pca.R",
     threads: 1

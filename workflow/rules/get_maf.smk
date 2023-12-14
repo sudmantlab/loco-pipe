@@ -16,7 +16,7 @@ rule get_maf:
         gl_model=config["global"]["gl_model"],
         minq=config["get_depth_global"]["minq"],
         minmapq=config["get_depth_global"]["minmapq"],
-        extra=config["snp_calling_global"]["extra"]
+        extra=config["get_maf"]["extra"]
     log: "{basedir}/angsd/get_maf/{population}.{chr}.log"
     conda: "../envs/angsd.yaml"
     shell:
