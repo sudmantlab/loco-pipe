@@ -160,7 +160,7 @@ SOFTWARE_DIR=/path/to
     the sample table and the pipeline configuration file
 
 ``` bash
-bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh`
+bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh
 ```
 
 3.  If you want to run `toyfish` on a computer cluster, also edit the
@@ -172,7 +172,7 @@ bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh`
 1.  Activate the `loco-pipe` environment with
 
 ``` bash
-conda activate loco-pipe`.
+conda activate loco-pipe
 ```
 
 2.  Plot the pipeline flowchart
