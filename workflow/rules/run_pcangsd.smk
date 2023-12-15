@@ -11,7 +11,7 @@ rule run_pcangsd_pca_global:
     threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/pcangsd/global/{file}.log"
     conda:
-        "pcangsd"
+        "pcangsd_lcpipe"
 
     shell:
         '''
@@ -41,7 +41,7 @@ rule run_pcangsd_pca_local:
     threads: config["run_pcangsd_local"]["threads"]
     log: "{basedir}/pcangsd/local/{population}.{file}.log"
     conda:
-        "pcangsd"
+        "pcangsd_lcpipe"
     shell:
         '''
         mkdir -p {params.outdir}

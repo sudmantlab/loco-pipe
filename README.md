@@ -133,8 +133,10 @@ computer cluster, making it much easier to learn and troubleshoot.
 4.  (Optional) If you would like to run PCA with the software
     [PCAngsd](https://github.com/Rosemeis/pcangsd) using loco-pipe, you
     **must** install PCAngsd manually as it is not yet available on
-    conda. Please install it to a conda environment named `pcangsd`
-    using the script below.
+    conda. Please install it to a conda environment named
+    `pcangsd_lcpipe` using the script below. Even if you already have
+    PCAngsd installed on your machine, you will need to run the
+    following code to ensure that the version is compatible.
 
     ``` bash
     # first set your working directory to a folder where you store your software programs
@@ -145,9 +147,9 @@ computer cluster, making it much easier to learn and troubleshoot.
     # check out the version the loco-pipe is based on
     git checkout 2880c6aafe5c8b075f7730779cc6f94fee2c9bbb
     # create an environment for PCAngsd 
-    mamba env create -f environment.yml  
+    mamba env create -f environment.yml -n pcangsd_lcpipe
     # activate the conda environment
-    conda activate pcangsd
+    conda activate pcangsd_lcpipe
     # build PCAngsd
     python setup.py build_ext --inplace  
     pip3 install -e .
@@ -159,14 +161,14 @@ computer cluster, making it much easier to learn and troubleshoot.
     [lostruct](https://github.com/petrelharp/local_pca) package in R
     using loco-pipe, you **must** install lostruct (in addition to
     PCAngsd, see above) manually as it is not yet available on conda.
-    Please install it to a conda environment named `lostruct` using the
-    script below.
+    Please install it to a conda environment named `lostruct_lcpipe`
+    using the script below.
 
     ``` bash
-    # create a conda environment named lostruct and install R and some key R packages
-    mamba create -n lostruct -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
+    # create a conda environment named lostruct_lcpipe and install R and some key R packages
+    mamba create -n lostruct_lcpipe -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
     # activate the lostruct conda environment
-    conda activate lostruct
+    conda activate lostruct_lcpipe
     # launch R
     R
     # install lostruct

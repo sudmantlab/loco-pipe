@@ -9,7 +9,7 @@ rule split_beagle_global:
         snp_window_size=config["lostruct"]["snp_window_size"],
     threads: 8
     conda:
-        "pcangsd"
+        "pcangsd_lcpipe"
     shell:
         '''
         mkdir -p {params.outdir}
@@ -38,7 +38,7 @@ rule run_pcangsd_in_windows_global:
     threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/lostruct/global/run_pcangsd_in_windows/{chr}.log"
     conda:
-        "pcangsd"
+        "pcangsd_lcpipe"
     shell:
         '''
         mkdir -p {params.outdir}
@@ -77,7 +77,7 @@ rule summarize_pcangsd_for_lostruct_global:
     threads: 8
     log: "{basedir}/lostruct/global/summarize_pcangsd_for_lostruct/{chr}.log"
     conda:
-        "lostruct"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
+        "lostruct_lcpipe"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
     shell:
         '''
         mkdir -p {params.outdir}
@@ -109,7 +109,7 @@ rule run_lostruct_global:
     threads: config["lostruct"]["threads"]
     log: "{basedir}/lostruct/global/run_lostruct/run_lostruct.log"
     conda:
-        "lostruct"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
+        "lostruct_lcpipe"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
     shell:
         '''
         mkdir -p {params.outdir}
@@ -138,7 +138,7 @@ rule plot_lostruct_mds_global:
     threads: 4
     log: "{basedir}/lostruct/global/plot_lostruct_mds/plot_lostruct_mds.log"
     conda:
-        "lostruct"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
+        "lostruct_lcpipe"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
     shell:
         '''
         mkdir -p {params.plot_dir}
@@ -161,7 +161,7 @@ rule run_pcangsd_with_lostruct_outliers_global:
     threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers/run_pcangsd_with_lostruct_outliers.log"
     conda:
-        "pcangsd"
+        "pcangsd_lcpipe"
     shell:
         '''
         mkdir -p {params.outdir}
@@ -213,7 +213,7 @@ rule plot_lostruct_outlier_pca_global:
     threads: 4
     log: "{basedir}/lostruct/global/plot_lostruct_outlier_pca/plot_lostruct_outlier_pca.log"
     conda:
-        "lostruct"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
+        "lostruct_lcpipe"  ## lostruct isn't available on conda. we'll need to set up a conda environment with lostruct beforehand
     shell:
         '''
         mkdir -p {params.outdir}
