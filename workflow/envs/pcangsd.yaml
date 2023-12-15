@@ -6,4 +6,4 @@ dependencies:
   - numpy==1.26.2
   - scipy==1.11.4
   - cython==3.0.0
-  - gcc==11.4.0
+  - gxx==13.2.0
