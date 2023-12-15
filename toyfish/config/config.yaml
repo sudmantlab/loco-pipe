@@ -58,18 +58,18 @@ global:
 
   # Full path of the project base directory. 
   # This folder should contain subfolders such as "config" and "docs".
-  basedir: "/global/scratch/users/nicolas931010/loco-pipe/toyfish"
+  basedir: "/path/to/loco-pipe/toyfish"
   
   # Full path of the reference genome.
   # The reference genome should be in fasta format. Under the current version, we recommend reference genome 
   # to be approximately at chromosome level. In other words, we advice against a highly fragmented reference genome
   # (e.g. L80 > 100). Due to the fact that many downstream analyses are performed at chromosome/scaffold/contig level,
   # having a highly-fragmented reference genome will create too many parallel jobs and might put cluster in high stress.
-  reference: "/global/scratch/users/nicolas931010/loco-pipe/toyfish/reference/toy_refgen.fa"
+  reference: "/path/to/loco-pipe/toyfish/reference/toy_refgen.fa"
 
   # Full path of the folder in which R scripts required for the pipeline are saved (i.e. you will need to change the 
-  # "/global/scratch/users/nicolas931010/" part to the path where loco-pipe is downloaded on your computer.)
-  scriptdir: "/global/scratch/users/nicolas931010/loco-pipe/workflow/scripts"
+  # "/path/to/" part to the path where loco-pipe is downloaded on your computer.)
+  scriptdir: "/path/to/loco-pipe/workflow/scripts"
   
   # The name of the tab-separated sample table file.
   # It should include at least three columns: "sample_name", "bam", and a third column that specifies the grouping 

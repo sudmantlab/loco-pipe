@@ -75,9 +75,14 @@ subsetted reference genome sequence and its index file are stored in
 ## Setting up the pipeline
 
 1.  Install
-    [mamba](https://mamba.readthedocs.io/en/latest/mamba-installation.html#mamba-install)
-    if you have not already done so. A fresh install with Mambaforge is
-    highly recommended.
+    [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html)
+    or conda
+    (<https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html>)
+    if you have not already done so. A fresh install of mamba with
+    miniforge (<https://github.com/conda-forge/miniforge>) is highly
+    recommended because mamba is much faster than conda. It is ok if you
+    prefer to use conda though; just replace all occurrences of `mamba`
+    with `conda` in the code below.
 
 2.  Download `loco-pipe` from GitHub (e.g. using `git clone`). We
     recommend you to download it to a folder where you store your
@@ -108,7 +113,7 @@ subsetted reference genome sequence and its index file are stored in
     conda activate pcangsd
     # build PCAngsd
     python setup.py build_ext --inplace  
-    pip3 install -e
+    pip3 install -e .
     # deactivate the conda environment
     conda deactivate  
     ```
@@ -124,7 +129,7 @@ subsetted reference genome sequence and its index file are stored in
     # create a conda environment named lostruct and install R and some key R packages
     mamba create -n lostruct -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
     # activate the lostruct conda environment
-    conda activate -n lostruct
+    conda activate lostruct
     # launch R
     R
     # install lostruct
@@ -139,16 +144,22 @@ subsetted reference genome sequence and its index file are stored in
 
 The file structure, sample table, chromosome table, and pipeline
 configuration file for toyfish are already set up for you in the
-`toyfish` directory. However, you do need to change some file paths to
+`toyfish` directory. However, we still need to change some file paths to
 match the ones on your computer.
 
-1.  In the sample table (`toyfish/docs/sample_table.tsv`), replace all
-    occurrences of `/global/scratch/users/nicolas931010/` with the path
-    at which `loco-pipe` is located on your computer.
+1.  Define the environmental variable `SOFTWARE_DIR`. Replace `/path/to`
+    with the path of the directory that contains `loco-pipe`
 
-2.  In the loco-pipe configuration file (`toyfish/config/config.yaml`),
-    replace all occurrences of `/global/scratch/users/nicolas931010/`
-    with the path at which `loco-pipe` is located on your computer.
+``` bash
+SOFTWARE_DIR=/path/to
+```
+
+2.  Run the shell script `toyfish/prepare.sh` to update file paths in
+    the sample table and the pipeline configuration file
+
+``` bash
+bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh`
+```
 
 3.  If you want to run `toyfish` on a computer cluster, also edit the
     `cluster_config.yaml` file under `workflow/profiles` to make sure
@@ -157,56 +168,51 @@ match the ones on your computer.
 ## Launching the pipeline
 
 1.  Activate the `loco-pipe` environment with
-    `conda activate loco-pipe`.
-
-2.  Define some environmental variables. Replace all occurrences of
-    `/global/scratch/users/nicolas931010/` with appropriate paths on
-    your computer.
 
 ``` bash
-SOFTWARE_DIR=/global/scratch/users/nicolas931010
-BASEDIR=/global/scratch/users/nicolas931010/loco-pipe/toyfish
-CONDA=/global/scratch/users/nicolas931010/conda-envs
+conda activate loco-pipe`.
 ```
 
-3.  Plot the pipeline flowchart
+2.  Plot the pipeline flowchart
 
 ``` bash
-mkdir -p $BASEDIR/figures/flowchart
+mkdir -p $SOFTWARE_DIR/loco-pipe/toyfish/figures/flowchart
 snakemake -n --forceall --rulegraph \
---directory $BASEDIR \
+--directory $SOFTWARE_DIR/loco-pipe/toyfish \
 --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk  | \
-dot -Tpdf > $BASEDIR/figures/flowchart/toyfish.pdf
+dot -Tpdf > $SOFTWARE_DIR/loco-pipe/toyfish/figures/flowchart/toyfish.pdf
 ```
 
-4.  Launch the pipeline
+3.  Launch the pipeline
 
-On a single machine:
+On a single machine (change `--cores` to the number of cores that you
+have available):
 
 ``` bash
 snakemake \
   --use-conda \
   --conda-frontend mamba \
-  --conda-prefix $CONDA \
-  --directory $BASEDIR \
-  --scheduler greedy \
-  --cores 1 \
+  --directory $SOFTWARE_DIR/loco-pipe/toyfish \
   --rerun-triggers mtime \
-  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk -p -n
+  --scheduler greedy \
+  --printshellcmds \
+  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk \
+  --cores 1 -n
 ```
 
 On a computer cluster:
 
 ``` bash
 snakemake \
+  --use-conda \
   --conda-frontend mamba \
-  --conda-prefix $CONDA \
-  --directory $BASEDIR \
-  --profile $SOFTWARE_DIR/loco-pipe/workflow/profiles/slurm \
-  --scheduler greedy \
-  --default-resources mem_mb=None disk_mb=None \
+  --directory $SOFTWARE_DIR/loco-pipe/toyfish \
   --rerun-triggers mtime \
-  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk -p -n
+  --scheduler greedy \
+  --printshellcmds \
+  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk \
+  --profile $SOFTWARE_DIR/loco-pipe/workflow/profiles/slurm \
+  --default-resources mem_mb=None disk_mb=None -n
 ```
 
 Note that the ending `-n` flag means it is a dry run. If the dry run

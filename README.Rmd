@@ -65,7 +65,7 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
 
 ## Setting up the pipeline
 
-1. Install [mamba](https://mamba.readthedocs.io/en/latest/mamba-installation.html#mamba-install) if you have not already done so. A fresh install with Mambaforge is highly recommended.
+1. Install [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) or conda (https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html) if you have not already done so. A fresh install of mamba with miniforge (https://github.com/conda-forge/miniforge) is highly recommended because mamba is much faster than conda. It is ok if you prefer to use conda though; just replace all occurrences of `mamba` with `conda` in the code below.
 
 2. Download `loco-pipe` from GitHub (e.g. using `git clone`). We recommend you to download it to a folder where you store your software programs. We will refer to the full path of the directory that contains the `loco-pipe` folder as `SOFTWARE_DIR`.
 
@@ -87,7 +87,7 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
     conda activate pcangsd
     # build PCAngsd
     python setup.py build_ext --inplace  
-    pip3 install -e
+    pip3 install -e .
     # deactivate the conda environment
     conda deactivate  
     ```
@@ -95,10 +95,18 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
 5. (Optional) If you would like to run local PCA with the [lostruct](https://github.com/petrelharp/local_pca) package in R using loco-pipe, you **must** install lostruct (in addition to PCAngsd, see above) manually as it is not yet available on conda. Please install it to a conda environment named `lostruct` using the script below.
 
     ```{bash eval=FALSE}
+    # create a conda environment named lostruct and install R and some key R packages
     mamba create -n lostruct -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
-    conda activate -n lostruct
-    ## this is an awkward solution, but I had to do it because lostruct would be installed to my system library location rather than the conda environment specific one instead
+    # activate the lostruct conda environment
+    conda activate lostruct
+    # launch R
+    R
+    # install lostruct
     devtools::install_github("petrelharp/local_pca/lostruct")
+    # quit R
+    q()
+    # deactivate the conda environment
+    conda deactivate  
     ```
 
 ## Preparing the project directory and required input files
@@ -154,12 +162,12 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
     --use-conda \
     --conda-frontend mamba \
     --directory $BASEDIR \
-    --scheduler greedy \
     --rerun-triggers mtime \
+    --scheduler greedy \
     --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk
     ```
     
-    When running loco-pipe on a computer cluster, make sure to use the `--profile` flag to specify your cluster profile. Other flags that may be useful are `--conda-prefix`, `--default-resources`, `-p`, etc.
+    When running loco-pipe on a computer cluster, make sure to use the `--profile` flag to specify your cluster profile. Other flags that may be useful are `--conda-prefix`, `--default-resources`, `--printshellcmds`, `--cores`, etc.
 
 ## Future directions
 

@@ -112,9 +112,14 @@ computer cluster, making it much easier to learn and troubleshoot.
 ## Setting up the pipeline
 
 1.  Install
-    [mamba](https://mamba.readthedocs.io/en/latest/mamba-installation.html#mamba-install)
-    if you have not already done so. A fresh install with Mambaforge is
-    highly recommended.
+    [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html)
+    or conda
+    (<https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html>)
+    if you have not already done so. A fresh install of mamba with
+    miniforge (<https://github.com/conda-forge/miniforge>) is highly
+    recommended because mamba is much faster than conda. It is ok if you
+    prefer to use conda though; just replace all occurrences of `mamba`
+    with `conda` in the code below.
 
 2.  Download `loco-pipe` from GitHub (e.g. using `git clone`). We
     recommend you to download it to a folder where you store your
@@ -145,7 +150,7 @@ computer cluster, making it much easier to learn and troubleshoot.
     conda activate pcangsd
     # build PCAngsd
     python setup.py build_ext --inplace  
-    pip3 install -e
+    pip3 install -e .
     # deactivate the conda environment
     conda deactivate  
     ```
@@ -158,10 +163,18 @@ computer cluster, making it much easier to learn and troubleshoot.
     script below.
 
     ``` bash
+    # create a conda environment named lostruct and install R and some key R packages
     mamba create -n lostruct -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
-    conda activate -n lostruct
-    ## this is an awkward solution, but I had to do it because lostruct would be installed to my system library location rather than the conda environment specific one instead
+    # activate the lostruct conda environment
+    conda activate lostruct
+    # launch R
+    R
+    # install lostruct
     devtools::install_github("petrelharp/local_pca/lostruct")
+    # quit R
+    q()
+    # deactivate the conda environment
+    conda deactivate  
     ```
 
 ## Preparing the project directory and required input files
@@ -196,16 +209,16 @@ computer cluster, making it much easier to learn and troubleshoot.
       pipeline configuration file `config.yaml`. Below is an example of
       a sample table.
 
-      | sample_name | bam                                                                        | species   | population  |
-      |:------------|:---------------------------------------------------------------------------|:----------|:------------|
-      | ABLG11920-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11920-1.bam | sunset    | sunset      |
-      | ABLG12067-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG12067-1.bam | sunset    | sunset      |
-      | ABLG11918-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11918-1.bam | vermilion | vermilion_1 |
-      | ABLG11913-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11913-1.bam | vermilion | vermilion_1 |
-      | ABLG9871-1  | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG9871-1.bam  | vermilion | vermilion_2 |
-      | ABLG11795-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11795-1.bam | vermilion | vermilion_2 |
-      | ABLG11937-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11937-1.bam | vermilion | vermilion_3 |
-      | ABLG11940-1 | /global/scratch/users/nicolas931010/loco-pipe/toyfish/bams/ABLG11940-1.bam | vermilion | vermilion_3 |
+      | sample_name | bam                                             | species   | population  |
+      |:------------|:------------------------------------------------|:----------|:------------|
+      | ABLG11920-1 | /path/to/loco-pipe/toyfish/bams/ABLG11920-1.bam | sunset    | sunset      |
+      | ABLG12067-1 | /path/to/loco-pipe/toyfish/bams/ABLG12067-1.bam | sunset    | sunset      |
+      | ABLG11918-1 | /path/to/loco-pipe/toyfish/bams/ABLG11918-1.bam | vermilion | vermilion_1 |
+      | ABLG11913-1 | /path/to/loco-pipe/toyfish/bams/ABLG11913-1.bam | vermilion | vermilion_1 |
+      | ABLG9871-1  | /path/to/loco-pipe/toyfish/bams/ABLG9871-1.bam  | vermilion | vermilion_2 |
+      | ABLG11795-1 | /path/to/loco-pipe/toyfish/bams/ABLG11795-1.bam | vermilion | vermilion_2 |
+      | ABLG11937-1 | /path/to/loco-pipe/toyfish/bams/ABLG11937-1.bam | vermilion | vermilion_3 |
+      | ABLG11940-1 | /path/to/loco-pipe/toyfish/bams/ABLG11940-1.bam | vermilion | vermilion_3 |
 
       > A few tips about the sample table:
       > - Sample names have to be unique, and each sample should
@@ -299,15 +312,15 @@ computer cluster, making it much easier to learn and troubleshoot.
     --use-conda \
     --conda-frontend mamba \
     --directory $BASEDIR \
-    --scheduler greedy \
     --rerun-triggers mtime \
+    --scheduler greedy \
     --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk
     ```
 
     When running loco-pipe on a computer cluster, make sure to use the
     `--profile` flag to specify your cluster profile. Other flags that
-    may be useful are `--conda-prefix`, `--default-resources`, `-p`,
-    etc.
+    may be useful are `--conda-prefix`, `--default-resources`,
+    `--printshellcmds`, `--cores`, etc.
 
 ## Future directions
 
