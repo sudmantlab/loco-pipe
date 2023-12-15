@@ -1,0 +1,8 @@
+name: lostruct_lcpipe
+channels:
+  - conda-forge
+dependencies:
+  - r-essentials==4.2
+  - r-tidyverse==2.0.0
+  - r-devtools==2.4.5
+  - r-cowplot==1.1.1

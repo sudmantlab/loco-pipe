@@ -38,7 +38,7 @@ Raw sequencing data were generated from an Illumina Novaseq sequencer, and we pe
     # check out the version the loco-pipe is based on
     git checkout 2880c6aafe5c8b075f7730779cc6f94fee2c9bbb
     # create an environment for PCAngsd 
-    mamba env create -f environment.yml -n pcangsd_lcpipe
+    mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/pcangsd.yaml
     # activate the conda environment
     conda activate pcangsd_lcpipe
     # build PCAngsd
@@ -52,7 +52,7 @@ Raw sequencing data were generated from an Illumina Novaseq sequencer, and we pe
 
     ```{bash eval=FALSE}
     # create a conda environment named lostruct_lcpipe and install R and some key R packages
-    mamba create -n lostruct_lcpipe -c conda-forge r-essentials=4.2 r-tidyverse=2.0.0 r-devtools=2.4.5 r-cowplot=1.1.1
+    mamba env create -c conda-forge -f $SOFTWARE_DIR/loco-pipe/workflow/envs/pcangsd.yaml
     # activate the lostruct conda environment
     conda activate lostruct_lcpipe
     # launch R
