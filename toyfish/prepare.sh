@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## set the directory of loco-pipe as PIPEDIR
-cd `dirname ${0}`..
+cd `dirname ${0}`/..
 PIPEDIR=`pwd -P`
 echo $PIPEDIR
 

@@ -78,7 +78,7 @@ SOFTWARE_DIR=/path/to
 2. Run the shell script `toyfish/prepare.sh` to update file paths in the sample table and the pipeline configuration file 
 
 ```{bash, eval = FALSE}
-bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh`
+bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh
 ```
 
 3. If you want to run `toyfish` on a computer cluster, also edit the `cluster_config.yaml` file under `workflow/profiles` to make sure that your cluster settings are specified correctly.
@@ -88,7 +88,7 @@ bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh`
 1. Activate the `loco-pipe` environment with 
 
 ```{bash, eval = FALSE}
-conda activate loco-pipe`.
+conda activate loco-pipe
 ```
 
 2. Plot the pipeline flowchart
