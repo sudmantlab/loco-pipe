@@ -129,7 +129,7 @@ subsetted reference genome sequence and its index file are stored in
 
     ``` bash
     # create a conda environment named lostruct_lcpipe and install R and some key R packages
-    mamba env create -c conda-forge -f $SOFTWARE_DIR/loco-pipe/workflow/envs/pcangsd.yaml
+    mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/lostruct.yaml
     # activate the lostruct conda environment
     conda activate lostruct_lcpipe
     # launch R
@@ -141,6 +141,15 @@ subsetted reference genome sequence and its index file are stored in
     # deactivate the conda environment
     conda deactivate  
     ```
+
+Note: depending on your system, you may need to ensure that lostruct is
+properly installed to the `lostruct_lcpipe` environment with something
+like
+
+``` r
+withr::with_libpaths(new = "/some/path/miniconda3/envs/lostruct_lcpipe/lib/R/library",
+                     devtools::install_github("petrelharp/local_pca/lostruct"))
+```
 
 ## Preparing the project directory and required input files
 
