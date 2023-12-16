@@ -142,14 +142,14 @@ subsetted reference genome sequence and its index file are stored in
     conda deactivate  
     ```
 
-Note: depending on your system, you may need to ensure that lostruct is
-properly installed to the `lostruct_lcpipe` environment with something
-like
+    Note: depending on your system, you may need to ensure that lostruct
+    is properly installed to the `lostruct_lcpipe` environment with
+    something like the following
 
-``` r
-withr::with_libpaths(new = "/some/path/miniconda3/envs/lostruct_lcpipe/lib/R/library",
-                     devtools::install_github("petrelharp/local_pca/lostruct"))
-```
+    ``` r
+    withr::with_libpaths(new = "/path/to/conda/envs/lostruct_lcpipe/lib/R/library",
+                         devtools::install_github("petrelharp/local_pca/lostruct"))
+    ```
 
 ## Preparing the project directory and required input files
 
