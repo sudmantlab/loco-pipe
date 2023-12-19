@@ -3,6 +3,7 @@
 
 ## Load required packages
 library(tidyverse)
+library(cowplot)
 
 ## Read in the arguments
 args = commandArgs(trailingOnly=TRUE)
@@ -106,17 +107,17 @@ mds_plot <- mds_long %>%
   scale_color_manual(values = c("darkgrey", "magenta")) +
   scale_size_manual(values = c(0.1, 0.5)) +
   facet_grid(axis~lg, scales="free", space="free_x") +
-  theme_bw() +
+  theme_cowplot() +
   xlab("position (Mbp)") +
   ylab("z-score") +
   theme(panel.spacing = unit(0.1, "lines"),
         axis.title.x=element_text(),
         legend.position="none",
-        text = element_text(size=10),
-        axis.text = element_text(size=6),
-        panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank()) 
-ggsave(str_c(plot_dir, '/separated.mds.png'), mds_plot, width = fig_width, height = fig_height)
+        text = element_text(size = 10),
+        axis.text = element_text(size = 6), 
+        panel.border = element_rect(color="black"),
+        axis.line = element_blank()) 
+ggsave(str_c(plot_dir, '/separated.mds.png'), mds_plot, width = fig_width, height = fig_height, units = "in")
 ## Save outlier windows
 mds_long %>%
   filter(outlier==TRUE, axis %in% str_c("mds_", 1:k)) %>%

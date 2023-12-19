@@ -27,10 +27,13 @@ chrs <- chr_table$chr
 # This functions makes the Fst plot with SNP-windows.
 plot_fst <- function(x){
   ggplot(x, aes(x = pos/10^6, y = fst)) +
-    geom_point(aes(color = lg), size = 0.1, alpha = 0.5) +
+    geom_point(size = 0.1, alpha = 0.5) +
+    ## uncomment the following to alternate colors across chromosomes
+    #geom_point(aes(color = lg), size = 0.1, alpha = 0.5) +
+    #scale_color_manual(values = rep(c('black', 'grey50'), 50)) +
     geom_smooth(color = 'blue', se = F) +
-    scale_color_manual(values = rep(c('black', 'grey50'), 50)) +
-    scale_x_continuous(breaks = seq(0, 100, 10)) +
+    ## uncomment the following to manually set x-axis breaks
+    #scale_x_continuous(breaks = seq(0, 100, 10)) +
     coord_cartesian(ylim = c(0, 1), expand = F) +
     xlab('position (Mbp)') +
     ylab('Fst') +
@@ -40,7 +43,9 @@ plot_fst <- function(x){
           axis.title.x = element_text(),
           legend.position = 'none',
           text = element_text(size = 10),
-          axis.text = element_text(size = 6))
+          axis.text = element_text(size = 6), 
+          panel.border = element_rect(color="black"),
+          axis.line = element_blank())
 }
 
 # This function subsets each linkage group via SNP window. (The window_length is the number of 

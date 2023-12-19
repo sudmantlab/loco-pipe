@@ -368,10 +368,10 @@ get_theta:
   realsfs_extra: ""
   
   # Height of the theta plot, in inches.
-  fig_height: 6
+  fig_height: 5
   
   # Width of the theta plot, in inches. You will likely need to enter a much larger number when using a real dataset.
-  fig_width: 3
+  fig_width: 5
 
 # -----------------------------------------------------------------------------------------------------------------------
 # The following parameters are needed by the "run_lostruct.smk" file, which runs local PCA with the lostruct package in R
@@ -388,7 +388,7 @@ lostruct:
   pc: 2
   
   # Number of top MDS axes to retain.
-  k: 10
+  k: 6
   
   # Number of threads that PCAngsd uses.
   threads: 8
@@ -397,10 +397,10 @@ lostruct:
   z_cutoff: 3
   
   # Height of the mds figure. 
-  fig_height: 8
+  fig_height: 6
 
   # Width of the mds figure. You will likely need to enter a much larger number when using a real dataset.
-  fig_width: 3
+  fig_width: 5
   
   # The name of a column in the sample table that you want to to color the points by in concensus PCA plots.
   # If you do not have a grouping color, use the name of the fake column that you create.
