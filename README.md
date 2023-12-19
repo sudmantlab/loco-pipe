@@ -59,7 +59,10 @@ genome sequencing (lcWGS) data.
 
 ## Pipeline flowchart
 
-![](updated_locopipe.jpeg)
+![](updated_locopipe.jpeg) Each box here represents an analytical step
+in the form of a Snakemake rule, and the boxes are colored by the major
+groups of analyses in the form of separate Snakefiles, which are stored
+in `workflow/rules`.
 
 ## Before you start
 
