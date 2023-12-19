@@ -181,4 +181,4 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
 
 We plan to improve the functionality of loco-pipe, by incorporating additional analyses (e.g. GWAS, dxy, LD estimation and pruning) into this pipeline and also enabling more functionalities for the existing software programs (e.g. ANGSD, Ohana). In terms of variety, we also hope to provide more software options for users to pick for certain analysis (e.g. winSFS for SFS estimation, ngsAdmix for admixture analysis).
 
-All kinds of feedback, such as bug reports and feature requests, are welcome on the "Issue" page. We also encourage users to build on the existing infrastructure and add more functionalities to loco-pipe in the form of pull requests.
+All kinds of feedback, such as bug reports and feature requests, are welcome on the [Issues](https://github.com/sudmantlab/loco-pipe/issues) page. We also encourage users to build on the existing infrastructure and add more functionalities to loco-pipe in the form of [pull requests](https://github.com/sudmantlab/loco-pipe/pulls).

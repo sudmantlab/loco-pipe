@@ -346,6 +346,7 @@ to provide more software options for users to pick for certain analysis
 (e.g. winSFS for SFS estimation, ngsAdmix for admixture analysis).
 
 All kinds of feedback, such as bug reports and feature requests, are
-welcome on the “Issue” page. We also encourage users to build on the
-existing infrastructure and add more functionalities to loco-pipe in the
-form of pull requests.
+welcome on the [Issues](https://github.com/sudmantlab/loco-pipe/issues)
+page. We also encourage users to build on the existing infrastructure
+and add more functionalities to loco-pipe in the form of [pull
+requests](https://github.com/sudmantlab/loco-pipe/pulls).
