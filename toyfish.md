@@ -22,17 +22,12 @@ Toyfish - a quick tutorial with an example dataset
   - <a href="#fst-between-sunset-and-vermilion"
     id="toc-fst-between-sunset-and-vermilion">Fst between sunset and
     vermilion</a>
-  - <a href="#theta-and-neutrality-stats"
-    id="toc-theta-and-neutrality-stats">Theta and neutrality stats</a>
+  - <a href="#theta-and-neutrality-stats-in-10000bp-windows"
+    id="toc-theta-and-neutrality-stats-in-10000bp-windows">Theta and
+    neutrality stats in 10000bp windows</a>
   - <a href="#heterozygosity-estimates"
     id="toc-heterozygosity-estimates">Heterozygosity estimates</a>
-  - <a href="#local-pca-mds-plot-when-combining-all-chromosomes"
-    id="toc-local-pca-mds-plot-when-combining-all-chromosomes">Local PCA MDS
-    plot when combining all chromosomes</a>
-  - <a
-    href="#local-pca-outlier-window-concensus-pca-plot-when-combining-all-chromosomes"
-    id="toc-local-pca-outlier-window-concensus-pca-plot-when-combining-all-chromosomes">Local
-    PCA outlier window concensus PCA plot when combining all chromosomes</a>
+  - <a href="#local-pca" id="toc-local-pca">Local PCA</a>
 
 ## Dataset overview
 
@@ -84,7 +79,8 @@ subsetted reference genome sequence and its index file are stored in
     prefer to use conda though; just replace all occurrences of `mamba`
     with `conda` in the code below.
 
-2.  Download `loco-pipe` from GitHub (e.g. using `git clone`). We
+2.  Download `loco-pipe` from GitHub (e.g. using
+    `git clone https://github.com/sudmantlab/loco-pipe.git`). We
     recommend you to download it to a folder where you store your
     software programs. We will refer to the full path of the directory
     that contains the `loco-pipe` folder as `SOFTWARE_DIR`.
@@ -153,24 +149,24 @@ subsetted reference genome sequence and its index file are stored in
 
 ## Preparing the project directory and required input files
 
-The file structure, sample table, chromosome table, and pipeline
-configuration file for toyfish are already set up for you in the
-`toyfish` directory. However, we still need to change some file paths to
-match the ones on your computer.
+The sequence alignment files, reference genome, sample table, chromosome
+table, and pipeline configuration file for toyfish are already set up
+for you. However, we still need to change some file paths to match the
+ones on your computer.
 
 1.  Define the environmental variable `SOFTWARE_DIR`. Replace `/path/to`
     with the path of the directory that contains `loco-pipe`
 
-``` bash
-SOFTWARE_DIR=/path/to
-```
+    ``` bash
+      SOFTWARE_DIR=/path/to
+    ```
 
 2.  Run the shell script `toyfish/prepare.sh` to update file paths in
     the sample table and the pipeline configuration file
 
-``` bash
-bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh
-```
+    ``` bash
+    bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh
+    ```
 
 3.  If you want to run `toyfish` on a computer cluster, also edit the
     `cluster_config.yaml` file under `workflow/profiles` to make sure
@@ -180,54 +176,54 @@ bash $SOFTWARE_DIR/loco-pipe/toyfish/prepare.sh
 
 1.  Activate the `loco-pipe` environment with
 
-``` bash
-conda activate loco-pipe
-```
+    ``` bash
+    conda activate loco-pipe
+    ```
 
 2.  Plot the pipeline flowchart
 
-``` bash
-mkdir -p $SOFTWARE_DIR/loco-pipe/toyfish/figures/flowchart
-snakemake -n --forceall --rulegraph \
---directory $SOFTWARE_DIR/loco-pipe/toyfish \
---snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk  | \
-dot -Tpdf > $SOFTWARE_DIR/loco-pipe/toyfish/figures/flowchart/toyfish.pdf
-```
+    ``` bash
+    mkdir -p $SOFTWARE_DIR/loco-pipe/toyfish/figures/flowchart
+    snakemake -n --forceall --rulegraph \
+    --directory $SOFTWARE_DIR/loco-pipe/toyfish \
+    --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk  | \
+    dot -Tpdf > $SOFTWARE_DIR/loco-pipe/toyfish/figures/flowchart/toyfish.pdf
+    ```
 
 3.  Launch the pipeline
 
-On a single machine (change `--cores` to the number of cores that you
-have available):
+    On a single machine (change `--cores` to the number of cores that
+    you have available):
 
-``` bash
-snakemake \
-  --use-conda \
-  --conda-frontend mamba \
-  --directory $SOFTWARE_DIR/loco-pipe/toyfish \
-  --rerun-triggers mtime \
-  --scheduler greedy \
-  --printshellcmds \
-  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk \
-  --cores 1 -n
-```
+    ``` bash
+    snakemake \
+      --use-conda \
+      --conda-frontend mamba \
+      --directory $SOFTWARE_DIR/loco-pipe/toyfish \
+      --rerun-triggers mtime \
+      --scheduler greedy \
+      --printshellcmds \
+      --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk \
+      --cores 1 -n
+    ```
 
-On a computer cluster:
+    On a computer cluster:
 
-``` bash
-snakemake \
-  --use-conda \
-  --conda-frontend mamba \
-  --directory $SOFTWARE_DIR/loco-pipe/toyfish \
-  --rerun-triggers mtime \
-  --scheduler greedy \
-  --printshellcmds \
-  --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk \
-  --profile $SOFTWARE_DIR/loco-pipe/workflow/profiles/slurm \
-  --default-resources mem_mb=None disk_mb=None -n
-```
+    ``` bash
+    snakemake \
+      --use-conda \
+      --conda-frontend mamba \
+      --directory $SOFTWARE_DIR/loco-pipe/toyfish \
+      --rerun-triggers mtime \
+      --scheduler greedy \
+      --printshellcmds \
+      --snakefile $SOFTWARE_DIR/loco-pipe/workflow/pipelines/loco-pipe.smk \
+      --profile $SOFTWARE_DIR/loco-pipe/workflow/profiles/slurm \
+      --default-resources mem_mb=None disk_mb=None -n
+    ```
 
-Note that the ending `-n` flag means it is a dry run. If the dry run
-goes through, remove `-n` to actually run the pipeline.
+    Note that the ending `-n` flag means it is a dry run. If the dry run
+    goes through, remove `-n` to actually run the pipeline.
 
 ## Example output
 
@@ -239,9 +235,19 @@ recreated in the `toyfish/figures` folder.
 
 [flow chart](toyfish/figures/flowchart/toyfish.pdf)
 
+<br>
+
 #### Depth distribution and choice of depth filters
 
 ![](toyfish/figures/depth/depth_filter.png)
+
+A density plot showing the empirical sequencing depth distribution (in
+black), and the fitted truncated normal distribution (in blue). The mean
+and standard deviation of the fitted distribution are shown on the top
+corner, and the chosen minimum and maximum depth filters are represented
+by the red lines.
+
+<br>
 
 #### PCA
 
@@ -249,9 +255,22 @@ recreated in the `toyfish/figures` folder.
 
 ![](toyfish/figures/pcangsd/global/combined.subsetted.png)
 
+A PCA plot showing the top eight PC axes with all samples combined. Each
+point is an individual, and they are colored by the population that they
+belong to. A thinned SNP list is used for this analysis.
+
+<br>
+
 ###### Vermilion only
 
 ![](toyfish/figures/pcangsd/local/vermilion.combined.subsetted.png)
+
+A PCA plot showing the top eight PC axes with the vermilion samples
+only. Each point is an individual, and they are colored by the
+population that they belong to. A thinned SNP list is used for this
+analysis.
+
+<br>
 
 #### Admixture analysis
 
@@ -259,9 +278,21 @@ recreated in the `toyfish/figures` folder.
 
 ![](toyfish/figures/ohana/global/combined.subsetted.png)
 
+An admixture plot with all samples combined and K=2-7 source
+populations. Each bar is an individual, and each colors represent a
+source population. A thinned SNP list is used for this analysis.
+
+<br>
+
 ###### Vermilion only
 
 ![](toyfish/figures/ohana/local/vermilion.combined.subsetted.png)
+
+An admixture plot with the vermilion samples only and K=2-4 source
+populations. Each bar is an individual, and each colors represent a
+source population. A thinned SNP list is used for this analysis.
+
+<br>
 
 #### Fst between sunset and vermilion
 
@@ -269,32 +300,110 @@ recreated in the `toyfish/figures` folder.
 
 ![](toyfish/figures/fst/sunset.vermilion.png)
 
+Per-SNP Fst between sunset and vermilion rockfish along the subsetted
+genome.
+
+<br>
+
 ###### In 100-SNP windows
 
 ![](toyfish/figures/fst/sunset.vermilion.100snp_window.png)
+
+Fst in 100-SNP windows between sunset and vermilion rockfish along the
+subsetted genome.
+
+<br>
 
 ###### In 10000bp windows
 
 ![](toyfish/figures/fst/sunset.vermilion.10000bp_window.png)
 
-#### Theta and neutrality stats
+Fst in 10000bp windows between sunset and vermilion rockfish along the
+subsetted genome.
+
+<br>
+
+#### Theta and neutrality stats in 10000bp windows
 
 ###### Sunset
 
 ![](toyfish/figures/theta/sunset.theta_by_window.png)
 
+Nucleotide diversity (pi), Watterson’s theta, and Tajima’s D in 10000bp
+windows along the subsetted genome in sunset rockfish.
+
+<br>
+
 ###### Vermilion
 
 ![](toyfish/figures/theta/vermilion.theta_by_window.png)
+
+Nucleotide diversity (pi), Watterson’s theta, and Tajima’s D in 10000bp
+windows along the subsetted genome in vermilion rockfish.
+
+<br>
 
 #### Heterozygosity estimates
 
 ![](toyfish/figures/heterozygosity/heterozygosity.png)
 
-#### Local PCA MDS plot when combining all chromosomes
+Average heterozygosity of each sample over the subsetted genome. Each
+point represents a sample, and they are grouped by the population that
+they belong to.
+
+<br>
+
+#### Local PCA
+
+Note that since this is a highly susbsetted dataset, the local PCA
+results are for demonstration purpose only and any signals are likely
+artifacts rather than reflecting biologically meaningful patterns.
+
+###### Local PCA MDS plot when combining all chromosomes
 
 ![](toyfish/figures/lostruct/global/combined.mds.png)
 
-#### Local PCA outlier window concensus PCA plot when combining all chromosomes
+An MDS plot showing the z-score of each 100-SNP window along the top six
+MDS axes. Windows with z-scores higher than 3 or lower than -3 along a
+certain axis are considered outliers and are colored in magenta. Outlier
+windows along the same axis tend to show similar PCA patterns among
+themselves and distinct patterns when compared to the genome-wide
+average. The MDS is conducted combining all chromosomes for this plot,
+so outlier windows along the same axis in different chromosomes tend to
+shown similar patterns.
+
+<br>
+
+###### Local PCA outlier window consensus PCA plots when combining all chromosomes
 
 ![](toyfish/figures/lostruct/global/combined.pca.png)
+
+Consensus PCA plots showing the combined PCA pattern of outlier windows
+along each MDS axis. A consensus PCA plot with all the non-outlier
+windows is also generated.
+
+<br>
+
+###### Local PCA MDS plot when running each chromsome separately
+
+![](toyfish/figures/lostruct/global/separated.mds.png)
+
+An MDS plot showing the z-score of each 100-SNP window along the top six
+MDS axes. Windows with z-scores higher than 3 or lower than -3 along a
+certain axis are considered outliers and are colored in magenta. Outlier
+windows along the same axis tend to show similar PCA patterns among
+themselves and distinct patterns when compared to the genome-wide
+average. The MDS is conducted for each chromosome separately for this
+plot, so outlier windows along the same axis in different chromosomes
+don’t necessarily show similar patterns.
+
+<br>
+
+###### Local PCA outlier window consensus PCA plots when running each chromsome separately
+
+[consensus PCA](toyfish/figures/lostruct/global/separated.pca.pdf)
+
+Consensus PCA plots showing the combined PCA pattern of outlier windows
+along each MDS axis with each chromosome analysed separately.
+
+<br>

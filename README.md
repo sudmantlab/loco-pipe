@@ -5,8 +5,8 @@ loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
 - <a href="#currently-supported-functionalities"
   id="toc-currently-supported-functionalities">Currently supported
   functionalities</a>
-- <a href="#pipeline-flowchart" id="toc-pipeline-flowchart">Pipeline
-  flowchart</a>
+- <a href="#complete-pipeline-flowchart"
+  id="toc-complete-pipeline-flowchart">Complete pipeline flowchart</a>
 - <a href="#before-you-start" id="toc-before-you-start">Before you
   start</a>
 - <a href="#setting-up-the-pipeline"
@@ -57,9 +57,16 @@ genome sequencing (lcWGS) data.
 - Heterozygosity estimation
 - Local PCA analysis
 
-## Pipeline flowchart
+![](simplified_flowchart.png) A simplified flowchart of loco-pipe
+highlighting its key functionalities. Each box represents an analytical
+step in the pipeline, and plots are generated using our toy dataset.
+Please see the [toy dataset
+page](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md) for
+detailed descriptions of the plots.
 
-![](updated_locopipe.jpeg) Each box here represents an analytical step
+## Complete pipeline flowchart
+
+![](complete_flowchart.jpeg) Each box here represents an analytical step
 in the form of a Snakemake rule, and the boxes are colored by the major
 groups of analyses in the form of separate Snakefiles, which are stored
 in `workflow/rules`.
@@ -124,7 +131,8 @@ computer cluster, making it much easier to learn and troubleshoot.
     prefer to use conda though; just replace all occurrences of `mamba`
     with `conda` in the code below.
 
-2.  Download `loco-pipe` from GitHub (e.g. using `git clone`). We
+2.  Download `loco-pipe` from GitHub (e.g. using
+    `git clone https://github.com/sudmantlab/loco-pipe.git`). We
     recommend you to download it to a folder where you store your
     software programs. We will refer to the full path of the directory
     that contains the `loco-pipe` folder as `SOFTWARE_DIR`.
@@ -291,25 +299,28 @@ computer cluster, making it much easier to learn and troubleshoot.
 
 3.  Edit the configuration files.
 
-    - The pipeline config file `config.yaml`: This config file serves as
-      an easily accessible way to control the behavior of loco-pipe. You
-      can use it to 1) specify the location of input files, 2) include
-      or exclude certain analyses from a loco-pipe run, 3) adjust the
-      parameter settings for different analyses. This config file is
-      thoroughly annotated, so please read it through and make edits
-      when needed. **Importantly**, please copy `config.yaml` to the
-      `config` folder in your project directory
+    - The [pipeline config
+      file](https://github.com/sudmantlab/loco-pipe/blob/main/config.yaml)
+      `config.yaml`: This config file serves as an easily accessible way
+      to control the behavior of loco-pipe. You can use it to 1) specify
+      the location of input files, 2) include or exclude certain
+      analyses from a loco-pipe run, 3) adjust the parameter settings
+      for different analyses. This config file is thoroughly annotated,
+      so please read it through and make edits when needed.
+      **Importantly**, please copy `config.yaml` to the `config` folder
+      in your project directory
       (i.e. `cp $SOFTWARE_DIR/loco-pipe/config.yaml $BASEDIR/config/config.yaml`)
       and make your edits there rather in the `loco-pipe` directory.
 
-    - (Optional) The cluster config file `cluster_config.yaml` under
-      `workflow/profiles`: This config files specifies the resources
-      each step of the pipeline can use on a computer cluster. We have
-      extensively tested loco-pipe with a slurm job scheduler and an
-      example slurm profile is included in loco-pipe
-      (`workflow/profiles/slurm`), but other job schedulers should also
-      work with Snakemake given an appropriate profile setup (see
-      [Snakemake
+    - (Optional) The [cluster config
+      file](https://github.com/sudmantlab/loco-pipe/blob/main/workflow/profiles/slurm/cluster_config.yaml)
+      `cluster_config.yaml` under `workflow/profiles`: This config files
+      specifies the resources each step of the pipeline can use on a
+      computer cluster. We have extensively tested loco-pipe with a
+      slurm job scheduler and an example slurm profile is included in
+      loco-pipe (`workflow/profiles/slurm`), but other job schedulers
+      should also work with Snakemake given an appropriate profile setup
+      (see [Snakemake
       manual](https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles)
       for details).
 
@@ -338,7 +349,7 @@ computer cluster, making it much easier to learn and troubleshoot.
 
 ## Future directions
 
-We plan to improve the functionality of loco-pipe, by incorporating
+We plan to continue to maintain and develop loco-pipe, by incorporating
 additional analyses (e.g. GWAS, dxy, LD estimation and pruning) into
 this pipeline and also enabling more functionalities for the existing
 software programs (e.g. ANGSD, Ohana). In terms of variety, we also hope
