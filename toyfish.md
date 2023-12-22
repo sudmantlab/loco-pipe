@@ -1,4 +1,4 @@
-Toyfish - a quick tutorial with an example dataset
+Toyfish - a quick start guide with an example dataset
 ================
 
 - <a href="#dataset-overview" id="toc-dataset-overview">Dataset
@@ -51,8 +51,8 @@ As shown in the picture above, these two species are very similar in
 their phenotype and even experts cannot accurately to tell them apart.
 It is even harder to distinguish one vermilion population from another
 based only on visual cues. So hopefully, in addition to teaching users
-about loco-pipe, this toy dataset will be a good demonstration of the
-power of lcWGS in characterizing population structure in natural
+about loco-pipe, this example dataset will be a good demonstration of
+the power of lcWGS in characterizing population structure in natural
 populations.
 
 Raw sequencing data were generated from an Illumina Novaseq sequencer,

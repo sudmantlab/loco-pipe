@@ -31,8 +31,8 @@ genome sequencing (lcWGS) data.
   low-coverage data
 - Key results are plotted automatically for visual inspection
 - Easy customization through a configuration file
-- Detailed tutorial with a [toy
-  dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md)
+- [A quick start guide with an example
+  dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md),
   and extensive in-line annotation
 - Flexible architecture that allows for the addition of new features
 - Inheritance of the many benefits offered by Snakemake, including
@@ -58,10 +58,11 @@ genome sequencing (lcWGS) data.
 - Local PCA analysis
 
 ![](simplified_flowchart.png) A simplified flowchart of loco-pipe
-highlighting its key functionalities. Each box represents an analytical
-step in the pipeline, and plots are generated using our toy dataset.
-Please see the [toy dataset
-page](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md) for
+highlighting its key functionalities. The box in dotted lines represents
+user-provided input files, and boxes in solid lines represent key
+analytical steps in the pipeline. Plots are generated using our example
+dataset. Please see our [quick start
+guide](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md) for
 detailed descriptions of the plots.
 
 ## Complete pipeline flowchart
@@ -110,14 +111,14 @@ documented](https://github.com/moiexpositoalonsolab/grenepipe/wiki), and
 it is a major inspiration for loco-pipe. Familiarizing yourself with
 grenepipe will also make loco-pipe much easier to learn.
 
-#### Toy dataset
+#### Quick start guide with an example dataset
 
 If you don’t yet have your data ready for loco-pipe, and even if you do,
-we highly recommend you to first test loco-pipe with a heavily subsetted
-toy dataset that we provide:
-[toyfish](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md).
-It only takes loco-pipe a few minutes to analyse the toy dataset on a
-computer cluster, making it much easier to learn and troubleshoot.
+we highly recommend you to first follow our [quick start
+guide](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md)
+which includes a heavily subsetted example dataset. It only takes
+loco-pipe a few minutes to analyse the example dataset on a computer
+cluster, making it much easier to learn and troubleshoot.
 
 ## Setting up the pipeline
 
@@ -272,12 +273,12 @@ computer cluster, making it much easier to learn and troubleshoot.
       >   population-level analyses in the configuration file (see
       >   below).
 
-    - Chromosome table: This table should contain one or two **unnamed**
-      columns. The first column is required, and it records the names of
-      all chromosomes/scaffolds/contigs that you would like to include
-      in the analysis. These should exactly match the names in the
-      reference genome. The second column is optional, and it records
-      shortened or alternative names of the
+    - Chromosome table: This table should contain one or two columns.
+      These columns should be **unnamed**. The first column is required,
+      and it records the names of all chromosomes/scaffolds/contigs that
+      you would like to include in the analysis. These should exactly
+      match the names in the reference genome. The second column is
+      optional, and it records shortened or alternative names of the
       chromosomes/scaffolds/contigs which you would like to show on the
       plots. If the second column is empty, the original names will be
       shown. Below is an example of a chromosome table.
