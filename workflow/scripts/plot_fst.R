@@ -66,8 +66,8 @@ fixed_snp_window_fst <- function(x, window_length){
 # base pairs contained in one window.) 
 fixed_bp_window_fst <- function(x, window_length){
   x %>%
-    mutate(pos = cut(pos, breaks = seq(0, 100*10^6, window_length), 
-                     labels = seq( window_length/2, 100*10^6-window_length/2, window_length))) %>%
+    mutate(pos = cut(pos, breaks = seq(0, 10^10, window_length), 
+                     labels = seq(window_length/2, 10^10-window_length/2, window_length))) %>%
     group_by(lg, pos) %>%
     summarise(alpha = sum(alpha), beta = sum(beta), n_snps = n()) %>%
     ungroup() %>%
