@@ -9,7 +9,8 @@ echo $PIPEDIR
 touch $PIPEDIR/toyfish/reference/toy_refgen.fa.fai 
 
 ## update the path in the config file
-sed -i "s|/path/to/loco-pipe|$PIPEDIR|g" $PIPEDIR/toyfish/config/config.yaml
+mkdir -p $PIPEDIR/toyfish/config
+sed "s|/path/to/loco-pipe|$PIPEDIR|g" $PIPEDIR/config.yaml > $PIPEDIR/toyfish/config/config.yaml
 
 ## update the path in the sample table
 sed -i "s|/path/to/loco-pipe|$PIPEDIR|g" $PIPEDIR/toyfish/docs/sample_table.tsv

@@ -37,9 +37,10 @@ theta_table_long <- theta_table %>%
   mutate(name=fct_relevel(name, c("pi", "Watterson's theta" , "Tajima's D")))
 ## plot theta in sliding windows
 theta_plot <- theta_table_long %>%
-  ggplot(aes(x=pos, y=value)) +
+  ggplot(aes(x=pos/10^6, y=value)) +
   geom_point(size = 0.1) +
   facet_grid(name~lg, space = "free_x", scale="free") +
+  xlab('position (Mbp)') +
   theme_cowplot() +
   theme(panel.spacing = unit(0.1, 'lines'),
         axis.title.x = element_text(),

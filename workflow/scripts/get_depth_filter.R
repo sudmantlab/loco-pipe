@@ -71,13 +71,13 @@ depth_plot <- depth_hist %>%
   geom_line(data=fitted_hist, color="blue", linewidth=1) +
   geom_line() +
   geom_vline(xintercept = c(min_filter, max_filter), color = "red") +
-  annotate("text", x= c(min_filter, max_filter), y = Inf, label=c(min_filter, max_filter), hjust = -0.2, vjust = 3, color="red") +
-  annotate("text", Inf, -Inf, label=str_c("fitted_mean=", round(fitted_mean,1)), hjust = 1.1, vjust= -20, color="blue") +
-  annotate("text", Inf, -Inf, label=str_c("fitted_sd=", round(fitted_sd,1)), hjust = 1.1, vjust= -18, color="blue") +
+  annotate("text", x= c(min_filter, max_filter), y = 0, label=c(min_filter, max_filter), hjust = -0.2, vjust = 0, color="red") +
+  annotate("text", Inf, Inf, label=str_c("fitted_mean=", round(fitted_mean,1)), hjust = 1.1, vjust= 1.1, color="blue") +
+  annotate("text", Inf, Inf, label=str_c("fitted_sd=", round(fitted_sd,1)), hjust = 1.1, vjust= 3.1, color="blue") +
   xlim(c(NA, fitted_mean*2)) +
   cowplot::theme_minimal_grid()
 ## output chosen depth filters as a text file
 tibble(min_filter, max_filter, fitted_mean, fitted_sd) %>%
   write_tsv(str_c(indir, "/depth_filter.tsv"))
 ## output the plot
-ggsave(str_c(plot_dir, "/depth_filter.png"), depth_plot)
+ggsave(str_c(plot_dir, "/depth_filter.png"), depth_plot, width = 6, height = 3, units = "in")

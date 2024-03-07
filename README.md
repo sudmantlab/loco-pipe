@@ -5,8 +5,8 @@ loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
 - <a href="#currently-supported-functionalities"
   id="toc-currently-supported-functionalities">Currently supported
   functionalities</a>
-- <a href="#pipeline-flowchart" id="toc-pipeline-flowchart">Pipeline
-  flowchart</a>
+- <a href="#complete-pipeline-flowchart"
+  id="toc-complete-pipeline-flowchart">Complete pipeline flowchart</a>
 - <a href="#before-you-start" id="toc-before-you-start">Before you
   start</a>
 - <a href="#setting-up-the-pipeline"
@@ -31,8 +31,8 @@ genome sequencing (lcWGS) data.
   low-coverage data
 - Key results are plotted automatically for visual inspection
 - Easy customization through a configuration file
-- Detailed tutorial with a [toy
-  dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md)
+- [A quick start guide with an example
+  dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md),
   and extensive in-line annotation
 - Flexible architecture that allows for the addition of new features
 - Inheritance of the many benefits offered by Snakemake, including
@@ -57,9 +57,20 @@ genome sequencing (lcWGS) data.
 - Heterozygosity estimation
 - Local PCA analysis
 
-## Pipeline flowchart
+![](simplified_flowchart.png) A simplified flowchart of loco-pipe
+highlighting its key functionalities. The box in dotted lines represents
+user-provided input files, and boxes in solid lines represent key
+analytical steps in the pipeline. Plots are generated using our example
+dataset. Please see our [quick start
+guide](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md) for
+detailed descriptions of the plots.
 
-![](updated_locopipe.jpeg)
+## Complete pipeline flowchart
+
+![](complete_flowchart.jpeg) Each box here represents an analytical step
+in the form of a Snakemake rule, and the boxes are colored by the major
+groups of analyses in the form of separate Snakefiles, which are stored
+in `workflow/rules`.
 
 ## Before you start
 
@@ -100,14 +111,14 @@ documented](https://github.com/moiexpositoalonsolab/grenepipe/wiki), and
 it is a major inspiration for loco-pipe. Familiarizing yourself with
 grenepipe will also make loco-pipe much easier to learn.
 
-#### Toy dataset
+#### Quick start guide with an example dataset
 
 If you don’t yet have your data ready for loco-pipe, and even if you do,
-we highly recommend you to first test loco-pipe with a heavily subsetted
-toy dataset that we provide:
-[toyfish](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md).
-It only takes loco-pipe a few minutes to analyse the toy dataset on a
-computer cluster, making it much easier to learn and troubleshoot.
+we highly recommend you to first follow our [quick start
+guide](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md)
+which includes a heavily subsetted example dataset. It only takes
+loco-pipe a few minutes to analyse the example dataset on a computer
+cluster, making it much easier to learn and troubleshoot.
 
 ## Setting up the pipeline
 
@@ -121,7 +132,8 @@ computer cluster, making it much easier to learn and troubleshoot.
     prefer to use conda though; just replace all occurrences of `mamba`
     with `conda` in the code below.
 
-2.  Download `loco-pipe` from GitHub (e.g. using `git clone`). We
+2.  Download `loco-pipe` from GitHub (e.g. using
+    `git clone https://github.com/sudmantlab/loco-pipe.git`). We
     recommend you to download it to a folder where you store your
     software programs. We will refer to the full path of the directory
     that contains the `loco-pipe` folder as `SOFTWARE_DIR`.
@@ -261,12 +273,12 @@ computer cluster, making it much easier to learn and troubleshoot.
       >   population-level analyses in the configuration file (see
       >   below).
 
-    - Chromosome table: This table should contain one or two **unnamed**
-      columns. The first column is required, and it records the names of
-      all chromosomes/scaffolds/contigs that you would like to include
-      in the analysis. These should exactly match the names in the
-      reference genome. The second column is optional, and it records
-      shortened or alternative names of the
+    - Chromosome table: This table should contain one or two columns.
+      These columns should be **unnamed**. The first column is required,
+      and it records the names of all chromosomes/scaffolds/contigs that
+      you would like to include in the analysis. These should exactly
+      match the names in the reference genome. The second column is
+      optional, and it records shortened or alternative names of the
       chromosomes/scaffolds/contigs which you would like to show on the
       plots. If the second column is empty, the original names will be
       shown. Below is an example of a chromosome table.
@@ -288,25 +300,28 @@ computer cluster, making it much easier to learn and troubleshoot.
 
 3.  Edit the configuration files.
 
-    - The pipeline config file `config.yaml`: This config file serves as
-      an easily accessible way to control the behavior of loco-pipe. You
-      can use it to 1) specify the location of input files, 2) include
-      or exclude certain analyses from a loco-pipe run, 3) adjust the
-      parameter settings for different analyses. This config file is
-      thoroughly annotated, so please read it through and make edits
-      when needed. **Importantly**, please copy `config.yaml` to the
-      `config` folder in your project directory
+    - The [pipeline config
+      file](https://github.com/sudmantlab/loco-pipe/blob/main/config.yaml)
+      `config.yaml`: This config file serves as an easily accessible way
+      to control the behavior of loco-pipe. You can use it to 1) specify
+      the location of input files, 2) include or exclude certain
+      analyses from a loco-pipe run, 3) adjust the parameter settings
+      for different analyses. This config file is thoroughly annotated,
+      so please read it through and make edits when needed.
+      **Importantly**, please copy `config.yaml` to the `config` folder
+      in your project directory
       (i.e. `cp $SOFTWARE_DIR/loco-pipe/config.yaml $BASEDIR/config/config.yaml`)
       and make your edits there rather in the `loco-pipe` directory.
 
-    - (Optional) The cluster config file `cluster_config.yaml` under
-      `workflow/profiles`: This config files specifies the resources
-      each step of the pipeline can use on a computer cluster. We have
-      extensively tested loco-pipe with a slurm job scheduler and an
-      example slurm profile is included in loco-pipe
-      (`workflow/profiles/slurm`), but other job schedulers should also
-      work with Snakemake given an appropriate profile setup (see
-      [Snakemake
+    - (Optional) The [cluster config
+      file](https://github.com/sudmantlab/loco-pipe/blob/main/workflow/profiles/slurm/cluster_config.yaml)
+      `cluster_config.yaml` under `workflow/profiles`: This config files
+      specifies the resources each step of the pipeline can use on a
+      computer cluster. We have extensively tested loco-pipe with a
+      slurm job scheduler and an example slurm profile is included in
+      loco-pipe (`workflow/profiles/slurm`), but other job schedulers
+      should also work with Snakemake given an appropriate profile setup
+      (see [Snakemake
       manual](https://snakemake.readthedocs.io/en/stable/executing/cli.html#profiles)
       for details).
 
@@ -335,7 +350,7 @@ computer cluster, making it much easier to learn and troubleshoot.
 
 ## Future directions
 
-We plan to improve the functionality of loco-pipe, by incorporating
+We plan to continue to maintain and develop loco-pipe, by incorporating
 additional analyses (e.g. GWAS, dxy, LD estimation and pruning) into
 this pipeline and also enabling more functionalities for the existing
 software programs (e.g. ANGSD, Ohana). In terms of variety, we also hope
@@ -343,6 +358,7 @@ to provide more software options for users to pick for certain analysis
 (e.g. winSFS for SFS estimation, ngsAdmix for admixture analysis).
 
 All kinds of feedback, such as bug reports and feature requests, are
-welcome on the “Issue” page. We also encourage users to build on the
-existing infrastructure and add more functionalities to loco-pipe in the
-form of pull requests.
+welcome on the [Issues](https://github.com/sudmantlab/loco-pipe/issues)
+page. We also encourage users to build on the existing infrastructure
+and add more functionalities to loco-pipe in the form of [pull
+requests](https://github.com/sudmantlab/loco-pipe/pulls).

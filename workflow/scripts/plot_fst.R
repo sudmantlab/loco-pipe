@@ -27,10 +27,13 @@ chrs <- chr_table$chr
 # This functions makes the Fst plot with SNP-windows.
 plot_fst <- function(x){
   ggplot(x, aes(x = pos/10^6, y = fst)) +
-    geom_point(aes(color = lg), size = 0.1, alpha = 0.5) +
+    geom_point(size = 0.1, alpha = 0.5) +
+    ## uncomment the following to alternate colors across chromosomes
+    #geom_point(aes(color = lg), size = 0.1, alpha = 0.5) +
+    #scale_color_manual(values = rep(c('black', 'grey50'), 50)) +
     geom_smooth(color = 'blue', se = F) +
-    scale_color_manual(values = rep(c('black', 'grey50'), 50)) +
-    scale_x_continuous(breaks = seq(0, 100, 10)) +
+    ## uncomment the following to manually set x-axis breaks
+    #scale_x_continuous(breaks = seq(0, 100, 10)) +
     coord_cartesian(ylim = c(0, 1), expand = F) +
     xlab('position (Mbp)') +
     ylab('Fst') +
@@ -40,7 +43,9 @@ plot_fst <- function(x){
           axis.title.x = element_text(),
           legend.position = 'none',
           text = element_text(size = 10),
-          axis.text = element_text(size = 6))
+          axis.text = element_text(size = 6), 
+          panel.border = element_rect(color="black"),
+          axis.line = element_blank())
 }
 
 # This function subsets each linkage group via SNP window. (The window_length is the number of 
@@ -61,8 +66,8 @@ fixed_snp_window_fst <- function(x, window_length){
 # base pairs contained in one window.) 
 fixed_bp_window_fst <- function(x, window_length){
   x %>%
-    mutate(pos = cut(pos, breaks = seq(0, 100*10^6, window_length), 
-                     labels = seq( window_length/2, 100*10^6-window_length/2, window_length))) %>%
+    mutate(pos = cut(pos, breaks = seq(0, 10^10, window_length), 
+                     labels = seq(window_length/2, 10^10-window_length/2, window_length))) %>%
     group_by(lg, pos) %>%
     summarise(alpha = sum(alpha), beta = sum(beta), n_snps = n()) %>%
     ungroup() %>%
