@@ -9,7 +9,8 @@ rule get_theta:
     output:
         expand("{{basedir}}/angsd/get_theta/{{population}}.{{chr}}.{ext}",
                ext=[ "arg", "sfs", "thetas.idx", "thetas.gz", "thetas.tsv.gz", "saf.gz", "saf.idx", "saf.pos.gz", "average_thetas.pestPG" ]),
-        touch("{basedir}/angsd/get_theta/{population}.{chr}.done"),
+        plot = "{basedir}/figures/sfs/{population}.{chr}.sfs.png",
+        done = touch("{basedir}/angsd/get_theta/{population}.{chr}.done"),
     threads:
         config["get_theta"]["threads"]
     params:
@@ -23,6 +24,9 @@ rule get_theta:
         step_size=config["get_theta"]["step_size"],
         dosaf_extra=config["get_theta"]["dosaf_extra"],
         realsfs_extra=config["get_theta"]["realsfs_extra"],
+        rscript=config["global"]["scriptdir"] + "/plot_SFS.R",
+        fig_height = config["get_theta"]["fig_height"],
+        fig_width = config["get_theta"]["fig_width"],
     log: "{basedir}/angsd/get_theta/{population}.{chr}.log"
     conda: "../envs/angsd.yaml"
     shell:
@@ -49,6 +53,9 @@ rule get_theta:
         -fold {params.ref_type} \
         {params.realsfs_extra} \
         > {params.outbase}.sfs 2>> {log}
+        
+        ## Barplots for each SFS
+        Rscript --vanilla {params.rscript} {output.plot} {params.fig_height} {params.fig_width} &> {log}
         
         ## Estimate theta
         realSFS saf2theta \
