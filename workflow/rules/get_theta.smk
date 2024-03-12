@@ -9,7 +9,6 @@ rule get_theta:
     output:
         expand("{{basedir}}/angsd/get_theta/{{population}}.{{chr}}.{ext}",
                ext=[ "arg", "sfs", "thetas.idx", "thetas.gz", "thetas.tsv.gz", "saf.gz", "saf.idx", "saf.pos.gz", "average_thetas.pestPG" ]),
-        plot = "{basedir}/figures/sfs/{population}.{chr}.sfs.png",
         done = touch("{basedir}/angsd/get_theta/{population}.{chr}.done"),
     threads:
         config["get_theta"]["threads"]
@@ -24,9 +23,6 @@ rule get_theta:
         step_size=config["get_theta"]["step_size"],
         dosaf_extra=config["get_theta"]["dosaf_extra"],
         realsfs_extra=config["get_theta"]["realsfs_extra"],
-        rscript=config["global"]["scriptdir"] + "/plot_SFS.R",
-        fig_height = config["get_theta"]["fig_height"],
-        fig_width = config["get_theta"]["fig_width"],
     log: "{basedir}/angsd/get_theta/{population}.{chr}.log"
     conda: "../envs/angsd.yaml"
     shell:
@@ -53,10 +49,7 @@ rule get_theta:
         -fold {params.ref_type} \
         {params.realsfs_extra} \
         > {params.outbase}.sfs 2>> {log}
-        
-        ## Barplots for each SFS
-        Rscript --vanilla {params.rscript} {output.plot} {params.fig_height} {params.fig_width} &> {log}
-        
+      
         ## Estimate theta
         realSFS saf2theta \
         {params.outbase}.saf.idx \
@@ -83,7 +76,33 @@ rule get_theta:
         {params.outbase}.thetas.idx \
         -win {params.window_size} -step {params.step_size} \
         -outnames {params.outbase}.{params.window_size}window_{params.step_size}step.thetas 2>> {log}
+ 
+       '''
+# This rule generates a barplot for sfs distribution of each population.
+rule plot_sfs_distribution:
+    input:
+        chr_list = "{basedir}/docs/chr_list.txt",
+        done = expand("{{basedir}}/angsd/get_theta/{{population}}.{chr}.done", chr = CHRS),
+    output:
+        plot = "{basedir}/figures/theta/sfs_distribution/{population}.sfs.png",
+        done = touch("{basedir}/figures/theta/sfs_distribution/{population}.sfs.done"),
+    params:
+        indir = "{basedir}/angsd/get_theta",
+        outdir = "{basedir}/figures/theta/sfs_distribution",
+        ref_type = config["global"]["ref_type"],
+        rscript=config["global"]["scriptdir"] + "/plot_SFS.R",
+    threads: 4
+    log: "{basedir}/angsd/get_theta/sfs_distribution/{population}.plot_sfs_distribution.log"
+    conda:
+        "../envs/r.yaml" 
+    shell:
         '''
+        mkdir -p {params.outdir}
+        Rscript --vanilla {params.rscript}  {params.indir} {params.outdir} {wildcards.population} {input.chr_list} {params.ref_type} &> {log}
+        '''
+
+
+       
 # This rule generates plots for 1)estimates of pi, 2)Watterson’s theta, and 3)Tajima’s D in sliding windows for each population separately.
 rule plot_theta_by_window:
     input:

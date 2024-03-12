@@ -116,6 +116,7 @@ rule all:
         
         ## theta and neutrality stats
         expand("{basedir}/angsd/get_theta/{population}.{chr}.done", basedir=BASEDIR, population = POP_L1, chr=CHRS) if config["to_include"]["get_theta"] else [],
+        expand("{basedir}/figures/theta/sfs_distribution/{population}.sfs.done", basedir=BASEDIR, population = POP_L1) if config["to_include"]["get_theta"] else [],
         expand("{basedir}/figures/theta/{population}.theta_by_window.done", basedir=BASEDIR, population = POP_L1) if config["to_include"]["get_theta"] else [],
         
         ## local PCA with lostruct
