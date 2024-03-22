@@ -1,4 +1,4 @@
-# This rule takes in population-specific bamlists and then estimate allele frequencies at each SNP location without subsetting. It will also output population-specific genotype likelihood in Beagle format and site allele frequency liklihoods.
+# This rule takes in population-specific bamlists and then estimate allele frequencies at each SNP location without subsetting. It will also output population-specific genotype likelihood in Beagle format and site allele frequency likelihoods.
 rule get_maf:
     input:
         ref= REFERENCE,
