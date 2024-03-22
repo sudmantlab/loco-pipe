@@ -1,4 +1,4 @@
-## Note that this assumes the saf is polarized with an ancestral genome. If this is not the case, use extra argument in the config file to output an folded SFS.
+## Note that this assumes the saf is polarized with an ancestral genome. If this is not the case, use extra argument in the config file to output a folded SFS.
 # This rule first estimates Fst between two populations, by using the site allele frequency likelihoods files of both populations to construct a chromosome-wide two-dimensional site frequency spectrum (SFS). RealSFS then takes this 2D SFS as a prior for the calculation of posterior estimates of Fst per SNP. 
 rule get_fst:
     input:
