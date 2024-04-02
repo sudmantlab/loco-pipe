@@ -17,6 +17,8 @@ rule get_theta:
         outbase="{basedir}/angsd/get_theta/{population}.{chr}",
         gl_model=config["global"]["gl_model"],
         minq=config["get_theta"]["minq"],
+        minind = config["get_theta"]["minind"],
+        mindepthind = config["get_theta"]["setMinDepthInd"],
         minmapq=config["get_theta"]["minmapq"],
         ref_type = config["global"]["ref_type"],
         window_size=config["get_theta"]["window_size"],
@@ -27,6 +29,8 @@ rule get_theta:
     conda: "../envs/angsd.yaml"
     shell:
         '''
+        MININD={params.minind}
+        MINDEPTHIND={params.mindepthind}
         mkdir -p {params.outdir}
         ## Get saf file
         angsd \
@@ -38,6 +42,7 @@ rule get_theta:
         -doCounts 1 \
         -GL {params.gl_model} \
         -P {threads} \
+        -minInd $MININD -setMinDepthInd $MINDEPTHIND \
         -minQ {params.minq} -minMapQ {params.minmapq} \
         -remove_bads 1 -only_proper_pairs 1\
         {params.dosaf_extra} 2> {log}

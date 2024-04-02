@@ -46,6 +46,7 @@ rule get_bamlist_local:
     extract_each_bam_column_to_txt(input.tsv_file, "\t", params.grouping, params.basedir, params.filename)
 
 # This rule uses samtools inside a conda environment to index the all the input bam files. 
+
 rule index_bam:
   input: 
     bam = "{bam}"

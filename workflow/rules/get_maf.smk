@@ -16,18 +16,23 @@ rule get_maf:
         gl_model=config["global"]["gl_model"],
         minq=config["get_depth_global"]["minq"],
         minmapq=config["get_depth_global"]["minmapq"],
-        extra=config["get_maf"]["extra"]
+        extra=config["get_maf"]["extra"],
+        minind=config["get_maf"]["minind"],
+        mindepthind=config["get_maf"]["setMinDepthInd"],
     log: "{basedir}/angsd/get_maf/{population}.{chr}.log"
     conda: "../envs/angsd.yaml"
     shell:
         '''
         mkdir -p {params.outdir}
+        MINDEPTHIND={params.mindepthind}
+        MININD={params.minind}
         angsd \
             -bam {input.bamlist} -anc {input.ref} \
             -P {threads} \
             -out {params.outdir}/{wildcards.population}.{wildcards.chr} \
             -sites {input.site_list} -r {wildcards.chr} \
             -GL {params.gl_model} -doGlf 2 -doMaf 1 -doSaf 1 -doMajorMinor 3 \
+            -minInd $MININD -setMinDepthInd $MINDEPTHIND \
             -doCounts 1 -dumpCounts 1 \
             -doIBS 1 -makematrix 1 -doCov 1 \
             -minQ {params.minq} -minMapQ {params.minmapq} \

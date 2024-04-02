@@ -27,6 +27,7 @@ rule snp_calling_global:
         minq = config["get_depth_global"]["minq"],
         minmapq = config["get_depth_global"]["minmapq"],
         minind = config["snp_calling_global"]["minind"],
+        mindepthind = config["snp_calling_global"]["setMinDepthInd"],
         minmaf = config["snp_calling_global"]["minmaf"],
         pval = config["snp_calling_global"]["pval"],
         extra = config["snp_calling_global"]["extra"]
@@ -39,6 +40,7 @@ rule snp_calling_global:
         NIND=`cat {input.bamlist} | wc -l`
         MININD_PROPORTION={params.minind}
         MININD=`awk -v x="$NIND" -v y="$MININD_PROPORTION" 'BEGIN {{ z = int(x * y); print z }}'`
+        MINDEPTHIND={params.mindepthind}
         mkdir -p {params.outdir}
         angsd \
             -bam {input.bamlist} -ref {input.ref} \
@@ -47,7 +49,7 @@ rule snp_calling_global:
             -GL {params.gl_model} -doGlf 2 -doMaf 1 -doMajorMinor 1 \
             -doDepth 1 -doCounts 1 -maxDepth 100000 -dumpCounts 1 \
             -doIBS 1 -makematrix 1 -doCov 1 \
-            -setMinDepth $MINDP -setMaxDepth $MAXDP -minInd $MININD \
+            -setMinDepth $MINDP -setMaxDepth $MAXDP -minInd $MININD -setMinDepthInd $MINDEPTHIND \
             -SNP_pval {params.pval} -minMaf {params.minmaf} \
             -minQ {params.minq} -minMapQ {params.minmapq} \
             -remove_bads 1 -only_proper_pairs 1 \
