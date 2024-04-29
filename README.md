@@ -67,7 +67,7 @@ detailed descriptions of the plots.
 
 ## Complete pipeline flowchart
 
-![](locopipe_flowchart.jpeg) Each box here represents an analytical step
+![](updated_flowchart.pdf) Each box here represents an analytical step
 in the form of a Snakemake rule, and the boxes are colored by the major
 groups of analyses in the form of separate Snakefiles, which are stored
 in `workflow/rules`.
