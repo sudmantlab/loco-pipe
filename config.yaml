@@ -158,6 +158,10 @@ snp_calling_global:
   # sequencing depth. With typical low-coverage
   # data, we often use half of the total sample size (i.e. 0.5).
   minind: "0.5"
+ 
+  # The filter threshold for sequencing depth. If the total sequencing threshold is below than the threshold number,
+  # then the individuals will not be filtered out. The default setting is 1. 
+  setMinDepthInd: "1"
   
   # Threshold for a site to be considered in SNP calling based on allele frequency.
   # The site that has a smaller minor allele frequency that "minmaf" will be filtered out.
@@ -269,6 +273,16 @@ run_ohana_local:
 # -----------------------------------------------------------------------------------------------------------------------
 get_maf:
 
+  # The minimum number of samples within a population that have to have data for a site to be considered in the analyses.
+  # The site that has a smaller sample size than minind will be filtered out. 
+  # Note that there is no standarized number for "minind". The users need to pick their own -minind values
+  # if they decide to use this filter. The default setting is 1. 
+  minind: "1"
+  
+  # The filter threshold for sequencing depth per individual. If the total sequencing depth of an individual  
+  # is below than the threshold number, then the individuals will be filtered out. The default setting is 1. 
+  setMinDepthInd: "1"
+  
   # Optional arguments to be passed to maf estimation per population in ANGSD.
   # These arguments could add extra input files to analyses (e.g. individual inbreed coefficients). 
   # They can also be used to specify additional filters or additional analyses.
@@ -345,6 +359,17 @@ get_theta:
   # A thread could be seen as a computing unit. Generally, the more threads you assign,
   # the faster the job could be done. For this step, the realSFS in ANGSD module is capable of using more than 8 threads.
   threads: 8
+  
+  # The minimum number of samples within a population that have to have data for a site to be considered in the analyses.
+  # The site that has a smaller sample size than minind will be filtered out. 
+  # Note that there is no standarized number for "minind". The users need to pick their own -minind values
+  # if they decide to use this filter. The default setting is 1. 
+  minind: "1"
+  
+  # The filter threshold for sequencing depth per individual. If the total sequencing depth of an individual  
+  # is below than the threshold number,
+  # then the individuals will be filtered out. The default setting is 1. 
+  setMinDepthInd: "1"
   
   # The minimum base quality score.
   # Sequencing data below this threshold will be filtered out and not included in the theta estimation.
