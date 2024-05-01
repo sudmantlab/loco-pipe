@@ -1,23 +1,16 @@
 loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
 ================
 
-- <a href="#key-features" id="toc-key-features">Key features</a>
-- <a href="#currently-supported-functionalities"
-  id="toc-currently-supported-functionalities">Currently supported
-  functionalities</a>
-- <a href="#complete-pipeline-flowchart"
-  id="toc-complete-pipeline-flowchart">Complete pipeline flowchart</a>
-- <a href="#before-you-start" id="toc-before-you-start">Before you
-  start</a>
-- <a href="#setting-up-the-pipeline"
-  id="toc-setting-up-the-pipeline">Setting up the pipeline</a>
-- <a href="#preparing-the-project-directory-and-required-input-files"
-  id="toc-preparing-the-project-directory-and-required-input-files">Preparing
-  the project directory and required input files</a>
-- <a href="#launching-the-pipeline"
-  id="toc-launching-the-pipeline">Launching the pipeline</a>
-- <a href="#future-directions" id="toc-future-directions">Future
-  directions</a>
+- [Key features](#key-features)
+- [Currently supported
+  functionalities](#currently-supported-functionalities)
+- [Complete pipeline flowchart](#complete-pipeline-flowchart)
+- [Before you start](#before-you-start)
+- [Setting up the pipeline](#setting-up-the-pipeline)
+- [Preparing the project directory and required input
+  files](#preparing-the-project-directory-and-required-input-files)
+- [Launching the pipeline](#launching-the-pipeline)
+- [Future directions](#future-directions)
 
 **loco-pipe** is an automated Snakemake pipeline that streamlines a set
 of essential population genomic analyses for **lo**w-**co**verage whole
@@ -32,8 +25,9 @@ genome sequencing (lcWGS) data.
 - Key results are plotted automatically for visual inspection
 - Easy customization through a configuration file
 - [A quick start guide with an example
-  dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md),
-  and extensive in-line annotation
+  dataset](https://github.com/sudmantlab/loco-pipe/blob/main/toyfish.md)
+- Extensive in-line annotation along with a detailed [user’s
+  manual](manual/README.md)
 - Flexible architecture that allows for the addition of new features
 - Inheritance of the many benefits offered by Snakemake, including
   - High computational efficiency achieved through massive
@@ -67,10 +61,12 @@ detailed descriptions of the plots.
 
 ## Complete pipeline flowchart
 
-![](updated_flowchart.jpeg) Each box here represents an analytical step
-in the form of a Snakemake rule, and the boxes are colored by the major
-groups of analyses in the form of separate Snakefiles, which are stored
-in `workflow/rules`.
+![](complete_flowchart.jpeg) Each item represents a Snakemake rule and
+is colored based on the major groups of analyses in the form of separate
+Snakefiles, which are stored in `workflow/rules`. The rules are
+organized in boxes indicating the types of SNPs or sites the analyses
+are conducted on. Please see our [user’s manual](manual/README.md) for
+detailed descriptions of each Snakemake rule.
 
 ## Before you start
 
@@ -120,6 +116,12 @@ which includes a heavily subsetted example dataset. It only takes
 loco-pipe a few minutes to analyse the example dataset on a computer
 cluster, making it much easier to learn and troubleshoot.
 
+#### User’s manual
+
+We also provide an extensive [user’s manual](manual/README.md) with
+detailed description of each step of the pipeline for easy reference.
+Tips and suggestions are also included in this document.
+
 ## Setting up the pipeline
 
 1.  Install
@@ -164,7 +166,7 @@ cluster, making it much easier to learn and troubleshoot.
     conda activate pcangsd_lcpipe
     # build PCAngsd
     python setup.py build_ext --inplace  
-    pip3 install -e .
+    pip3 install -e . ## if you run into issues pertaining to ssl certificates, try "pip3 install --trusted-host pypi.org -e ." instead
     # deactivate the conda environment
     conda deactivate  
     ```
@@ -353,9 +355,19 @@ cluster, making it much easier to learn and troubleshoot.
 We plan to continue to maintain and develop loco-pipe, by incorporating
 additional analyses (e.g. GWAS, dxy, LD estimation and pruning) into
 this pipeline and also enabling more functionalities for the existing
-software programs (e.g. ANGSD, Ohana). In terms of variety, we also hope
-to provide more software options for users to pick for certain analysis
-(e.g. winSFS for SFS estimation, ngsAdmix for admixture analysis).
+software programs (e.g. ANGSD, Ohana). For certain existing analyses, we
+also hope to provide more software options for users to pick from
+(e.g. [winSFS](https://academic.oup.com/genetics/article/222/4/iyac148/6730749?login=false)
+for SFS estimation,
+[ngsAdmix](https://academic.oup.com/genetics/article/195/3/693/5935455)
+for admixture analysis). Advanced SNP filtering procedures, such as the
+one described in [Dallaire et
+al. (2023)](https://academic.oup.com/gbe/article/15/12/evad229/7470724),
+can be incorporated into loco-pipe manually (see [User’s
+Manual](manual/README.md) for instructions), but may be fully automated
+in the future. In choosing depth filters, we may adopt a mixed model
+instead of a truncated normal distribution for curve fitting in the
+future. Docker/singularity support will also be considered.
 
 All kinds of feedback, such as bug reports and feature requests, are
 welcome on the [Issues](https://github.com/sudmantlab/loco-pipe/issues)
