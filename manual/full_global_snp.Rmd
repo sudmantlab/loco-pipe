@@ -54,7 +54,7 @@ This rule uses ANGSD to identify single nucleotide polymorphisms (SNPs) that seg
   * `-minMaf`: minimum minor allele frequency threshold for a site to be considered as a SNP. This is defaulted to be 0.05 can be modified in the config file.
   * `-minInd`: minimum number of individuals that have to have data  for a site to be included. This is defaulted to be 50% of the total sample size but can be modified in the config file.
   * `-setMinDepthInd`: minimum read depth an individual must have to be included in the count of individuals for `-minInd`. This is defaulted to be 1 and can be modified in the config file. 
-  
+  * `{params.extra}`:   optional arguments to be passed to the SNP calling step in ANGSD. These arguments could add extra input files to analyses (e.g. ancestral genome and individual inbreed coefficients). They can also be used to specify additional filters or additional analyses. For example, users can use the "-site" flag here to constrain analysis on a predefined set of SNPs. Or, users can use the "-rmTriallelic" flag followed by a p-value threshold to remove sites with more than two alleles.
 
 ## Local PCA (`run_lostruct_global.smk`)
 
@@ -78,7 +78,7 @@ This rule runs PCAngsd at each window. This rule runs on each chromosome separat
   * `lostruct/global/run_pcangsd_in_windows/{chr}.w{window_id}.cov`: covariance matrix at each genomic window on each chromosome
   
 * Customizable arguments:
-  * `minmaf`: minimum allele frequency for a SNP to be considered in the local PCA analysis. It is defaulted to be 0.05 but can be specified in the config file.
+  * `minmaf`: minimum allele frequency for a SNP to be considered in the local PCA analysis. It is defaulted to be 0.05 but can be modified in the config file.
 
 #### summarize_pcangsd_for_lostruct_global
 
@@ -105,7 +105,7 @@ This rule plots the top MDS axes and saves the outlier windows in text files.
   * `figures/lostruct/global/combined.mds.png`: MDS plot when all chromosomes are combined. 
 
 * Customizable arguments
-  * `z_cutoff`: the z score cutoff for windows to be considered outliers along each MDS axis. It is defaulted to be 3 but can be specified in the config file. 
+  * `z_cutoff`: the z score cutoff for windows to be considered outliers along each MDS axis. It is defaulted to be 3 but can be modified in the config file. 
 
 #### run_pcangsd_with_lostruct_outliers_global
 

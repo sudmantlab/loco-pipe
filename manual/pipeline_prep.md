@@ -34,8 +34,9 @@ This rule generates a text file that contains the full paths to all bam
 files for each population (or other grouping variables that users
 choose, i.e. “local”)
 
-- Key output files: `docs/{population}_bamlist.txt`: a text file
-  containing the full paths to all bam files for each “population”.
+- Key output files:
+  - `docs/{population}_bamlist.txt`: a text file containing the full
+    paths to all bam files for each “population”.
 
 #### get_chr_list
 
@@ -89,12 +90,12 @@ all samples. This rule runs on each chromosome separately.
 - Customizable arguments:
   - `-ref`: path to the reference genome. Users can specify their
     reference genome in the config file.
-  - `-P`: number of threads this rule uses. This can be specified in the
-    config file.
-  - `-minQ`: minimum sequence quality threshold. This can be specified
-    in the config file.
-  - `-minMapQ`: minimum mapping quality threshold. This can be specified
-    in the config file.
+  - `-P`: number of threads this rule uses. It is defaulted to be 8 but
+    can be modified in the config file.
+  - `-minQ`: minimum sequence quality threshold. It is defaulted to be
+    20 but can be modified in the config file.
+  - `-minMapQ`: minimum mapping quality threshold. It is defaulted to be
+    20 but can be modified in the config file.
 
 ## Depth filter determination (`get_depth_filter_global.smk`)
 
@@ -118,15 +119,5 @@ and min and max filters.
   - `n_sd`: the maximum distance in standard deviations away from the
     mean of the fitted distribution for a site be included in the
     analyses. The higher `n_sd` is, the more relaxed depth filters will
-    be, and the more sites will be retained for downstream analyses.
-    This can be specified in the config file.
-- Tip:
-  - We highly recommend users to check the depth distribution plot
-    before going further in the pipeline. They should expect to see the
-    bulk of the distribution falling inside the minimum and maximum
-    depth filters, with both tails excluded. If they find the filters to
-    be too relaxed or too stringent, they should adjust the n_sd
-    parameter in the config file accordingly. If the fitted normal
-    distribution is a poor fit to the data, they should manually set
-    depth filters in the “depth_filter.tsv” file. See the “Advanced
-    usages of loco-pipe” section below for detailed instructions.
+    be, and the more sites will be retained for downstream analyses. It
+    is defaulted to be 2 but can be modified in the config file.

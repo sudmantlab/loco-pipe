@@ -1,0 +1,198 @@
+Analyses using the full site list (global or local)
+================
+
+- [Global site list
+  (`get_site_list_global.smk`)](#global-site-list-get_site_list_globalsmk)
+  - [get_site_list_global](#get_site_list_global)
+  - [combine_site_list_global](#combine_site_list_global)
+- [Theta estimation (`get_theta.smk`)](#theta-estimation-get_thetasmk)
+  - [get_theta](#get_theta)
+  - [plot_sfs_difstribution](#plot_sfs_difstribution)
+  - [plot_theta_by_window](#plot_theta_by_window)
+- [Heterozygosity estimation
+  (`get_heterozygosity.smk`)](#heterozygosity-estimation-get_heterozygositysmk)
+  - [get_heterozygosity](#get_heterozygosity)
+  - [plot_heterozygosity](#plot_heterozygosity)
+
+## Global site list (`get_site_list_global.smk`)
+
+This Snakefile generates a global site list, which includes both
+variable and invariable sites, that have passed the depth filter to be
+used in downstream analyses that require invariable sites.
+
+#### get_site_list_global
+
+This rule extracts the min and the max depth filters from the
+`depth_filter.tsv` first. With these filters, it subsets the pos.gz file
+generated from `get_depth_global.smk` for every chromosome and generates
+a list of sites (both variable and invariable ones). Lastly, through the
+“-sites” flag in ANGSD, we can limit future analysis (e.g. genetic
+diversity estimation) to this site list.
+
+- Key output files
+  - `/angsd/get_depth_global/{chr}.site_list`: chromosome-specific site
+    lists in ANGSD format that can be used to constrain downstream
+    analyses.
+
+#### combine_site_list_global
+
+This rule collects the chromosome-specific site_list files and combines
+them into one file. Then, similar to above, ANGSD is used to index the
+site list.
+
+- Key output files
+  - `/angsd/get_depth_global/combined.site_list`: a genome-wide site
+    list in ANGSD format that can be used to constrain downstream
+    analyses.
+
+## Theta estimation (`get_theta.smk`)
+
+This Snakefile calculates different estimators of theta and neutrality
+stats for each population. Each population + chromosome combination is
+processed separately.
+
+#### get_theta
+
+This rule inputs a population-specific bamlist and a chromosome-specific
+site list into ANGSD to calculate site allele frequency likelihoods for
+each population at each chromosome. Then it uses realSFS to estimate the
+one-dimensional SFS on all sites, both variable and invariable. Finally,
+the SFS is used as a prior to calculate theta. We offer three types of
+theta estimation: 1) per-SNP, 2) chromosome-average, and 3)
+sliding-window. Please see
+<https://popgen.dk/angsd/index.php/Thetas,Tajima,Neutrality_tests> for
+details.
+
+- Key output files:
+  - `angsd/get_theta/{population}.{chr}.saf.gz`: sample allele frequency
+    likelihoods in each population at each chromosome, including
+    invariable sites.
+  - `angsd/get_theta/{population}.{chr}.sfs`: the site allele frequency
+    spectrum in each population at each chromosome, including invariable
+    sites.
+  - `angsd/get_theta/{population}.{chr}.thetas.tsv.gz`: per-SNP theta
+    and neutrality stats estimates.
+  - `angsd/get_theta{population}.{chr}.{x}window_{y}step.thetas.pestPG`:
+    stepping-window theta and neutrality stats estimates.
+  - `angsd/get_theta/{population}.{chr}.average_thetas.pestPG`:
+    chromosome-average theta and neutrality stats estimates.
+- Hard-coded arguments:
+  - `-r {wildcards.chr}`: constrain the analysis on each chromosome
+    separately. This ensures that all chromosomes are analyzed in
+    parallel.
+  - `-doSaf 1`: calculate the site allele frequency likelihoods for each
+    population at each chromosome
+  - `-doCounts 1`: return count of alleles at each site
+  - `remove_bads 1`: remove duplicated or failed reads.
+  - `-only_proper_pairs 1`: only include paired end data that both reads
+    of a pair are mapped correctly
+- Customizable arguments:
+  - `-b {input.bamlist}`: pathway to the bamlist file
+  - `-sites {input.site_list}`: use the SNP_list generated
+    `snp_calling_global` rule to filter sites for analyses
+  - `-anc {input.ref}`: path to the reference genome if the users set
+    the reference genome as the ancestral state. Users can specify their
+    reference genome in the config file.
+  - `-out {params.outbase}`: base directory to save the to-be generated
+    files
+  - `-GL`: the genotype likelihood model that ANGSD uses. This is
+    defaulted to be 1 but can be modified in the config file. 1 for
+    SAMtools, 2 for GATK, 3 for SOAPsnp, and 4 for SYK (see
+    <https://www.popgen.dk/angsd/index.php/Genotype_Likelihoods#Options>
+    for details)
+  - `-P`: number of threads this rule uses. This is defaulted to be 8
+    but can be modified in the config file.
+  - `-minInd`: minimum number of individuals that have to have data for
+    a site to be included. This is defaulted to be 1 but can be modified
+    in the config file.
+  - `-setMinDepthInd`: minimum read depth an individual must have to be
+    included in the count of individuals for `-minInd`. This is
+    defaulted to be 1 and can be modified in the config file.
+  - `-minQ`: minimum sequence quality threshold. This can be specified
+    in the config file.
+  - `-minMapQ`: minimum mapping quality threshold. This can be specified
+    in the config file.
+  - `-fold`: the type of a reference genome.
+  - `-anc`: path to the reference genome if the users set the reference
+    genome as the ancestral state. Users can specify their reference
+    genome in the config file.
+
+#### plot_sfs_difstribution
+
+This rule will generate two bar plots of sfs distribution for each
+population. One plot includes both invariable and variable sites and the
+other contains variable sites only.
+
+- Key output files
+  - `figures/theta/sfs_distribution/{population}.sfs.png`: this image
+    file contains 1. plot that contains both invariable and variable
+    sites and 2. plot that contains variable sites only. The expected
+    SFS in a neutrally evolving population is also included in the
+    second plot. Note that y axis is in log scale in the first plot.
+
+#### plot_theta_by_window
+
+This rule generates plots for 1) estimates of pi, 2) Watterson’s theta,
+and 3) Tajima’s D in sliding windows for each population separately.
+
+- Key output files
+  - `figures/theta/{population}.theta_by_window.png`: contain three
+    kinds of theta estimation specific to each population
+
+## Heterozygosity estimation (`get_heterozygosity.smk`)
+
+This rule estimates and plots individual heterozygosity.
+
+#### get_heterozygosity
+
+This rule first uses the “doSaf” method to output 4 file types listed in
+the “ext” for each sample across all chromosomes. It then runs the
+“realSFS” submodule with the newly generated .saf.idx file to estimate
+the site frequency spectrum (SFS), which is outputted in the .sfs file.
+
+- Key output files:
+  - `angsd/heterozygosity/{id}.saf.gz`: genome-wide sample allele
+    frequency likelihoods for each sample, including invariable sites.
+  - `angsd/heterozygosity/{id}.sfs`: genome-wide site frequency spectrum
+    for each sample, including invariable sites. Note that an
+    individual’s heterozygosity is simply the number of the second entry
+    in the file divided by the sum of all entries in this file.
+- Hard-coded arguments:
+  - `-doSaf 1`: calculate the site allele frequency likelihoods for each
+    population at each chromosome
+  - `remove_bads 1`: remove duplicated or failed reads.
+  - `-only_proper_pairs 1`: only include paired end data that both reads
+    of a pair are mapped correctly
+- Customizable arguments:
+  - `-i {input.bamlist}`: pathway to the bamlist file
+  - `-sites {input.site_list}`: use the SNP_list generated
+    `snp_calling_global` rule to filter sites for analyses
+  - `-anc {input.ref}`: path to the reference genome if the users set
+    the reference genome as the ancestral state. Users can specify their
+    reference genome in the config file.
+  - `-out`: base directory unique to each specimen to save the to-be
+    generated files
+  - `-GL`: the genotype likelihood model that ANGSD uses. This is
+    defaulted to be 1 but can be modified in the config file. 1 for
+    SAMtools, 2 for GATK, 3 for SOAPsnp, and 4 for SYK (see
+    <https://www.popgen.dk/angsd/index.php/Genotype_Likelihoods#Options>
+    for details)
+  - `-P`: number of threads this rule uses. This is defaulted to be 8
+    but can be modified in the config file.
+  - `-minQ`: minimum sequence quality threshold. This can be specified
+    in the config file.
+  - `-minMapQ`: minimum mapping quality threshold. This can be specified
+    in the config file.
+  - `-fold`: the type of a reference genome.
+  - `-anc`: path to the reference genome if the users set the reference
+    genome as the ancestral state. Users can specify their reference
+    genome in the config file.
+  - `-rf`: path to the chromosome list.
+
+#### plot_heterozygosity
+
+This rule will plot the estimated heterozygosity of each individual.
+
+- Key output files:
+  - `figures/heterozygosity/heterozygosity.png`: a plot of individual
+    heterozygosity grouped by a variable of the user’s choosing.

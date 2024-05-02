@@ -114,14 +114,14 @@ separately.
   - `-setMinDepthInd`: minimum read depth an individual must have to be
     included in the count of individuals for `-minInd`. This is
     defaulted to be 1 and can be modified in the config file.
-- Tips
-  - You can use the “extra” flag in the configuration file to add in
-    more flags for additional filtering and analyses. For example, you
-    can use the “-sites” flag to constrain SNP calling on a prefiltered
-    SNP list, so that the corresponding genotype likelihood files can be
-    generated and the downstream analyses can be carried on accordingly.
-    See the “Advanced usages of loco-pipe” section below for detailed
-    instructions.
+  - `{params.extra}`: optional arguments to be passed to the SNP calling
+    step in ANGSD. These arguments could add extra input files to
+    analyses (e.g. ancestral genome and individual inbreed
+    coefficients). They can also be used to specify additional filters
+    or additional analyses. For example, users can use the “-site” flag
+    here to constrain analysis on a predefined set of SNPs. Or, users
+    can use the “-rmTriallelic” flag followed by a p-value threshold to
+    remove sites with more than two alleles.
 
 ## Local PCA (`run_lostruct_global.smk`)
 
@@ -165,7 +165,7 @@ separately.
     covariance matrix at each genomic window on each chromosome
 - Customizable arguments:
   - `minmaf`: minimum allele frequency for a SNP to be considered in the
-    local PCA analysis. It is defaulted to be 0.05 but can be specified
+    local PCA analysis. It is defaulted to be 0.05 but can be modified
     in the config file.
 
 #### summarize_pcangsd_for_lostruct_global
@@ -204,7 +204,7 @@ files.
     chromosomes are combined.
 - Customizable arguments
   - `z_cutoff`: the z score cutoff for windows to be considered outliers
-    along each MDS axis. It is defaulted to be 3 but can be specified in
+    along each MDS axis. It is defaulted to be 3 but can be modified in
     the config file.
 
 #### run_pcangsd_with_lostruct_outliers_global

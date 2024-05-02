@@ -174,6 +174,8 @@ snp_calling_global:
   # Optional arguments to be passed to the SNP calling step in ANGSD.
   # These arguments could add extra input files to analyses (e.g. ancestral genome and individual inbreed coefficients). 
   # They can also be used to specify additional filters or additional analyses.
+  # For example, users can use the "-site" flag here to constrain analysis on a predefined set of SNPs
+  # Or, users can use the "-rmTriallelic" flag followed by a p-value threshold to remove sites with more than two alleles.
   extra: ""
 
 # -----------------------------------------------------------------------------------------------------------------------

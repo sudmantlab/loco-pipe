@@ -26,7 +26,7 @@ This rule generates a text file that contains the full paths to all bam files.
 This rule generates a text file that contains the full paths to all bam files for each population (or other grouping variables that users choose, i.e. “local”) 
 
 * Key output files:
-`docs/{population}_bamlist.txt`: a text file containing the full paths to all bam files for each “population”.
+  * `docs/{population}_bamlist.txt`: a text file containing the full paths to all bam files for each “population”.
 
 #### get_chr_list
 
@@ -62,9 +62,9 @@ This rule uses ANGSD to count the read depth at every site summed across all sam
   * `-only_proper_pairs 1`: only include paired end data that both reads of a pair are mapped correctly
 * Customizable arguments:
   * `-ref`:  path to the reference genome. Users can specify their reference genome in the config file.
-  * `-P`: number of threads this rule uses. This can be specified in the config file. 
-  * `-minQ`: minimum sequence quality threshold. This can be specified in the config file. 
-  * `-minMapQ`: minimum mapping quality threshold. This can be specified in the config file. 
+  * `-P`: number of threads this rule uses. It is defaulted to be 8 but can be modified in the config file. 
+  * `-minQ`: minimum sequence quality threshold. It is defaulted to be 20 but can be modified in the config file. 
+  * `-minMapQ`: minimum mapping quality threshold. It is defaulted to be 20 but can be modified in the config file. 
 
 ## Depth filter determination (`get_depth_filter_global.smk`)
 
@@ -76,4 +76,4 @@ This rule reads in the depth histograms of all chromosomes (i.e. `depthGlobal` f
   * `angsd/get_depth_global/depth_filter.tsv`: a text file containing the minimum and maximum depth filters to be used in further analyses, as well as the mean and standard deviation of the fitted distribution. 
   * `figures/depth/depth_filter.png`: the density plot of the read depth distribution. The chosen depth filters are shown as vertical lines. 
 Customizable arguments:
-  * `n_sd`: the maximum distance in standard deviations away from the mean of the fitted distribution for a site be included in the analyses. The higher `n_sd` is, the more relaxed depth filters will be, and the more sites will be retained for downstream analyses. This can be specified in the config file. 
+  * `n_sd`: the maximum distance in standard deviations away from the mean of the fitted distribution for a site be included in the analyses. The higher `n_sd` is, the more relaxed depth filters will be, and the more sites will be retained for downstream analyses. It is defaulted to be 2 but can be modified in the config file. 
