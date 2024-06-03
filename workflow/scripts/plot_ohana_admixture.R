@@ -92,4 +92,4 @@ admix_plot <- genome_admix %>%
         text = element_text(size=10),
         strip.text.x = element_text(size = 10, angle = 90),
         strip.text.y = element_text(size = 10, angle = 180))
-ggsave(plot, admix_plot, width = sample_size*0.15, height = (max_k-min_k+2)*1, unit="in")
+ggsave(plot, admix_plot, width = sample_size*0.1, height = (max_k-min_k+2)*1, unit="cm")
