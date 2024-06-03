@@ -63,3 +63,31 @@ rule combine_subsetted_beagle_local:
         gzip -c {output.subsetted_beagle} > {output.subsetted_beagle_gz} 2>> {log}
         '''
 
+# This rule unzips the full beagle file for each chromosome
+rule unzip_beagle_global:
+    input:
+        beagle="{basedir}/angsd/snp_calling_global/{chr}.beagle.gz",
+    output:
+        beagle="{basedir}/angsd/snp_calling_global/{chr}.beagle",
+    threads: 1
+    shell:
+        '''
+        gunzip -c {input.beagle} > {output.beagle}
+        '''
+        
+# This rule combines the beagle files from all chromosomes together
+rule combine_beagle_global:
+    input:
+        beagle=expand("{{basedir}}/angsd/snp_calling_global/{chr}.beagle", chr=CHRS),
+    output:
+        beagle="{basedir}/angsd/snp_calling_global/combined.beagle",
+        beagle_gz="{basedir}/angsd/snp_calling_global/combined.beagle.gz",
+        done=touch("{basedir}/angsd/snp_calling_global/combined.beagle.done"),
+    threads: 1
+    log: "{basedir}/angsd/snp_calling_global/combine_beagle.log"
+    shell:
+        '''
+        head -n 1 {input.beagle[0]} > {output.beagle} 2> {log}
+        tail -q -n +2 {input.beagle} >> {output.beagle} 2>> {log}
+        gzip -c {output.beagle} > {output.beagle}.gz 2>> {log}
+        '''

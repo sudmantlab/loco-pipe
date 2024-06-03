@@ -79,6 +79,7 @@ rule all:
         expand("{basedir}/angsd/snp_calling_global/{chr}.done", basedir=BASEDIR, chr=CHRS) if config["to_include"]["snp_calling_global"] else [],
         expand("{basedir}/angsd/snp_calling_global/combined.subsetted.beagle.done", basedir=BASEDIR) if config["to_include"]["snp_calling_global"] else [],
         expand("{basedir}/angsd/snp_calling_global/combined.subsetted.snp_list.done", basedir=BASEDIR) if config["to_include"]["snp_calling_global"] else [],
+        expand("{basedir}/angsd/snp_calling_global/combined.beagle.done", basedir=BASEDIR) if config["to_include"]["snp_calling_global"] else [],
 
         ## PCAngsd global
         expand("{basedir}/pcangsd/global/combined.subsetted.done", basedir = BASEDIR) if config["to_include"]["run_pcangsd_global"] else [],
