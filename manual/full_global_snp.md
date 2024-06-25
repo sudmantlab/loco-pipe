@@ -1,18 +1,28 @@
 Analyses using the full global SNP list
 ================
 
-- [SNP calling
-  (`snp_calling_global.smk`)](#snp-calling-snp_calling_globalsmk)
-  - [snp_calling_global](#snp_calling_global)
-- [Local PCA
-  (`run_lostruct_global.smk`)](#local-pca-run_lostruct_globalsmk)
-  - [split_beagle_global](#split_beagle_global)
-  - [run_pcangsd_in_windows_global](#run_pcangsd_in_windows_global)
-  - [summarize_pcangsd_for_lostruct_global](#summarize_pcangsd_for_lostruct_global)
-  - [run_lostruct_global](#run_lostruct_global)
-  - [plot_lostruct_mds_global](#plot_lostruct_mds_global)
-  - [run_pcangsd_with_lostruct_outliers_global](#run_pcangsd_with_lostruct_outliers_global)
-  - [plot_lostruct_outlier_pca_global](#plot_lostruct_outlier_pca_global)
+- <a href="#snp-calling-snp_calling_globalsmk"
+  id="toc-snp-calling-snp_calling_globalsmk">SNP calling
+  (<code>snp_calling_global.smk</code>)</a>
+  - <a href="#snp_calling_global"
+    id="toc-snp_calling_global">snp_calling_global</a>
+- <a href="#local-pca-run_lostruct_globalsmk"
+  id="toc-local-pca-run_lostruct_globalsmk">Local PCA
+  (<code>run_lostruct_global.smk</code>)</a>
+  - <a href="#split_beagle_global"
+    id="toc-split_beagle_global">split_beagle_global</a>
+  - <a href="#run_pcangsd_in_windows_global"
+    id="toc-run_pcangsd_in_windows_global">run_pcangsd_in_windows_global</a>
+  - <a href="#summarize_pcangsd_for_lostruct_global"
+    id="toc-summarize_pcangsd_for_lostruct_global">summarize_pcangsd_for_lostruct_global</a>
+  - <a href="#run_lostruct_global"
+    id="toc-run_lostruct_global">run_lostruct_global</a>
+  - <a href="#plot_lostruct_mds_global"
+    id="toc-plot_lostruct_mds_global">plot_lostruct_mds_global</a>
+  - <a href="#run_pcangsd_with_lostruct_outliers_global"
+    id="toc-run_pcangsd_with_lostruct_outliers_global">run_pcangsd_with_lostruct_outliers_global</a>
+  - <a href="#plot_lostruct_outlier_pca_global"
+    id="toc-plot_lostruct_outlier_pca_global">plot_lostruct_outlier_pca_global</a>
 
 ## SNP calling (`snp_calling_global.smk`)
 
@@ -110,7 +120,8 @@ separately.
     the config file.
   - `-minInd`: minimum number of individuals that have to have data for
     a site to be included. This is defaulted to be 50% of the total
-    sample size but can be modified in the config file.
+    sample size but can be modified in the config file as a different
+    proportion.
   - `-setMinDepthInd`: minimum read depth an individual must have to be
     included in the count of individuals for `-minInd`. This is
     defaulted to be 1 and can be modified in the config file.

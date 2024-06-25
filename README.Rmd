@@ -72,6 +72,8 @@ If you don't yet have your data ready for loco-pipe, and even if you do, we high
 
 We also provide an extensive [user's manual](manual/README.md) with detailed description of each step of the pipeline for easy reference. Tips and suggestions are also included in this document. 
 
+We **strongly** advise users to take advantage of these resources (as well as other resources such as the [ANGSD manual](https://www.popgen.dk/angsd/index.php/ANGSD) and our [beginner's guide to lcWGS](https://doi.org/10.1111/mec.16077)) to gain a good understanding of loco-pipe, the software it uses, and lcWGS data analysis in general while you are using loco-pipe. **Using this pipeline as a black box can lead to spurious results and erroneous conclusions.**
+
 ## Setting up the pipeline
 
 1. Install [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html) or conda (https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html) if you have not already done so. A fresh install of mamba with miniforge (https://github.com/conda-forge/miniforge) is highly recommended because mamba is much faster than conda. It is ok if you prefer to use conda though; just replace all occurrences of `mamba` with `conda` in the code below.

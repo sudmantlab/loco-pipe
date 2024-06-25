@@ -1,20 +1,39 @@
 User’s manual
 ================
 
-- [Complete pipeline flowchart](#complete-pipeline-flowchart)
-- [Detailed description of the
-  pipeline](#detailed-description-of-the-pipeline)
-- [Tips and suggestions](#tips-and-suggestions)
-  - [Depth filtering](#depth-filtering)
-  - [Global SNP calling](#global-snp-calling)
-  - [CPU and memory requirements](#cpu-and-memory-requirements)
-  - [Advanced usage of loco-pipe](#advanced-usage-of-loco-pipe)
+- <a href="#complete-pipeline-flowchart"
+  id="toc-complete-pipeline-flowchart">Complete pipeline flowchart</a>
+- <a href="#detailed-description-of-the-analytical-steps"
+  id="toc-detailed-description-of-the-analytical-steps">Detailed
+  description of the analytical steps</a>
+- <a href="#directory-structure" id="toc-directory-structure">Directory
+  structure</a>
+- <a href="#tips-and-suggestions" id="toc-tips-and-suggestions">Tips and
+  suggestions</a>
+  - <a href="#never-use-loco-pipe-a-black-box"
+    id="toc-never-use-loco-pipe-a-black-box">Never use loco-pipe a black
+    box</a>
+  - <a href="#input-sequence-alignment-files"
+    id="toc-input-sequence-alignment-files">Input sequence alignment
+    files</a>
+  - <a href="#depth-filtering" id="toc-depth-filtering">Depth filtering</a>
+  - <a href="#global-snp-calling" id="toc-global-snp-calling">Global SNP
+    calling</a>
+  - <a href="#sample-mislabeling" id="toc-sample-mislabeling">Sample
+    mislabeling</a>
+  - <a href="#important-assumptions-of-the-software"
+    id="toc-important-assumptions-of-the-software">Important assumptions of
+    the software</a>
+  - <a href="#cpu-and-memory-requirements"
+    id="toc-cpu-and-memory-requirements">CPU and memory requirements</a>
+  - <a href="#advanced-usage-of-loco-pipe"
+    id="toc-advanced-usage-of-loco-pipe">Advanced usage of loco-pipe</a>
 
 ## Complete pipeline flowchart
 
 ![](../complete_flowchart.jpeg)
 
-## Detailed description of the pipeline
+## Detailed description of the analytical steps
 
 [Pipeline preparation and depth filter determination](pipeline_prep.md)
 
@@ -27,7 +46,75 @@ User’s manual
 [Analyses using the full global site lists (global or
 local)](full_site.md)
 
+## Directory structure
+
+- `loco-pipe/workflow`: Snakemake pipeline
+
+  - `pipelines/loco-pipe.smk`: main Snakefile
+  - `rules/`: Snakefiles of individual modules
+  - `scripts/`: various scripts (now mainly in R) that some of the
+    Snakefiles use
+  - `envs/`: conda environment files
+  - `profiles`: cluster profiles
+
+- `loco-pipe/toyfish/`: test dataset
+
+  - `bams/`: sequence alignment files in bam format
+  - `reference`: reference genome in fasta format
+  - `docs/`: input text files
+  - `figures/`: output figures
+
+- `loco-pipe/manual/`: user’s manual
+
+- `loco-pipe/config.yaml`: pipeline configuration file
+
 ## Tips and suggestions
+
+#### Never use loco-pipe a black box
+
+loco-pipe is not intended to be used as a black box where users can
+simply input the data and expect flawless results without knowing what
+happens in between. We try our best to help you navigate through the
+complex workflow as painless as possible and avoid some of the common
+pitfalls, but it is not possible to account for every peculiarity in any
+given dataset. Therefore, it is critical for users to develop a good
+understanding of the structure and mechanism of loco-pipe, the software
+it uses, and lcWGS data analysis in general to ensure the proper use of
+the pipeline. For example, the configuration file needs to be carefully
+read through and edited, various intermediate outputs need to be sanity
+checked, and all results need to be interpreted with caution. To
+facilitate this process, we strive to provide ample resources in this
+GitHub repo, but please let us know in the [Issues
+page](https://github.com/sudmantlab/loco-pipe/issues) when we fall short
+(and we inevitably will). We will try our best to reply in a timely
+fashion.
+
+In addition to this GitHub repo, you may find the following resources
+helpful when working with loco-pipe.
+
+- [A beginner’s guide to lcWGS](https://doi.org/10.1111/mec.16077)
+- [The ANGSD website](https://www.popgen.dk/angsd/index.php/ANGSD)
+- [The PCAngsd
+  website](https://www.popgen.dk/software/index.php/PCAngsd)
+- [The Ohana website](https://github.com/jade-cheng/ohana)
+- [The Snakemake manual](https://snakemake.readthedocs.io/en/stable/)
+- [The grenepipe
+  website](https://github.com/moiexpositoalonsolab/grenepipe)
+
+#### Input sequence alignment files
+
+It is important to check the evenness of sequencing depth of the input
+BAM files and the evenness of sample size across populations before
+launching the pipeline. Samples with extremely low sequencing depth
+compared to others (e.g. \<0.5x), as well as populations with extremely
+low sample sizes (e.g. n\<5), may need to be excluded from certain
+analyses. Also be aware that large variance in sequencing depth can lead
+to batch effects for certain analyses (e.g. one of the PC axes
+correlates with depth), and uneven sample sizes across populations can
+also lead to technical artifacts (e.g. admixture analysis over-splitting
+populations with large sample sizes). It doesn’t necessarily mean that
+downsampling or additional sequencing efforts are required; users just
+need to bare these in mind when interpreting the results.
 
 #### Depth filtering
 
@@ -42,12 +129,49 @@ file.
 
 #### Global SNP calling
 
-You can use the `extra` flag in the configuration file to add in more
-flags for additional filtering and analyses. For example, you can use
+Users can use the `extra` flag in the configuration file to add in more
+flags for additional filtering and analyses. For example, they can use
 the “-sites” flag to constrain SNP calling on a prefiltered SNP list, so
 that the corresponding genotype likelihood files can be generated and
 the downstream analyses can be carried on accordingly. See the “Advanced
 usages of loco-pipe” section below for detailed instructions.
+
+#### Sample mislabeling
+
+Mislabeled samples can lead to inaccurate estimations of allele
+frequencies and diversity stats. Therefore, users should inspect the PCA
+results and correct for any mislabeled samples before continuing the
+pipeline.
+
+#### Important assumptions of the software
+
+All software used in the pipeline make various assumptions about the
+data. The violation of some of these can be have particularly strong
+impacts on the result. It is therefore important for the user to
+understand the the inner mechanisms of these software. Below are a few
+examples of these:
+
+- Independence among SNPs: PCA and admixture analysis assume a set of
+  unlinked SNPs. Our SNP thinning procedure can help ensure this in many
+  scenarios, but not when there is a large non-recombining block in the
+  genome (e.g. a chromosome inversion). In such cases, the
+  non-recombining block may drive the patterns in the PCA and admixture
+  analysis. This doesn’t render their result invalid, but you may want
+  to provide a list of SNPs excluding the non-recombining region (see
+  above) to get a more accurate account of the underlying population
+  structure in such cases.
+
+- Empirical Bayes inference and the importance of the prior: Some
+  analytical steps in ANGSD uses the empircal Bayes inference approach,
+  where a prior is derived from the data itself for the estimation of
+  the posterior. In such cases, a mis-specification of the prior can
+  severely bias the results. Analyses that can be affected by this are
+  the estimation of diversity stats and Fst, both of which use the SFS
+  (1dSFS including invariable sites for the former, 2dSFS excluding
+  invariable sites for the latter) as their prior. Therefore, it is
+  important to sanity check these SFS and make sure that their take
+  reasonable shapes. (Note that the 1dSFS is plotted by default, but
+  users may need to manually check the 2dSFS).
 
 #### CPU and memory requirements
 

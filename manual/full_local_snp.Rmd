@@ -46,8 +46,8 @@ This rule takes in population-specific bamlists and then uses ANGSD to estimate 
   * `-anc` : path to the reference genome. Users can specify their reference genome in the config file.
   * `-P` : number of threads this rule uses. This is defaulted to be 8 but can be modified in the config file.
   * `-GL`: model chosen for genotype likelihood estimation. 1: SAMtools model, 2: GATK models, 3: SOAPsnp model, 4: SYK model. 
-  * `-minInd`: minimum number of individuals that have to have data  for a site to be included. This is defaulted to be 1 but can be modified in the config file.
-  * `-setMinDepthInd`: minimum read depth an individual must have to be included in the count of individuals for `-minInd`. This is defaulted to be 1 and can be modified in the config file. 
+  * `-minInd`: minimum number of individuals that have to have data for a site to be included. This is defaulted to be 1 (i.e. a site only need to be covered by 1 sample in a population for it to be included in the analysis in that population) but can be modified in the config file.
+  * `-setMinDepthInd`: minimum read depth an individual must have to be included in the count of individuals for `-minInd`. This is defaulted to be 1 (i.e. a sample only needs to have 1 read at a site for it to be included in the count) and can be modified in the config file. 
 
 ## Fst estimation (`get_fst.smk`)
 

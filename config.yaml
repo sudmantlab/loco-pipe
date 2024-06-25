@@ -152,18 +152,22 @@ get_depth_filter_global:
 # -----------------------------------------------------------------------------------------------------------------------
 snp_calling_global:
   
-  # The minimum proportion of samples that have to have data for a site to be considered in the analyses.
-  # The site that has a smaller sample size than minind*total_sample_size will be filtered out. 
-  # Note that there is no standarized number for "minind". The choice depends on the
-  # sequencing depth. With typical low-coverage
-  # data, we often use half of the total sample size (i.e. 0.5).
-  minind: "0.5"
+  # The minimum PROPORTION of samples that have to have read depth equal to or greater than 
+  # the value set by "mindepthind" (see below) for a site to be considered in the analysis.
+  # The sites that have fewer samples passing this threshold will be filtered out. 
+  # Note that there is no standarized rule for setting "minind_proportion". The choice depends on the
+  # sequencing depth and its evenness across samples. Since additional depth filteres are 
+  # automatically applied in this step, we often choose a relatively relaxed minind filter. 
+  # For example, with coverage around 1-2x among samples,
+  # we often use half of the total sample size (i.e. 0.5).
+  minind_proportion: "0.5"
  
-  # The filter threshold for sequencing depth. If the total sequencing threshold is below than the threshold number,
-  # then the individuals will not be filtered out. The default setting is 1. 
-  setMinDepthInd: "1"
+  # This filter is used in combination with "minind_proportion" (see above). The default setting is 1, 
+  # meaning that a sample needs to have at least 1 read at a site for it to be counted for the "minind" filter.
+  # We suggest that you use stick with the default setting unless there are compelling reasons to use a different value.
+  mindepthind: "1"
   
-  # Threshold for a site to be considered in SNP calling based on allele frequency.
+  # The minimum allele frequency threshold for a site to be considered in the analysis.
   # The site that has a smaller minor allele frequency that "minmaf" will be filtered out.
   minmaf: "0.05"
   
@@ -275,15 +279,19 @@ run_ohana_local:
 # -----------------------------------------------------------------------------------------------------------------------
 get_maf:
 
-  # The minimum number of samples within a population that have to have data for a site to be considered in the analyses.
-  # The site that has a smaller sample size than minind will be filtered out. 
-  # Note that there is no standarized number for "minind". The users need to pick their own -minind values
-  # if they decide to use this filter. The default setting is 1. 
+  # The minimum NUMBER of samples IN A POPULATION that have to have read depth equal to or greater than 
+  # the value set by "mindepthind" (see below) for a site to be considered in the analysis.
+  # The sites that have fewer samples passing this threshold will be filtered out. 
+  # Note that this is different from the "minind_proportion" filter used in global_snp_calling, 
+  # as it specifies a NUMBER of samples instead of a PROPORTION out of the total sample size .
+  # The default setting is 1, meaning that a site only needs to be covered by 1 sample in a population with read depth equal to 
+  # or greater than "mindepthind" for it to be considered.
   minind: "1"
   
-  # The filter threshold for sequencing depth per individual. If the total sequencing depth of an individual  
-  # is below than the threshold number, then the individuals will be filtered out. The default setting is 1. 
-  setMinDepthInd: "1"
+  # This filter is used in combination with "minind" (see above). The default setting is 1, 
+  # meaning that a sample needs to have at least 1 read at a site for it to be counted for the "minind" filter.
+  # We suggest that you stick with the default setting unless there are compelling reasons to use a different value.
+  mindepthind: "1"
   
   # Optional arguments to be passed to maf estimation per population in ANGSD.
   # These arguments could add extra input files to analyses (e.g. individual inbreed coefficients). 
@@ -362,16 +370,19 @@ get_theta:
   # the faster the job could be done. For this step, the realSFS in ANGSD module is capable of using more than 8 threads.
   threads: 8
   
-  # The minimum number of samples within a population that have to have data for a site to be considered in the analyses.
-  # The site that has a smaller sample size than minind will be filtered out. 
-  # Note that there is no standarized number for "minind". The users need to pick their own -minind values
-  # if they decide to use this filter. The default setting is 1. 
+  # The minimum NUMBER of samples IN A POPULATION that have to have read depth equal to or greater than 
+  # the value set by "mindepthind" (see below) for a site to be considered in the analysis.
+  # The sites that have fewer samples passing this threshold will be filtered out. 
+  # Note that this is different from the "minind_proportion" filter used in global_snp_calling, 
+  # as it specifies a NUMBER of samples instead of a PROPORTION out of the total sample size .
+  # The default setting is 1, meaning that a site only needs to be covered by 1 sample in a population with read depth equal to 
+  # or greater than "mindepthind" for it to be considered.
   minind: "1"
   
-  # The filter threshold for sequencing depth per individual. If the total sequencing depth of an individual  
-  # is below than the threshold number,
-  # then the individuals will be filtered out. The default setting is 1. 
-  setMinDepthInd: "1"
+  # This filter is used in combination with "minind" (see above). The default setting is 1, 
+  # meaning that a sample needs to have at least 1 read at a site for it to be counted for the "minind" filter.
+  # We suggest that you use stick with the default setting unless there are compelling reasons to use a different value.
+  mindepthind: "1"
   
   # The minimum base quality score.
   # Sequencing data below this threshold will be filtered out and not included in the theta estimation.

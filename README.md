@@ -1,16 +1,23 @@
 loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
 ================
 
-- [Key features](#key-features)
-- [Currently supported
-  functionalities](#currently-supported-functionalities)
-- [Complete pipeline flowchart](#complete-pipeline-flowchart)
-- [Before you start](#before-you-start)
-- [Setting up the pipeline](#setting-up-the-pipeline)
-- [Preparing the project directory and required input
-  files](#preparing-the-project-directory-and-required-input-files)
-- [Launching the pipeline](#launching-the-pipeline)
-- [Future directions](#future-directions)
+- <a href="#key-features" id="toc-key-features">Key features</a>
+- <a href="#currently-supported-functionalities"
+  id="toc-currently-supported-functionalities">Currently supported
+  functionalities</a>
+- <a href="#complete-pipeline-flowchart"
+  id="toc-complete-pipeline-flowchart">Complete pipeline flowchart</a>
+- <a href="#before-you-start" id="toc-before-you-start">Before you
+  start</a>
+- <a href="#setting-up-the-pipeline"
+  id="toc-setting-up-the-pipeline">Setting up the pipeline</a>
+- <a href="#preparing-the-project-directory-and-required-input-files"
+  id="toc-preparing-the-project-directory-and-required-input-files">Preparing
+  the project directory and required input files</a>
+- <a href="#launching-the-pipeline"
+  id="toc-launching-the-pipeline">Launching the pipeline</a>
+- <a href="#future-directions" id="toc-future-directions">Future
+  directions</a>
 
 **loco-pipe** is an automated Snakemake pipeline that streamlines a set
 of essential population genomic analyses for **lo**w-**co**verage whole
@@ -121,6 +128,14 @@ cluster, making it much easier to learn and troubleshoot.
 We also provide an extensive [user’s manual](manual/README.md) with
 detailed description of each step of the pipeline for easy reference.
 Tips and suggestions are also included in this document.
+
+We **strongly** advise users to take advantage of these resources (as
+well as other resources such as the [ANGSD
+manual](https://www.popgen.dk/angsd/index.php/ANGSD) and our [beginner’s
+guide to lcWGS](https://doi.org/10.1111/mec.16077)) to gain a good
+understanding of loco-pipe, the software it uses, and lcWGS data
+analysis in general while you are using loco-pipe. **Using this pipeline
+as a black box can lead to spurious results and erroneous conclusions.**
 
 ## Setting up the pipeline
 

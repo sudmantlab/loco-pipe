@@ -57,8 +57,8 @@ This rule inputs a population-specific bamlist and a chromosome-specific site li
   * `-out {params.outbase}`: base directory to save the to-be generated files
   * `-GL `: the genotype likelihood model that ANGSD uses. This is defaulted to be 1 but can be modified in the config file. 1 for  SAMtools, 2 for GATK, 3 for SOAPsnp, and 4 for SYK (see https://www.popgen.dk/angsd/index.php/Genotype_Likelihoods#Options for details)
   * `-P`: number of threads this rule uses. This is defaulted to be 8 but can be modified in the config file. 
-  * `-minInd`: minimum number of individuals that have to have data  for a site to be included. This is defaulted to be 1 but can be modified in the config file.
-  * `-setMinDepthInd`: minimum read depth an individual must have to be included in the count of individuals for `-minInd`. This is defaulted to be 1 and can be modified in the config file. 
+  * `-minInd`: minimum number of individuals that have to have data  for a site to be included. This is defaulted to be 1 (i.e. a site only need to be covered by 1 sample in a population for it to be included in the analysis in that population) but can be modified in the config file.
+  * `-setMinDepthInd`: minimum read depth an individual must have to be included in the count of individuals for `-minInd`. This is defaulted to be 1 (i.e. a sample only needs to have 1 read at a site for it to be included in the count) and can be modified in the config file. 
   * `-minQ`: minimum sequence quality threshold. This can be specified in the config file. 
   * `-minMapQ`: minimum mapping quality threshold. This can be specified in the config file. 
   * `-fold`: the type of a reference genome.

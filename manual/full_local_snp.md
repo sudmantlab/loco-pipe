@@ -1,12 +1,15 @@
 Analyses using the full local SNP list
 ================
 
-- [Allele frequency estimation
-  (`get_maf.smk`)](#allele-frequency-estimation-get_mafsmk)
-  - [get_maf](#get_maf)
-- [Fst estimation (`get_fst.smk`)](#fst-estimation-get_fstsmk)
-  - [get_fst](#get_fst)
-  - [plot_fst](#plot_fst)
+- <a href="#allele-frequency-estimation-get_mafsmk"
+  id="toc-allele-frequency-estimation-get_mafsmk">Allele frequency
+  estimation (<code>get_maf.smk</code>)</a>
+  - <a href="#get_maf" id="toc-get_maf">get_maf</a>
+- <a href="#fst-estimation-get_fstsmk"
+  id="toc-fst-estimation-get_fstsmk">Fst estimation
+  (<code>get_fst.smk</code>)</a>
+  - <a href="#get_fst" id="toc-get_fst">get_fst</a>
+  - <a href="#plot_fst" id="toc-plot_fst">plot_fst</a>
 
 ## Allele frequency estimation (`get_maf.smk`)
 
@@ -90,11 +93,15 @@ same SNP position across all populations.
   - `-GL`: model chosen for genotype likelihood estimation. 1: SAMtools
     model, 2: GATK models, 3: SOAPsnp model, 4: SYK model.
   - `-minInd`: minimum number of individuals that have to have data for
-    a site to be included. This is defaulted to be 1 but can be modified
-    in the config file.
+    a site to be included. This is defaulted to be 1 (i.e. a site only
+    need to be covered by 1 sample in a population for it to be included
+    in the analysis in that population) but can be modified in the
+    config file.
   - `-setMinDepthInd`: minimum read depth an individual must have to be
     included in the count of individuals for `-minInd`. This is
-    defaulted to be 1 and can be modified in the config file.
+    defaulted to be 1 (i.e. a sample only needs to have 1 read at a site
+    for it to be included in the count) and can be modified in the
+    config file.
 
 ## Fst estimation (`get_fst.smk`)
 

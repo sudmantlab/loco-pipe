@@ -1,18 +1,28 @@
 Analyses using the full site list (global or local)
 ================
 
-- [Global site list
-  (`get_site_list_global.smk`)](#global-site-list-get_site_list_globalsmk)
-  - [get_site_list_global](#get_site_list_global)
-  - [combine_site_list_global](#combine_site_list_global)
-- [Theta estimation (`get_theta.smk`)](#theta-estimation-get_thetasmk)
-  - [get_theta](#get_theta)
-  - [plot_sfs_difstribution](#plot_sfs_difstribution)
-  - [plot_theta_by_window](#plot_theta_by_window)
-- [Heterozygosity estimation
-  (`get_heterozygosity.smk`)](#heterozygosity-estimation-get_heterozygositysmk)
-  - [get_heterozygosity](#get_heterozygosity)
-  - [plot_heterozygosity](#plot_heterozygosity)
+- <a href="#global-site-list-get_site_list_globalsmk"
+  id="toc-global-site-list-get_site_list_globalsmk">Global site list
+  (<code>get_site_list_global.smk</code>)</a>
+  - <a href="#get_site_list_global"
+    id="toc-get_site_list_global">get_site_list_global</a>
+  - <a href="#combine_site_list_global"
+    id="toc-combine_site_list_global">combine_site_list_global</a>
+- <a href="#theta-estimation-get_thetasmk"
+  id="toc-theta-estimation-get_thetasmk">Theta estimation
+  (<code>get_theta.smk</code>)</a>
+  - <a href="#get_theta" id="toc-get_theta">get_theta</a>
+  - <a href="#plot_sfs_difstribution"
+    id="toc-plot_sfs_difstribution">plot_sfs_difstribution</a>
+  - <a href="#plot_theta_by_window"
+    id="toc-plot_theta_by_window">plot_theta_by_window</a>
+- <a href="#heterozygosity-estimation-get_heterozygositysmk"
+  id="toc-heterozygosity-estimation-get_heterozygositysmk">Heterozygosity
+  estimation (<code>get_heterozygosity.smk</code>)</a>
+  - <a href="#get_heterozygosity"
+    id="toc-get_heterozygosity">get_heterozygosity</a>
+  - <a href="#plot_heterozygosity"
+    id="toc-plot_heterozygosity">plot_heterozygosity</a>
 
 ## Global site list (`get_site_list_global.smk`)
 
@@ -103,11 +113,15 @@ details.
   - `-P`: number of threads this rule uses. This is defaulted to be 8
     but can be modified in the config file.
   - `-minInd`: minimum number of individuals that have to have data for
-    a site to be included. This is defaulted to be 1 but can be modified
-    in the config file.
+    a site to be included. This is defaulted to be 1 (i.e. a site only
+    need to be covered by 1 sample in a population for it to be included
+    in the analysis in that population) but can be modified in the
+    config file.
   - `-setMinDepthInd`: minimum read depth an individual must have to be
     included in the count of individuals for `-minInd`. This is
-    defaulted to be 1 and can be modified in the config file.
+    defaulted to be 1 (i.e. a sample only needs to have 1 read at a site
+    for it to be included in the count) and can be modified in the
+    config file.
   - `-minQ`: minimum sequence quality threshold. This can be specified
     in the config file.
   - `-minMapQ`: minimum mapping quality threshold. This can be specified
