@@ -55,7 +55,9 @@ loco-pipe is not intended to be used as a black box where users can simply input
 In addition to this GitHub repo, you may find the following resources helpful when working with loco-pipe.
 
 * [A beginner's guide to lcWGS](https://doi.org/10.1111/mec.16077)
-* [The ANGSD website](https://www.popgen.dk/angsd/index.php/ANGSD)
+* [An lcWGS tutorial made for the physalia workshop](https://github.com/nt246/physalia-lcwgs)
+* [An ANGSD pipeline built by Claire Mérot and Eric Normandeau](https://github.com/clairemerot/angsd_pipeline)
+* [The ANGSD manual](https://www.popgen.dk/angsd/index.php/ANGSD)
 * [The PCAngsd website](https://www.popgen.dk/software/index.php/PCAngsd)
 * [The Ohana website](https://github.com/jade-cheng/ohana)
 * [The Snakemake manual](https://snakemake.readthedocs.io/en/stable/)
