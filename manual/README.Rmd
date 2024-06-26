@@ -12,7 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Complete pipeline flowchart 
 
-![](../complete_flowchart.jpeg)
+![](../complete_flowchart.png)
+Each box represents a Snakemake rule and is colored based on the major groups of analyses in the form of separate Snakefiles (shown at the top left corner). The differently colored shades indicate the types of SNPs or sites on which the analyses are conducted. Dashed arrows indicate key modules that can be turned on or off in the configuration file. The four orange boxes at the top right corner (part of the “pipeline_prep.smk” Snakefile) are the starting points of the pipeline, and the “all” box at the bottom is the end point. Please see the section below for detailed descriptions of each Snakemake rule.
 
 ## Detailed description of the analytical steps 
 
