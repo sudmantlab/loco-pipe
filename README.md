@@ -1,23 +1,17 @@
 loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
 ================
 
-- <a href="#key-features" id="toc-key-features">Key features</a>
-- <a href="#currently-supported-functionalities"
-  id="toc-currently-supported-functionalities">Currently supported
-  functionalities</a>
-- <a href="#complete-pipeline-flowchart"
-  id="toc-complete-pipeline-flowchart">Complete pipeline flowchart</a>
-- <a href="#before-you-start" id="toc-before-you-start">Before you
-  start</a>
-- <a href="#setting-up-the-pipeline"
-  id="toc-setting-up-the-pipeline">Setting up the pipeline</a>
-- <a href="#preparing-the-project-directory-and-required-input-files"
-  id="toc-preparing-the-project-directory-and-required-input-files">Preparing
-  the project directory and required input files</a>
-- <a href="#launching-the-pipeline"
-  id="toc-launching-the-pipeline">Launching the pipeline</a>
-- <a href="#future-directions" id="toc-future-directions">Future
-  directions</a>
+- [Key features](#key-features)
+- [Currently supported
+  functionalities](#currently-supported-functionalities)
+- [Complete pipeline flowchart](#complete-pipeline-flowchart)
+- [Before you start](#before-you-start)
+- [Setting up the pipeline](#setting-up-the-pipeline)
+- [Preparing the project directory and required input
+  files](#preparing-the-project-directory-and-required-input-files)
+- [Launching the pipeline](#launching-the-pipeline)
+- [Future directions](#future-directions)
+- [Citation](#citation)
 
 **loco-pipe** is an automated Snakemake pipeline that streamlines a set
 of essential population genomic analyses for **lo**w-**co**verage whole
@@ -393,3 +387,9 @@ welcome on the [Issues](https://github.com/sudmantlab/loco-pipe/issues)
 page. We also encourage users to build on the existing infrastructure
 and add more functionalities to loco-pipe in the form of [pull
 requests](https://github.com/sudmantlab/loco-pipe/pulls).
+
+## Citation
+
+loco-pipe is published in Bioinformatics Advances:
+<https://doi.org/10.1093/bioadv/vbae098> Please cite this paper if you
+use loco-pipe in your research.

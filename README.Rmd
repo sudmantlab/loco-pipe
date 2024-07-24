@@ -193,3 +193,8 @@ We plan to continue to maintain and develop loco-pipe, by incorporating addition
 [Dallaire et al. (2023)](https://academic.oup.com/gbe/article/15/12/evad229/7470724), can be incorporated into loco-pipe manually (see [User's Manual](manual/README.md) for instructions), but may be fully automated in the future. In choosing depth filters, we may adopt a mixed model instead of a truncated normal distribution for curve fitting in the future. Docker/singularity support will also be considered.
 
 All kinds of feedback, such as bug reports and feature requests, are welcome on the [Issues](https://github.com/sudmantlab/loco-pipe/issues) page. We also encourage users to build on the existing infrastructure and add more functionalities to loco-pipe in the form of [pull requests](https://github.com/sudmantlab/loco-pipe/pulls).
+
+
+## Citation
+
+loco-pipe is published in Bioinformatics Advances: https://doi.org/10.1093/bioadv/vbae098 Please cite this paper if you use loco-pipe in your research.

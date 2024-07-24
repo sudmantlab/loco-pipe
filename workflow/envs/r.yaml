@@ -10,3 +10,4 @@ dependencies:
  - r-extraDistr==1.9.1
  - r-survival==3.5_3
  - mkl==2023.2.0
+ - r-stringi
