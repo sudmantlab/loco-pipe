@@ -28,10 +28,12 @@ depth_hist <- depth_count %>%
   tibble(depth=0:10000, count=.) %>%
   filter(depth > 0)
 ## find the mode of the distribution
+total_counts <- sum(depth_hist$count)
 depth_quantile <- depth_hist %>%
-  uncount(count) %>%
-  pull(depth) %>%
-  quantile(probs = 0.25)
+  mutate(cum_count = cumsum(as.numeric(count))) %>%
+  filter(cum_count >= total_counts * 0.25) %>%
+  slice(1) %>%
+  pull(depth)
 depth_mode <- depth_hist %>%
   filter(depth>depth_quantile) %>%
   slice_max(count) %>%
@@ -50,10 +52,7 @@ n_sites_subset <- depth_hist_subset %>%
   sum()
 ## fit a truncated normal distribution to the subsetted chunk
 set.seed(42)
-depth_dist_subset <- depth_hist_subset %>%
-  uncount(count) %>%
-  pull(depth) %>%
-  sample(100000)
+depth_dist_subset <- sample(x=depth_hist_subset$depth, size = 100000, prob = depth_hist_subset$count, replace = TRUE)
 fitted_dist <- depth_dist_subset %>%
   fitdist("tnorm", start = list(mean=depth_mode, sd=depth_mode/5), fix.arg = list(a = depth_lower_bound, b= depth_upper_bound), discrete = TRUE)
 ## use numbers of sd away from the mean as depth filters
