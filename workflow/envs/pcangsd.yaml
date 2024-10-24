@@ -1,6 +1,6 @@
 name: pcangsd_lcpipe
 channels:
-  - conda-forge
+  - defaults
 dependencies:
   - python
   - numpy
