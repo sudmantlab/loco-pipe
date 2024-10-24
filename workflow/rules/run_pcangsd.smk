@@ -22,7 +22,7 @@ rule run_pcangsd_pca_global:
         --beagle {input} \
         --snp_weights \
         --sites_save \
-        --minMaf {params.minmaf} \
+        --maf {params.minmaf} \
         --threads {threads} \
         --out {params.outdir}/{wildcards.file} \
         &>> {log}
@@ -50,7 +50,7 @@ rule run_pcangsd_pca_local:
         --beagle {input} \
         --snp_weights \
         --sites_save \
-        --minMaf {params.minmaf} \
+        --maf {params.minmaf} \
         --threads {threads} \
         --out {params.outdir}/{wildcards.population}.{wildcards.file} \
         &> {log}

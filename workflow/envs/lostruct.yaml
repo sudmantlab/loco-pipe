@@ -6,4 +6,6 @@ dependencies:
   - r-tidyverse==2.0.0
   - r-devtools==2.4.5
   - r-cowplot==1.1.1
-  - r-stringi
+  - r-stringi==1.8.4
+  - r-data.table==1.15.4
+  - r-rspectra==0.16_1

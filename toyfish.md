@@ -1,33 +1,24 @@
 Toyfish - a quick start guide with an example dataset
 ================
 
-- <a href="#dataset-overview" id="toc-dataset-overview">Dataset
-  overview</a>
-- <a href="#setting-up-the-pipeline"
-  id="toc-setting-up-the-pipeline">Setting up the pipeline</a>
-- <a href="#preparing-the-project-directory-and-required-input-files"
-  id="toc-preparing-the-project-directory-and-required-input-files">Preparing
-  the project directory and required input files</a>
-- <a href="#launching-the-pipeline"
-  id="toc-launching-the-pipeline">Launching the pipeline</a>
-- <a href="#example-output" id="toc-example-output">Example output</a>
-  - <a href="#pipeline-flowchart" id="toc-pipeline-flowchart">Pipeline
-    flowchart</a>
-  - <a href="#depth-distribution-and-choice-of-depth-filters"
-    id="toc-depth-distribution-and-choice-of-depth-filters">Depth
-    distribution and choice of depth filters</a>
-  - <a href="#pca" id="toc-pca">PCA</a>
-  - <a href="#admixture-analysis" id="toc-admixture-analysis">Admixture
-    analysis</a>
-  - <a href="#fst-between-sunset-and-vermilion"
-    id="toc-fst-between-sunset-and-vermilion">Fst between sunset and
-    vermilion</a>
-  - <a href="#theta-and-neutrality-stats-in-10000bp-windows"
-    id="toc-theta-and-neutrality-stats-in-10000bp-windows">Theta and
-    neutrality stats in 10000bp windows</a>
-  - <a href="#heterozygosity-estimates"
-    id="toc-heterozygosity-estimates">Heterozygosity estimates</a>
-  - <a href="#local-pca" id="toc-local-pca">Local PCA</a>
+- [Dataset overview](#dataset-overview)
+- [Setting up the pipeline](#setting-up-the-pipeline)
+- [Preparing the project directory and required input
+  files](#preparing-the-project-directory-and-required-input-files)
+- [Launching the pipeline](#launching-the-pipeline)
+- [Example output](#example-output)
+  - [Pipeline flowchart](#pipeline-flowchart)
+  - [Depth distribution and choice of depth
+    filters](#depth-distribution-and-choice-of-depth-filters)
+  - [PCA](#pca)
+  - [Admixture analysis](#admixture-analysis)
+  - [Fst between sunset and
+    vermilion](#fst-between-sunset-and-vermilion)
+  - [Site frequency spectrum](#site-frequency-spectrum)
+  - [Theta and neutrality stats in 10000bp
+    windows](#theta-and-neutrality-stats-in-10000bp-windows)
+  - [Heterozygosity estimates](#heterozygosity-estimates)
+  - [Local PCA](#local-pca)
 
 ## Dataset overview
 
@@ -104,7 +95,7 @@ subsetted reference genome sequence and its index file are stored in
     git clone https://github.com/Rosemeis/pcangsd.git
     cd pcangsd
     # check out the version the loco-pipe is based on
-    git checkout 2880c6aafe5c8b075f7730779cc6f94fee2c9bbb
+    git checkout f90d41f7b9b245481781ae319c4a174376e5f471
     # create an environment for PCAngsd 
     mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/pcangsd.yaml
     # activate the conda environment
@@ -131,7 +122,7 @@ subsetted reference genome sequence and its index file are stored in
     # launch R
     R
     # install lostruct
-    devtools::install_github("petrelharp/local_pca/lostruct")
+    devtools::install_github("petrelharp/local_pca/lostruct", ref = "93ad59309151e44d2d3d0d7748cdc92f6121f564")
     # quit R
     q()
     # deactivate the conda environment
@@ -322,6 +313,16 @@ Fst in 10000bp windows between sunset and vermilion rockfish along the
 subsetted genome.
 
 <br>
+
+#### Site frequency spectrum
+
+###### Sunset
+
+![](toyfish/figures/sfs/sunset.sfs.png)
+
+###### Vermilion
+
+![](toyfish/figures/sfs/vermilion.sfs.png)
 
 #### Theta and neutrality stats in 10000bp windows
 

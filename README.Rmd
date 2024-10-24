@@ -91,7 +91,7 @@ We **strongly** advise users to take advantage of these resources (as well as ot
     git clone https://github.com/Rosemeis/pcangsd.git
     cd pcangsd
     # check out the version the loco-pipe is based on
-    git checkout 2880c6aafe5c8b075f7730779cc6f94fee2c9bbb
+    git checkout f90d41f7b9b245481781ae319c4a174376e5f471
     # create an environment for PCAngsd 
     mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/pcangsd.yaml
     # activate the conda environment
@@ -113,7 +113,7 @@ We **strongly** advise users to take advantage of these resources (as well as ot
     # launch R
     R
     # install lostruct
-    devtools::install_github("petrelharp/local_pca/lostruct")
+    devtools::install_github("petrelharp/local_pca/lostruct", ref = "93ad59309151e44d2d3d0d7748cdc92f6121f564")
     # quit R
     q()
     # deactivate the conda environment

@@ -87,11 +87,11 @@ rule plot_sfs_distribution:
         chr_list = "{basedir}/docs/chr_list.txt",
         done = expand("{{basedir}}/angsd/get_theta/{{population}}.{chr}.done", chr = CHRS),
     output:
-        plot = "{basedir}/figures/theta/sfs_distribution/{population}.sfs.png",
-        done = touch("{basedir}/figures/theta/sfs_distribution/{population}.sfs.done"),
+        plot = "{basedir}/figures/sfs/{population}.sfs.png",
+        done = touch("{basedir}/figures/sfs/{population}.sfs.done"),
     params:
         indir = "{basedir}/angsd/get_theta",
-        outdir = "{basedir}/figures/theta/sfs_distribution",
+        outdir = "{basedir}/figures/sfs",
         ref_type = config["global"]["ref_type"],
         rscript=config["global"]["scriptdir"] + "/plot_SFS.R",
     threads: 4
