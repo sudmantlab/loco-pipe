@@ -8,11 +8,12 @@ library(cowplot)
 args = commandArgs(trailingOnly=TRUE)
 indir <- args[1]
 file <- args[2]
-plot <- args[3]
-sample_table_path <- args[4]
-group_by <- args[5]
-min_k <- args[6] %>% as.integer()
-max_k <- args[7] %>% as.integer()
+output_table <- args[3]
+plot <- args[4]
+sample_table_path <- args[5]
+group_by <- args[6]
+min_k <- args[7] %>% as.integer()
+max_k <- args[8] %>% as.integer()
 
 if(length(args)>7){
   pop_col <- args[8]
@@ -74,6 +75,7 @@ sample_order <- genome_admix %>%
   semi_join(genome_admix, ., by=c(group_by, "anc", "k")) %>%
   arrange(get(group_by), -p) %>%
   .$id_tmp
+write_tsv(genome_admix, output_table)
 admix_plot <- genome_admix %>%
   mutate(id_tmp=fct_relevel(id_tmp, sample_order)) %>%
   filter(p>0.001) %>%

@@ -37,5 +37,8 @@ het_plot <- mutate(sample_table, het=het) %>%
   theme_cowplot() +
   theme(legend.position = "none")
 
+## write underlying data as a text file
+mutate(sample_table, het=het) %>%
+  write_tsv(str_c(indir, "/heterozygosity.tsv"))
 n_row <- sample_table %>% pull({color_by}) %>% unique() %>% length()
 ggsave(str_c(outdir, "/heterozygosity.png"), het_plot, width = 6, height = n_row*1, units = "in")

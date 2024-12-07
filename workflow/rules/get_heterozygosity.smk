@@ -55,6 +55,7 @@ rule plot_heterozygosity:
     input:
         done=expand("{{basedir}}/angsd/heterozygosity/{id}.done", id=ALL_SAMPLES),
     output:
+        table="{basedir}/angsd/heterozygosity/heterozygosity.tsv",
         plot="{basedir}/figures/heterozygosity/heterozygosity.png",
         done=touch("{basedir}/figures/heterozygosity/heterozygosity.done"),
     params:

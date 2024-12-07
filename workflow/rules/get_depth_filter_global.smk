@@ -7,6 +7,7 @@ rule get_depth_filter_global:
     input: expand("{{basedir}}/angsd/get_depth_global/{chr}.depthGlobal", chr = CHRS)
     output: 
         "{basedir}/angsd/get_depth_global/depth_filter.tsv",
+        "{basedir}/angsd/get_depth_global/depth_histogram.tsv",
         "{basedir}/figures/depth/depth_filter.png"
     threads: 4
     params:

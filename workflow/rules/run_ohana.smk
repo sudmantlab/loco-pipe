@@ -74,6 +74,7 @@ rule plot_ohana_admixture_global:
     input:
         done = expand("{{basedir}}/ohana/global/{{file}}.k{k}.done", k=list(range(config["run_ohana_global"]["min_k"], config["run_ohana_global"]["max_k"] + 1))),
     output:
+        table = "{basedir}/ohana/global/{file}.tsv",
         plot = "{basedir}/figures/ohana/global/{file}.png",
         done = touch("{basedir}/figures/ohana/global/{file}.done"),
     params:
@@ -91,13 +92,14 @@ rule plot_ohana_admixture_global:
     shell:
         '''
         mkdir -p {params.outdir}
-        Rscript --vanilla {params.rscript} {params.indir} {wildcards.file} {output.plot} {params.sample_table_path} {params.group_by} {params.min_k} {params.max_k} &> {log}
+        Rscript --vanilla {params.rscript} {params.indir} {wildcards.file} {output.table} {output.plot} {params.sample_table_path} {params.group_by} {params.min_k} {params.max_k} &> {log}
         '''
 
 rule plot_ohana_admixture_local:
     input:
         done = expand("{{basedir}}/ohana/local/{{population}}.{{file}}.k{k}.done", k=list(range(config["run_ohana_local"]["min_k"], config["run_ohana_local"]["max_k"] + 1))),
     output:
+        table = "{basedir}/ohana/local/{population}.{file}.tsv",
         plot = "{basedir}/figures/ohana/local/{population}.{file}.png",
         done = touch("{basedir}/figures/ohana/local/{population}.{file}.done"),
     params:
@@ -116,5 +118,5 @@ rule plot_ohana_admixture_local:
     shell:
         '''
         mkdir -p {params.outdir}
-        Rscript --vanilla {params.rscript} {params.indir} {wildcards.file} {output.plot} {params.sample_table_path} {params.group_by} {params.min_k} {params.max_k} {params.pop_col} {wildcards.population} &> {log}
+        Rscript --vanilla {params.rscript} {params.indir} {wildcards.file} {output.table} {output.plot} {params.sample_table_path} {params.group_by} {params.min_k} {params.max_k} {params.pop_col} {wildcards.population} &> {log}
         '''

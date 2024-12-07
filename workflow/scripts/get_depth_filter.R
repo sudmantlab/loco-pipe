@@ -75,6 +75,9 @@ depth_plot <- depth_hist %>%
   annotate("text", Inf, Inf, label=str_c("fitted_sd=", round(fitted_sd,1)), hjust = 1.1, vjust= 3.1, color="blue") +
   xlim(c(NA, fitted_mean*2)) +
   cowplot::theme_minimal_grid()
+## output depth distribution as a text file
+depth_hist %>%
+  write_tsv(str_c(indir, "/depth_histogram.tsv"))
 ## output chosen depth filters as a text file
 tibble(min_filter, max_filter, fitted_mean, fitted_sd) %>%
   write_tsv(str_c(indir, "/depth_filter.tsv"))

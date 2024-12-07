@@ -7,12 +7,13 @@ library(cowplot)
 ## Read in the arguments
 args = commandArgs(trailingOnly=TRUE)
 cov <- args[1]
-plot <- args[2]
-sample_table_path <- args[3]
-color_by <- args[4]
-if(length(args)>4){
-  pop_col <- args[5]
-  pop <- args[6]
+output_table <- args[2]
+plot <- args[3]
+sample_table_path <- args[4]
+color_by <- args[5]
+if(length(args)>5){
+  pop_col <- args[6]
+  pop <- args[7]
 }
 
 # cov <- "/global/scratch/users/nicolas931010/loco-pipe/toyfish/pcangsd/local/vermilion.combined.subsetted.cov"
@@ -84,3 +85,4 @@ if (sample_size < 4) {
   ) %>% 
     ggsave(plot=., filename = plot, width = 7.5, height = 4, units = "in")
 }
+write_tsv(pca_table, output_table)

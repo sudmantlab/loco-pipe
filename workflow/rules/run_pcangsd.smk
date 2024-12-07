@@ -61,6 +61,7 @@ rule plot_pcangsd_pca_global:
         cov = "{basedir}/pcangsd/global/{file}.cov",
         done = "{basedir}/pcangsd/global/{file}.done",
     output:
+        table = "{basedir}/pcangsd/global/{file}.tsv",
         plot = "{basedir}/figures/pcangsd/global/{file}.png",
         done = touch("{basedir}/figures/pcangsd/global/{file}.done"),
     params:
@@ -75,7 +76,7 @@ rule plot_pcangsd_pca_global:
     shell:
         '''
         mkdir -p {params.outdir}
-        Rscript --vanilla {params.rscript} {input.cov} {output.plot} {params.sample_table_path} {params.color_by} &> {log}
+        Rscript --vanilla {params.rscript} {input.cov} {output.table} {output.plot} {params.sample_table_path} {params.color_by} &> {log}
         '''
 
 # This rule plots the PCA analysis conducted in the rule,run_pcangsd_pca_local, above. 
@@ -84,6 +85,7 @@ rule plot_pcangsd_pca_local:
         cov = "{basedir}/pcangsd/local/{population}.{file}.cov",
         done = "{basedir}/pcangsd/local/{population}.{file}.done",
     output:
+        table = "{basedir}/pcangsd/local/{population}.{file}.tsv",
         plot = "{basedir}/figures/pcangsd/local/{population}.{file}.png",
         done = touch("{basedir}/figures/pcangsd/local/{population}.{file}.done"),
     params:
@@ -99,5 +101,5 @@ rule plot_pcangsd_pca_local:
     shell:
         '''
         mkdir -p {params.outdir}
-        Rscript --vanilla {params.rscript} {input.cov} {output.plot} {params.sample_table_path} {params.color_by} {params.pop_col} {wildcards.population} &> {log}
+        Rscript --vanilla {params.rscript} {input.cov} {output.table} {output.plot} {params.sample_table_path} {params.color_by} {params.pop_col} {wildcards.population} &> {log}
         '''
