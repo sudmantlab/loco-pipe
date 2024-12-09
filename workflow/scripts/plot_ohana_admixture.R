@@ -14,10 +14,9 @@ sample_table_path <- args[5]
 group_by <- args[6]
 min_k <- args[7] %>% as.integer()
 max_k <- args[8] %>% as.integer()
-
-if(length(args)>7){
-  pop_col <- args[8]
-  pop <- args[9]
+if(length(args)>8){
+  pop_col <- args[9]
+  pop <- args[10]
 }
 
 # indir <- "/global/scratch/users/nicolas931010/loco-pipe/toyfish/ohana/global"
@@ -39,7 +38,7 @@ if(length(args)>7){
 # pop <- "vermilion"
 
 ## read in sample table and subset by population if "local"
-if(length(args)<=7){
+if(length(args)<=8){
   sample_table <- read_tsv(sample_table_path) %>%
     mutate(id_tmp = row_number() %>% as.character())
   indir_file <- str_c(indir, "/", file)

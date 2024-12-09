@@ -24,7 +24,7 @@ if(length(args)>5){
 # pop <- "vermilion"
 
 ## read in sample table and subset by population if this is a local run
-if(length(args)<=4){
+if(length(args)<=5){
   sample_table <- read_tsv(sample_table_path)
 } else {
   sample_table <- read_tsv(sample_table_path) %>%
