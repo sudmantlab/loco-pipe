@@ -71,7 +71,8 @@ pca_plot <- pca_table_final %>%
         panel.border = element_rect(color = "black"),
         legend.title = element_blank())
 ggsave(str_c(plot_dir, '/combined.pca.png'), pca_plot, width = plot_col*2, height = plot_row*1.5)
-
+pca_table_final %>%
+  write_tsv(str_c(cov_dir, "/../plot_lostruct_outlier_pca/combined.pca.tsv"))
 ## Plot PCA with lostruct outliers when each genome was run separately in lostruct
 pca_table <- NULL
 for (i in seq_len(nrow(chr_table))){
@@ -130,3 +131,5 @@ separated_pca <- pca_table_final %>%
 pdf(str_c(plot_dir, '/separated.pca.pdf'), width = plot_col*2, height = plot_row*1.5+1.5)
 separated_pca
 dev.off()
+pca_table_final %>%
+  write_tsv(str_c(cov_dir, "/../plot_lostruct_outlier_pca/separated.pca.tsv"))

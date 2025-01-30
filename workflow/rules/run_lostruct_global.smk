@@ -122,7 +122,9 @@ rule plot_lostruct_mds_global:
     input:
         done="{basedir}/lostruct/global/run_lostruct/run_lostruct.done",
     output:
+        combined_table="{basedir}/lostruct/global/plot_lostruct_mds/combined.mds.tsv",
         combined_plot="{basedir}/figures/lostruct/global/combined.mds.png",
+        separated_table="{basedir}/lostruct/global/plot_lostruct_mds/separated.mds.tsv",
         separated_plot="{basedir}/figures/lostruct/global/separated.mds.png",
         done=touch("{basedir}/figures/lostruct/global/plot_lostruct_mds.done"),
     params:
@@ -198,7 +200,9 @@ rule plot_lostruct_outlier_pca_global:
     input:
         done="{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers/run_pcangsd_with_lostruct_outliers.done",
     output:
+        combined_table="{basedir}/lostruct/global/plot_lostruct_outlier_pca/combined.pca.tsv",
         combined_plot="{basedir}/figures/lostruct/global/combined.pca.png",
+        separated_table="{basedir}/lostruct/global/plot_lostruct_outlier_pca/separated.pca.tsv",
         separated_plot="{basedir}/figures/lostruct/global/separated.pca.pdf",
         done=touch("{basedir}/figures/lostruct/global/plot_lostruct_outlier_pca.done"),
     params:

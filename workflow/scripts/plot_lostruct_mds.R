@@ -68,6 +68,9 @@ mds_plot <- mds_long %>%
 				panel.grid.major = element_blank(), 
 				panel.grid.minor = element_blank()) 
 ggsave(str_c(plot_dir, '/combined.mds.png'), mds_plot, width = fig_width, height = fig_height)
+## Save MDS results
+mds_long %>%
+  write_tsv(str_c(out_dir, "/combined.mds.tsv"))
 ## Save outlier windows
 mds_long %>%
   filter(outlier==TRUE) %>%
@@ -118,6 +121,9 @@ mds_plot <- mds_long %>%
         panel.border = element_rect(color="black"),
         axis.line = element_blank()) 
 ggsave(str_c(plot_dir, '/separated.mds.png'), mds_plot, width = fig_width, height = fig_height, units = "in")
+## Save MDS results
+mds_long %>%
+  write_tsv(str_c(out_dir, "/separated.mds.tsv"))
 ## Save outlier windows
 mds_long %>%
   filter(outlier==TRUE, axis %in% str_c("mds_", 1:k)) %>%
