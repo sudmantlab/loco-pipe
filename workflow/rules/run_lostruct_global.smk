@@ -122,9 +122,9 @@ rule plot_lostruct_mds_global:
     input:
         done="{basedir}/lostruct/global/run_lostruct/run_lostruct.done",
     output:
-        combined_table="{basedir}/lostruct/global/plot_lostruct_mds/combined.mds.tsv",
+        combined_table="{basedir}/lostruct/global/plot_lostruct_mds/combined.mds.csv",
         combined_plot="{basedir}/figures/lostruct/global/combined.mds.png",
-        separated_table="{basedir}/lostruct/global/plot_lostruct_mds/separated.mds.tsv",
+        separated_table="{basedir}/lostruct/global/plot_lostruct_mds/separated.mds.csv",
         separated_plot="{basedir}/figures/lostruct/global/separated.mds.png",
         done=touch("{basedir}/figures/lostruct/global/plot_lostruct_mds.done"),
     params:
