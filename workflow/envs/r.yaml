@@ -11,3 +11,4 @@ dependencies:
  - r-survival==3.5_3
  - mkl==2023.2.0
  - r-stringi
+ - r-mass
