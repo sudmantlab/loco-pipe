@@ -69,7 +69,7 @@ sample_order <- genome_admix %>%
   group_by(k, get(group_by), anc) %>%
   summarise(mean_p=mean(p)) %>%
   rename(!!group_by:=`get(group_by)`) %>%
-  slice_max(order_by = mean_p) %>%
+  slice_max(order_by = mean_p, with_ties = FALSE) %>%
   ungroup() %>%
   semi_join(genome_admix, ., by=c(group_by, "anc", "k")) %>%
   arrange(get(group_by), -p) %>%
