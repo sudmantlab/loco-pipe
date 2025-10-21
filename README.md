@@ -1,17 +1,24 @@
 loco-pipe: a Snakemake pipeline for low-coverage whole-genome sequencing
 ================
 
-- [Key features](#key-features)
-- [Currently supported
-  functionalities](#currently-supported-functionalities)
-- [Complete pipeline flowchart](#complete-pipeline-flowchart)
-- [Before you start](#before-you-start)
-- [Setting up the pipeline](#setting-up-the-pipeline)
-- [Preparing the project directory and required input
-  files](#preparing-the-project-directory-and-required-input-files)
-- [Launching the pipeline](#launching-the-pipeline)
-- [Future directions](#future-directions)
-- [Citation](#citation)
+- <a href="#key-features" id="toc-key-features">Key features</a>
+- <a href="#currently-supported-functionalities"
+  id="toc-currently-supported-functionalities">Currently supported
+  functionalities</a>
+- <a href="#complete-pipeline-flowchart"
+  id="toc-complete-pipeline-flowchart">Complete pipeline flowchart</a>
+- <a href="#before-you-start" id="toc-before-you-start">Before you
+  start</a>
+- <a href="#setting-up-the-pipeline"
+  id="toc-setting-up-the-pipeline">Setting up the pipeline</a>
+- <a href="#preparing-the-project-directory-and-required-input-files"
+  id="toc-preparing-the-project-directory-and-required-input-files">Preparing
+  the project directory and required input files</a>
+- <a href="#launching-the-pipeline"
+  id="toc-launching-the-pipeline">Launching the pipeline</a>
+- <a href="#future-directions" id="toc-future-directions">Future
+  directions</a>
+- <a href="#citation" id="toc-citation">Citation</a>
 
 **loco-pipe** is an automated Snakemake pipeline that streamlines a set
 of essential population genomic analyses for **lo**w-**co**verage whole
@@ -157,39 +164,11 @@ as a black box can lead to spurious results and erroneous conclusions.**
     `mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/loco-pipe.yaml`
     (replace \$SOFTWARE_DIR with a real path).
 
-4.  (Optional) If you would like to run PCA with the software
-    [PCAngsd](https://github.com/Rosemeis/pcangsd) using loco-pipe, you
-    **must** install PCAngsd manually as it is not yet available on
-    conda. Please install it to a conda environment named
-    `pcangsd_lcpipe` using the script below. Even if you already have
-    PCAngsd installed on your machine, you will need to run the
-    following code to ensure that the version is compatible.
-
-    ``` bash
-    # first set your working directory to a folder where you store your software programs
-    cd $SOFTWARE_DIR # replace $SOFTWARE_DIR with a real path
-    # download PCAngsd from Github
-    git clone https://github.com/Rosemeis/pcangsd.git
-    cd pcangsd
-    # check out the version the loco-pipe is based on
-    git checkout f90d41f7b9b245481781ae319c4a174376e5f471
-    # create an environment for PCAngsd 
-    mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/pcangsd.yaml
-    # activate the conda environment
-    conda activate pcangsd_lcpipe
-    # build PCAngsd
-    python setup.py build_ext --inplace  
-    pip3 install -e . ## if you run into issues pertaining to ssl certificates, try "pip3 install --trusted-host pypi.org -e ." instead
-    # deactivate the conda environment
-    conda deactivate  
-    ```
-
-5.  (Optional) If you would like to run local PCA with the
+4.  (Optional) If you would like to run local PCA with the
     [lostruct](https://github.com/petrelharp/local_pca) package in R
-    using loco-pipe, you **must** install lostruct (in addition to
-    PCAngsd, see above) manually as it is not yet available on conda.
-    Please install it to a conda environment named `lostruct_lcpipe`
-    using the script below.
+    using loco-pipe, you **must** install lostruct manually as it is not
+    yet available on conda. Please install it to a conda environment
+    named `lostruct_lcpipe` using the script below.
 
     ``` bash
     # create a conda environment named lostruct_lcpipe and install R and some key R packages
@@ -246,6 +225,14 @@ as a black box can lead to spurious results and erroneous conclusions.**
       etc. You will need to enter the name of the third column into the
       pipeline configuration file `config.yaml`. Below is an example of
       a sample table.
+
+          ## Warning: package 'tidyr' was built under R version 4.2.3
+
+          ## Warning: package 'readr' was built under R version 4.2.3
+
+          ## Warning: package 'dplyr' was built under R version 4.2.3
+
+          ## Warning: package 'stringr' was built under R version 4.2.3
 
       | sample_name | bam                                             | species   | population  |
       |:------------|:------------------------------------------------|:----------|:------------|
