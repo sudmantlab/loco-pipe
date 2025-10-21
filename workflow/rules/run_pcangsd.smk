@@ -11,8 +11,7 @@ rule run_pcangsd_pca_global:
     threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/pcangsd/global/{file}.log"
     conda:
-        "pcangsd_lcpipe"
-
+        "../envs/pcangsd.yaml" 
     shell:
         '''
         conda env list > {log}
@@ -41,7 +40,7 @@ rule run_pcangsd_pca_local:
     threads: config["run_pcangsd_local"]["threads"]
     log: "{basedir}/pcangsd/local/{population}.{file}.log"
     conda:
-        "pcangsd_lcpipe"
+        "../envs/pcangsd.yaml" 
     shell:
         '''
         mkdir -p {params.outdir}
@@ -55,6 +54,7 @@ rule run_pcangsd_pca_local:
         --out {params.outdir}/{wildcards.population}.{wildcards.file} \
         &> {log}
         '''
+
 # This rule plots the PCA analysis conducted in the rule,run_pcangsd_pca_global, above. 
 rule plot_pcangsd_pca_global:
     input:
