@@ -48,8 +48,6 @@ rule run_pcangsd_in_windows_global:
         if [ $N_SNPS -gt $(({params.snp_window_size}/2)) ]; then
         pcangsd \
         --beagle $FILE \
-        --snp_weights \
-        --sites_save \
         --maf {params.minmaf} \
         --threads {threads} \
         --out {params.outdir}/${{FILE%%.beagle.gz}} \
@@ -184,8 +182,6 @@ rule run_pcangsd_with_lostruct_outliers_global:
         ## Run PCAngsd
         pcangsd \
         --beagle {params.outdir}/${{PREFIX}}.beagle.gz \
-        --snp_weights \
-        --sites_save \
         --maf {params.minmaf} \
         --threads {threads} \
         --out {params.outdir}/${{PREFIX}} \
