@@ -1,8 +1,6 @@
 name: pcangsd_lcpipe
 channels:
-  - defaults
+  - bioconda
+  - conda-forge
 dependencies:
-  - python
-  - numpy
-  - scipy
-  - cython
+  - pcangsd==1.36.4
