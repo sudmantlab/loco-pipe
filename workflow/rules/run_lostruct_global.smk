@@ -8,8 +8,6 @@ rule split_beagle_global:
         outdir="{basedir}/lostruct/global/split_beagle",
         snp_window_size=config["lostruct"]["snp_window_size"],
     threads: 8
-    conda:
-        "pcangsd_lcpipe"
     shell:
         '''
         mkdir -p {params.outdir}
@@ -38,7 +36,7 @@ rule run_pcangsd_in_windows_global:
     threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/lostruct/global/run_pcangsd_in_windows/{chr}.log"
     conda:
-        "pcangsd_lcpipe"
+        "../envs/pcangsd.yaml" 
     shell:
         '''
         mkdir -p {params.outdir}
@@ -163,7 +161,7 @@ rule run_pcangsd_with_lostruct_outliers_global:
     threads: config["run_pcangsd_global"]["threads"]
     log: "{basedir}/lostruct/global/run_pcangsd_with_lostruct_outliers/run_pcangsd_with_lostruct_outliers.log"
     conda:
-        "pcangsd_lcpipe"
+        "../envs/pcangsd.yaml" 
     shell:
         '''
         mkdir -p {params.outdir}
