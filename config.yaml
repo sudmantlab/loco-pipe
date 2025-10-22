@@ -419,6 +419,8 @@ lostruct:
   # Number of SNPs in each window.
   # Note that since toyfish is already heavily subsetted, we are using a small number here.
   # You will likely need to enter a much larger number when using a real dataset.
+  # The highest number of windows this pipeline can handle is 46340, so it's important to use a SNP window size that 
+  # results in fewer (ideally a lot fewer) than 46340 windows in total across the genome.
   snp_window_size: 100
   
   # Minimum minor allele frequency filter when running the PCA.
