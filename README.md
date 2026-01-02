@@ -146,13 +146,14 @@ as a black box can lead to spurious results and erroneous conclusions.**
 
 1.  Install
     [mamba](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html)
-    or conda
-    (<https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html>)
-    if you have not already done so. A fresh install of mamba with
-    miniforge (<https://github.com/conda-forge/miniforge>) is highly
-    recommended because mamba is much faster than conda. It is ok if you
-    prefer to use conda though; just replace all occurrences of `mamba`
-    with `conda` in the code below.
+    or
+    [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/install/index.html)
+    if you have not already done so. Note that `mamba v2` has some
+    compatibility issues with Snakemake, and the speed of `conda` has
+    improved significantly in recent updates, so `mamba` is no longer
+    recommended over `conda`. If you choose to use `mamba`, make sure to
+    use a v1 version, and replace all occurrences of `conda` with
+    `mamba` in the code below.
 
 2.  Download `loco-pipe` from GitHub (e.g. using
     `git clone https://github.com/sudmantlab/loco-pipe.git`). We
@@ -160,8 +161,8 @@ as a black box can lead to spurious results and erroneous conclusions.**
     software programs. We will refer to the full path of the directory
     that contains the `loco-pipe` folder as `SOFTWARE_DIR`.
 
-3.  Create the `loco-pipe` conda environment using mamba by running
-    `mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/loco-pipe.yaml`
+3.  Create the `loco-pipe` conda environment using conda by running
+    `conda env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/loco-pipe.yaml`
     (replace \$SOFTWARE_DIR with a real path).
 
 4.  (Optional) If you would like to run local PCA with the
@@ -172,7 +173,7 @@ as a black box can lead to spurious results and erroneous conclusions.**
 
     ``` bash
     # create a conda environment named lostruct_lcpipe and install R and some key R packages
-    mamba env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/lostruct.yaml
+    conda env create -f $SOFTWARE_DIR/loco-pipe/workflow/envs/lostruct.yaml
     # activate the lostruct conda environment
     conda activate lostruct_lcpipe
     # launch R
@@ -338,7 +339,7 @@ as a black box can lead to spurious results and erroneous conclusions.**
     ``` bash
     snakemake \
     --use-conda \
-    --conda-frontend mamba \
+    --conda-frontend conda \
     --directory $BASEDIR \
     --rerun-triggers mtime \
     --scheduler greedy \
