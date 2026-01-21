@@ -246,7 +246,7 @@ filtering procedures below.
   `snp_calling_global`, users will be able to follow the recommended
   workflow to identify the deviant SNPs. Next, they could generate a new
   SNP list excluding the deviant SNPs in ANGSD format and index it with
-  ANGSD. They can then use the `-site` flag to restrict another round of
+  ANGSD. They can then use the `-sites` flag to restrict another round of
   SNP calling on this new SNP list (this can be done with the `extra`
   flag in the config file or by directly editing the
   `snp_calling_global` rule), rename the existing
@@ -274,7 +274,7 @@ filtering procedures below.
   generate a SNP/site list by intersecting the SNPs that pass a certain
   population-level missingness threshold. Similar to the previous
   example, they can then index this SNP/site list, input it to
-  `snp_calling_global` and `get_theta` with the `-site` flag, rename the
+  `snp_calling_global` and `get_theta` with the `-sites` flag, rename the
   existing `snp_calling_global` and `get_theta` folders, and relaunch
   the pipeline.
 
